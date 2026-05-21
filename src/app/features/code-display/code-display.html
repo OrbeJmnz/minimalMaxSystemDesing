@@ -1,0 +1,59 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Display"
+    title="Code block · Diff viewer"
+    description="Bloques de código con syntax highlight regex (cero deps) y comparador de diff con +/− coloreado."
+  />
+
+  <mm-canvas-frame
+    heading="Code block — TypeScript"
+    description="Header con tres dots macOS-style, tag de lenguaje, botón copy con feedback."
+    [snippets]="snippetsCodeBlockTs"
+  >
+    <mm-code-block [code]="tsCode" lang="ts" title="counter.component.ts" />
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Code block — HTML"
+    description="Tags, attrs y strings con highlight diferenciado."
+    [snippets]="snippetsCodeBlockHtml"
+  >
+    <mm-code-block [code]="htmlCode" lang="html" title="hero.html" />
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Code block — CSS"
+    description="Selectors, properties, valores numéricos con units."
+    [snippets]="snippetsCodeBlockCss"
+  >
+    <mm-code-block [code]="cssCode" lang="css" title="styles.css" />
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Code block — JSON"
+    description="Keys vs values con colores distintos."
+    [snippets]="snippetsCodeBlockJson"
+  >
+    <mm-code-block [code]="jsonCode" lang="json" title="package.json" />
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Code block — Bash (plain)"
+    description="Comandos shell sin highlight de tokens, solo monoespaciado."
+    [snippets]="snippetsCodeBlockBash"
+  >
+    <mm-code-block [code]="bashCode" lang="bash" title="setup.sh" />
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Diff viewer"
+    description="Comparación line-by-line con +/− rojo/verde. Diff algorithm simple sin libs."
+    [snippets]="snippetsDiffViewer"
+  >
+    <mm-diff-viewer
+      [before]="diffBefore"
+      [after]="diffAfter"
+      title="src/utils/calculate-total.ts"
+    />
+  </mm-canvas-frame>
+</div>

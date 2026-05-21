@@ -1,0 +1,220 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Exports"
+    title="PDF · Excel · CSV · JSON · Print · Copy"
+    description="Exportar datos en los formatos típicos. Demos funcionales sin dependencias (TSV/CSV nativo + window.print) y patrón de carga lazy para jspdf/xlsx."
+  />
+
+  <mm-canvas-frame
+    heading="Acciones de export"
+    description="Cada botón descarga el archivo correspondiente desde los datos de la tabla."
+    [snippets]="snippetsAccionesDeExport"
+  >
+    <div data-stagger class="flex flex-wrap gap-3">
+      <button
+        type="button"
+        mmRipple
+        (click)="exportPDF()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-error px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition-all duration-300 mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <path d="M14 2v6h6M9 13h6M9 17h4"></path>
+        </svg>
+        Export PDF
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="exportExcel()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-success px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+          <path d="M14 2v6h6M8 13l3 3 5-5"></path>
+        </svg>
+        Export Excel
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="exportCSV()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+        </svg>
+        CSV
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="exportJSON()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-surface-secondary px-5 py-2.5 text-sm font-medium text-ink-dark hover:bg-border transition mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5a2 2 0 0 0 2 2h1M16 3h1a2 2 0 0 1 2 2v5a2 2 0 0 0 2 2 2 2 0 0 0-2 2v5a2 2 0 0 1-2 2h-1"></path>
+        </svg>
+        JSON
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="print()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-surface-secondary px-5 py-2.5 text-sm font-medium text-ink-dark hover:bg-border transition mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+          <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        Imprimir
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="copyTable()"
+        [class.!bg-success]="copied()"
+        [class.!text-white]="copied()"
+        class="inline-flex items-center gap-2 rounded-mm-md border border-border bg-surface-base px-5 py-2.5 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+      >
+        @if (copied()) {
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M20 6 9 17l-5-5"></path>
+          </svg>
+          Copiado
+        } @else {
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          Copiar tabla
+        }
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Tabla de origen"
+    description="Datos usados por los exports. La sintaxis del CSV/TSV es la misma que abrirías en Excel/Numbers."
+    [snippets]="snippetsTablaDeOrigen"
+  >
+    <div class="overflow-hidden rounded-mm-xl border border-border-soft">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-surface-secondary/50 border-b border-border-soft text-left">
+            <tr>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary">ID</th>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary">Nombre</th>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary">Owner</th>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary">Estado</th>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary text-right">Progreso</th>
+              <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-ink-secondary text-right">Monto</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-soft">
+            @for (row of rows; track row.id) {
+              <tr class="hover:bg-surface-secondary/40 transition-colors">
+                <td class="px-4 py-3 font-mono text-xs text-ink-muted">{{ row.id }}</td>
+                <td class="px-4 py-3 font-medium text-ink-dark">{{ row.name }}</td>
+                <td class="px-4 py-3 text-ink-secondary">{{ row.owner }}</td>
+                <td class="px-4 py-3">
+                  <span class="rounded-mm-pill bg-surface-secondary text-ink-dark px-2.5 py-0.5 text-xs">
+                    {{ row.status }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-right font-mono text-ink-dark tabular-nums">
+                  {{ row.progress }}%
+                </td>
+                <td class="px-4 py-3 text-right font-mono text-ink-dark tabular-nums">
+                  ${{ row.amount.toLocaleString() }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Patrón lazy load para libs grandes"
+    description="jspdf y xlsx pesan 200+ KB. Cárgalos sólo cuando el user los pida con dynamic import."
+    [snippets]="snippetsPatronLazyLoadParaLibsGrandes"
+  >
+    <pre
+      class="font-mono text-xs leading-relaxed bg-cta text-white/90 p-5 rounded-mm-xl overflow-x-auto"
+    ><code>// PDF con jspdf — carga lazy
+async exportPDF() &#123;
+  const &#123; jsPDF &#125; = await import('jspdf');
+  const doc = new jsPDF();
+  doc.text('Reporte MinimalMax', 14, 20);
+  doc.autoTable(&#123; head: [headers], body: rows &#125;);
+  doc.save('reporte.pdf');
+&#125;
+
+// Excel con xlsx (SheetJS) — carga lazy
+async exportExcel() &#123;
+  const XLSX = await import('xlsx');
+  const ws = XLSX.utils.json_to_sheet(this.rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Proyectos');
+  XLSX.writeFile(wb, 'reporte.xlsx');
+&#125;</code></pre>
+  </mm-canvas-frame>
+</div>

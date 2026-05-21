@@ -1,0 +1,118 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Maps"
+    title="Mapa con marcadores"
+    description="Demo con OpenStreetMap (sin API key). Para producción usa Leaflet (@asymmetrik/ngx-leaflet) o Mapbox."
+  />
+
+  <mm-canvas-frame
+    heading="Mapa con selector de ubicación"
+    description="Tabs con ubicaciones — cambia el bbox y marcador del iframe en tiempo real."
+    [snippets]="snippetsMap"
+  >
+    <div class="flex flex-col gap-4">
+      <nav
+        class="inline-flex flex-wrap items-center gap-2 p-1 bg-surface-secondary rounded-mm-pill self-start"
+        role="tablist"
+      >
+        @for (loc of locations; track loc.id) {
+          <button
+            type="button"
+            role="tab"
+            (click)="setLocation(loc.id)"
+            class="rounded-mm-pill px-4 py-1.5 text-xs font-medium transition-colors duration-200"
+            [class.bg-cta]="activeId() === loc.id"
+            [class.text-white]="activeId() === loc.id"
+            [class.shadow-mm-sm]="activeId() === loc.id"
+            [class.text-ink-secondary]="activeId() !== loc.id"
+            [class.hover:text-ink-dark]="activeId() !== loc.id"
+          >
+            {{ loc.name }}
+          </button>
+        }
+      </nav>
+
+      <div class="rounded-mm-2xl overflow-hidden border border-border-soft shadow-mm-sm relative">
+        <iframe
+          [src]="mapUrl()"
+          class="w-full aspect-video block bg-surface-secondary"
+          loading="lazy"
+          [attr.title]="'Mapa de ' + activeLocation().name"
+        ></iframe>
+
+        <div
+          class="absolute top-4 left-4 max-w-xs rounded-mm-xl bg-surface-base/95 backdrop-blur-md border border-border-soft shadow-mm-elevated p-4"
+        >
+          <span class="text-[10px] uppercase tracking-wider text-ink-muted font-semibold">
+            Ubicación activa
+          </span>
+          <h4 class="font-display text-base font-semibold text-ink-dark mt-0.5">
+            {{ activeLocation().name }}
+          </h4>
+          <p class="text-xs text-ink-secondary mt-1">{{ activeLocation().description }}</p>
+          <p class="mt-3 font-mono text-[10px] text-ink-muted">
+            {{ activeLocation().marker }}
+          </p>
+        </div>
+
+        <a
+          [href]="
+            'https://www.openstreetmap.org/?mlat=' +
+            activeLocation().marker.split(',')[0] +
+            '&mlon=' +
+            activeLocation().marker.split(',')[1] +
+            '#map=14/' +
+            activeLocation().marker
+          "
+          target="_blank"
+          rel="noopener"
+          class="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-mm-pill bg-surface-base/95 backdrop-blur-md border border-border-soft shadow-mm-sm px-3 py-1.5 text-xs font-medium text-ink-dark hover:shadow-mm-elevated transition"
+        >
+          Ver en OpenStreetMap
+          <svg
+            class="size-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M7 17 17 7M7 7h10v10"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Patrón con Leaflet (producción)"
+    description="Para apps reales: instala leaflet + ngx-leaflet, usa lazy import y aplica estilos MinimalMax."
+    [snippets]="snippetsLeaflet"
+  >
+    <pre
+      class="font-mono text-xs leading-relaxed bg-cta text-white/90 p-5 rounded-mm-xl overflow-x-auto"
+    ><code>// npm i leaflet @asymmetrik/ngx-leaflet
+// styles.css → &#64;import "leaflet/dist/leaflet.css";
+
+import &#123; LeafletModule &#125; from '&#64;asymmetrik/ngx-leaflet';
+import * as L from 'leaflet';
+
+&#64;Component(&#123;
+  imports: [LeafletModule],
+  template: `
+    &lt;div leaflet
+      [leafletOptions]="options"
+      [leafletLayers]="markers" /&gt;
+  `,
+&#125;)
+export class MapDemo &#123;
+  protected options: L.MapOptions = &#123;
+    layers: [L.tileLayer('https://&#123;s&#125;.tile.openstreetmap.org/&#123;z&#125;/&#123;x&#125;/&#123;y&#125;.png')],
+    zoom: 12,
+    center: L.latLng(19.4326, -99.1332),
+  &#125;;
+  protected markers = [L.marker([19.4326, -99.1332])];
+&#125;</code></pre>
+  </mm-canvas-frame>
+</div>

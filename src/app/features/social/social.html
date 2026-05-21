@@ -1,0 +1,247 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Comunidad"
+    title="Activity feed · Reactions"
+    description="Feed cronológico con verbos sociales, attachments, reactions con count y emoji picker. Cero deps."
+  />
+
+  <mm-canvas-frame
+    heading="Compose box"
+    description="Pequeño compose para publicar nueva actividad."
+    [snippets]="snippetsComposeBox"
+  >
+    <div
+      class="rounded-mm-2xl border border-border-soft bg-surface-base p-4 shadow-mm-sm flex gap-3"
+    >
+      <span
+        class="size-10 shrink-0 rounded-mm-pill grid place-items-center text-white font-display font-semibold text-sm bg-linear-to-br from-brand-6 to-primary-500"
+      >
+        OJ
+      </span>
+      <div class="flex-1 flex flex-col gap-3">
+        <textarea
+          [value]="newPost()"
+          (input)="newPost.set($any($event.target).value)"
+          placeholder="¿Qué quieres compartir?"
+          rows="2"
+          class="w-full resize-none rounded-mm-md border border-border bg-surface-secondary/40 px-3 py-2 text-sm text-ink-dark focus:bg-surface-base focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition mm-scroll-thin"
+        ></textarea>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-1 text-ink-muted">
+            <button
+              type="button"
+              aria-label="Agregar imagen"
+              class="size-8 rounded-mm-sm grid place-items-center hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <path d="m21 15-5-5L5 21"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Agregar código"
+              class="size-8 rounded-mm-sm grid place-items-center hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m16 18 6-6-6-6M8 6l-6 6 6 6"></path>
+              </svg>
+            </button>
+            <button
+              type="button"
+              aria-label="Emoji"
+              class="size-8 rounded-mm-sm grid place-items-center hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"></path>
+              </svg>
+            </button>
+          </div>
+          <button
+            type="button"
+            mmRipple
+            (click)="post()"
+            [disabled]="!newPost().trim()"
+            class="rounded-mm-md bg-cta px-4 py-2 text-xs font-medium text-cta-fg shadow-mm-sm hover:shadow-mm-elevated transition mm-press disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Publicar
+          </button>
+        </div>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Feed de actividad"
+    description="Cada item con avatar + verbo + content + reactions + comentarios. Click en emoji para reaccionar."
+    [snippets]="snippetsFeedActividad"
+  >
+    <ul data-stagger class="flex flex-col gap-4">
+      @for (item of feed(); track item.id) {
+        <li
+          class="rounded-mm-2xl border border-border-soft bg-surface-base p-5 shadow-mm-sm"
+        >
+          <header class="flex items-start gap-3 mb-3">
+            <span
+              [class]="
+                'size-10 rounded-mm-pill grid place-items-center text-white font-display font-semibold text-sm bg-linear-to-br ' +
+                item.author.tone
+              "
+            >
+              {{ item.author.initials }}
+            </span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm leading-snug">
+                <span class="font-medium text-ink-dark">{{ item.author.name }}</span>
+                <span class="text-ink-secondary"> {{ item.verb }} </span>
+                @if (item.target) {
+                  <a class="font-medium text-brand-6 hover:underline cursor-pointer">
+                    {{ item.target }}
+                  </a>
+                }
+              </p>
+              <p class="text-xs text-ink-muted font-mono mt-0.5">{{ item.time }}</p>
+            </div>
+            <button
+              type="button"
+              class="size-7 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition"
+              aria-label="Más opciones"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="1"></circle>
+                <circle cx="19" cy="12" r="1"></circle>
+                <circle cx="5" cy="12" r="1"></circle>
+              </svg>
+            </button>
+          </header>
+
+          @if (item.content) {
+            <p class="text-sm text-ink-dark leading-relaxed">{{ item.content }}</p>
+          }
+
+          @if (item.attachment?.type === 'image') {
+            <img
+              [src]="item.attachment!.src"
+              [alt]="item.target ?? 'attachment'"
+              loading="lazy"
+              class="mt-3 rounded-mm-xl w-full max-h-72 object-cover"
+            />
+          } @else if (item.attachment?.type === 'code') {
+            <pre
+              class="mt-3 rounded-mm-xl bg-surface-inverse text-white/90 p-4 text-xs font-mono leading-relaxed overflow-x-auto mm-scroll-thin"
+            ><code>{{ item.attachment!.code }}</code></pre>
+          }
+
+          <footer class="flex items-center justify-between mt-4 pt-3 border-t border-border-soft">
+            <div class="flex flex-wrap items-center gap-1.5">
+              @for (r of item.reactions; track r.emoji) {
+                <button
+                  type="button"
+                  (click)="toggleReaction(item.id, r.emoji)"
+                  class="inline-flex items-center gap-1 rounded-mm-pill px-2 py-0.5 text-xs transition mm-press"
+                  [class.bg-primary-200]="r.mine"
+                  [class.text-primary-700]="r.mine"
+                  [class.bg-surface-secondary]="!r.mine"
+                  [class.text-ink-secondary]="!r.mine"
+                  [class.hover:bg-border]="!r.mine"
+                >
+                  <span>{{ r.emoji }}</span>
+                  <span class="font-mono">{{ r.count }}</span>
+                </button>
+              }
+
+              <div class="relative">
+                <button
+                  type="button"
+                  (click)="toggleEmojiPicker(item.id)"
+                  aria-label="Reaccionar"
+                  class="size-7 rounded-mm-pill grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01M16 11h-1l1 4-1-4z"></path>
+                  </svg>
+                </button>
+                @if (emojiPicker() === item.id) {
+                  <div
+                    class="absolute z-30 top-full mt-2 left-0 rounded-mm-xl border border-border-soft bg-surface-base shadow-mm-elevated p-2 flex gap-1 flex-wrap w-48"
+                    style="animation: scaleIn 200ms var(--ease-out) both; transform-origin: top left"
+                  >
+                    @for (emoji of availableEmojis; track emoji) {
+                      <button
+                        type="button"
+                        (click)="toggleReaction(item.id, emoji)"
+                        class="size-8 rounded-mm-sm grid place-items-center text-base hover:bg-surface-secondary transition mm-press"
+                      >
+                        {{ emoji }}
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 text-xs text-ink-secondary hover:text-ink-dark transition"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+              {{ item.commentsCount }}
+            </button>
+          </footer>
+        </li>
+      }
+    </ul>
+  </mm-canvas-frame>
+</div>

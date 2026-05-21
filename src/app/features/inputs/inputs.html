@@ -1,0 +1,308 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Formularios"
+    title="Inputs"
+    description="Floating labels alineados con el texto, focus ring animado, error shake. Reactive Forms con feedback inline."
+  />
+
+  <mm-canvas-frame
+    heading="Floating labels"
+    description="El label flota arriba cuando hay focus o valor. Alineado pixel-perfect con la línea de texto del usuario."
+    [snippets]="snippetsFloatingLabels"
+  >
+    <div data-stagger class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl">
+      <div class="flex flex-col">
+        <div class="relative">
+          <input
+            type="text"
+            [formControl]="nameCtrl"
+            placeholder=" "
+            id="mm-name"
+            class="peer w-full rounded-mm-md border-2 border-border bg-surface-base px-4 pt-5 pb-2 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200"
+          />
+          <span
+            class="pointer-events-none absolute left-4 transition-all duration-200 origin-left top-1.5 text-xs font-medium text-ink-muted peer-placeholder-shown:top-[1.1rem] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-focus:top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-primary-500"
+          >
+            Nombre completo
+          </span>
+        </div>
+        <span class="block mt-1 text-xs text-ink-muted">Cómo apareces para tu equipo.</span>
+      </div>
+
+      <div class="flex flex-col">
+        <div
+          class="relative"
+          [class.animate-[shake_380ms_ease-out_both]]="emailCtrl.invalid && emailCtrl.touched"
+        >
+          <input
+            type="email"
+            [formControl]="emailCtrl"
+            placeholder=" "
+            id="mm-email"
+            class="peer w-full rounded-mm-md border-2 border-border bg-surface-base px-4 pt-5 pb-2 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200"
+            [class.!border-error]="emailCtrl.invalid && emailCtrl.touched"
+            [class.!bg-error-bg]="emailCtrl.invalid && emailCtrl.touched"
+          />
+          <span
+            class="pointer-events-none absolute left-4 transition-all duration-200 origin-left top-1.5 text-xs font-medium text-ink-muted peer-placeholder-shown:top-[1.1rem] peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-focus:top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-primary-500"
+            [class.!text-error]="emailCtrl.invalid && emailCtrl.touched"
+          >
+            Email
+          </span>
+        </div>
+        @if (emailCtrl.invalid && emailCtrl.touched) {
+          <span class="flex items-center gap-1 mt-1 text-xs text-error font-medium">
+            <svg
+              class="size-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4M12 16h.01"></path>
+            </svg>
+            Ingresa un email válido.
+          </span>
+        } @else {
+          <span class="block mt-1 text-xs text-ink-muted">Usamos esto para enviarte invoices.</span>
+        }
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Password con toggle"
+    description="Botón revelar/ocultar con icono y feedback de fuerza."
+    [snippets]="snippetsPasswordToggle"
+  >
+    <div class="relative max-w-md">
+      <input
+        [type]="showPassword() ? 'text' : 'password'"
+        [formControl]="passwordCtrl"
+        placeholder=" "
+        id="mm-password"
+        class="peer w-full rounded-mm-md border-2 border-border bg-surface-base pl-4 pr-12 py-3 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 justify-center items-start"
+      />
+      <span
+        class="pointer-events-none absolute left-4 ml-10 -translate-x-1/2 transition-all duration-200 origin-left top-1.5 text-center text-xs font-medium text-ink-muted peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-focus:top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-primary-500"
+      >
+        Contraseña
+      </span>
+
+      <button
+        type="button"
+        (click)="togglePassword()"
+        [attr.aria-label]="showPassword() ? 'Ocultar' : 'Mostrar'"
+        class="absolute right-3 top-1/2 -translate-y-1/2 size-8 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+      >
+        @if (showPassword()) {
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M9.88 9.88a3 3 0 1 0 4.24 4.24M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"
+            ></path>
+            <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+            <line x1="2" x2="22" y1="2" y2="22"></line>
+          </svg>
+        } @else {
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        }
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+<mm-canvas-frame heading="Number con prefijo / sufijo"
+  description="Adornos inline para precios y valores con unidad. Spinners nativos ocultos — usa los botones +/- del stepper o el teclado."
+  [snippets]="snippetsNumberPrefixSuffix">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl">
+    <!-- Input 1: Precio -->
+    <label class="flex flex-col gap-1.5">
+      <span class="text-xs font-medium text-ink-dark">Precio</span>
+      <div
+        class="group flex items-center h-11 rounded-mm-md border-2 border-border bg-surface-base focus-within:border-primary-500 focus-within:ring-3 focus-within:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 overflow-hidden">
+        <span
+          class="inline-flex items-center pl-4 pr-1 text-sm font-medium text-ink-muted transition-colors group-focus-within:text-primary-500">
+          $
+        </span>
+        <input
+          type="number"
+          [formControl]="amountCtrl"
+          min="0"
+          class="mm-input-bare flex-1 min-w-0 px-1 text-sm text-ink-dark tabular-nums"
+        />
+        <span
+          class="inline-flex items-center pl-1 pr-4 text-[11px] font-semibold uppercase tracking-wider text-ink-muted border-l border-border-soft ml-2">
+          MXN
+        </span>
+      </div>
+      <span class="text-xs text-ink-muted">Tipea o usa las flechas del teclado.</span>
+    </label>
+
+    <!-- Input 2: Buscar -->
+    <label class="flex flex-col gap-1.5">
+      <span class="text-xs font-medium text-ink-dark">Buscar</span>
+      <div
+        class="group flex items-center h-11 rounded-mm-pill border-2 border-border bg-surface-base focus-within:border-primary-500 focus-within:shadow-mm-sm transition-[border-color,box-shadow] duration-200 overflow-hidden">
+        <span class="inline-flex items-center pl-4">
+          <svg
+            class="size-4 text-ink-muted transition-all duration-200 group-focus-within:text-primary-500 group-focus-within:scale-110"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+        </span>
+        <input
+          type="search"
+          placeholder="Buscar producto…"
+          [formControl]="searchCtrl"
+          class="mm-input-bare flex-1 min-w-0 px-3 text-sm text-ink-dark"
+        />
+      </div>
+    </label>
+  </div>
+</mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Stepper numérico"
+    description="Botones +/- custom — reemplazan los spinners feos del browser y dan control táctil en móvil."
+    [snippets]="snippetsStepper"
+  >
+    <label class="flex flex-col gap-1.5 max-w-xs">
+      <span class="text-xs font-medium text-ink-dark">Cantidad</span>
+      <div
+        class="group flex items-center h-11 rounded-mm-md border-2 border-border bg-surface-base focus-within:border-primary-500 focus-within:ring-3 focus-within:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 overflow-hidden"
+      >
+        <button
+          type="button"
+          mmRipple
+          [color]="'rgba(0,0,0,0.08)'"
+          (click)="step(quantityCtrl, -1, 1, 99)"
+          [disabled]="quantityCtrl.value <= 1"
+          aria-label="Restar"
+          class="inline-flex items-center justify-center w-11 text-ink-dark hover:bg-surface-secondary transition disabled:opacity-40 disabled:cursor-not-allowed mm-press"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M5 12h14"></path>
+          </svg>
+        </button>
+        <input
+          type="number"
+          [formControl]="quantityCtrl"
+          min="1"
+          max="99"
+          class="mm-input-bare flex-1 min-w-0 text-center text-sm font-medium text-ink-dark tabular-nums"
+        />
+        <button
+          type="button"
+          mmRipple
+          [color]="'rgba(0,0,0,0.08)'"
+          (click)="step(quantityCtrl, 1, 1, 99)"
+          [disabled]="quantityCtrl.value >= 99"
+          aria-label="Sumar"
+          class="inline-flex items-center justify-center w-11 text-ink-dark hover:bg-surface-secondary transition disabled:opacity-40 disabled:cursor-not-allowed mm-press"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 5v14M5 12h14"></path>
+          </svg>
+        </button>
+      </div>
+    </label>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Textarea"
+    description="Para mensajes largos. Resize vertical, contador de caracteres dinámico."
+    [snippets]="snippetsTextarea"
+  >
+    <div class="flex flex-col max-w-2xl">
+      <div class="relative">
+        <textarea
+          rows="4"
+          [formControl]="notesCtrl"
+          placeholder=" "
+          id="mm-notes"
+          class="peer w-full rounded-mm-md border-2 border-border bg-surface-base px-4 pt-6 pb-3 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 resize-y"
+        ></textarea>
+        <span
+          class="pointer-events-none absolute left-4 transition-all duration-200 origin-left top-1.5 text-xs font-medium text-ink-muted peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-placeholder-shown:font-normal peer-focus:top-1.5 peer-focus:text-xs peer-focus:font-medium peer-focus:text-primary-500"
+        >
+          Notas
+        </span>
+      </div>
+      <div class="flex justify-between items-center mt-1 text-xs text-ink-muted">
+        <span>Markdown soportado</span>
+        <span class="font-mono" [class.text-warning]="notesCtrl.value.length > 400">
+          {{ notesCtrl.value.length }} / 500
+        </span>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Estados"
+    description="Default, focus, error con shake, disabled, readonly. Cada uno con feedback visual claro."
+    [snippets]="snippetsStates"
+  >
+    <div data-stagger class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-2xl">
+      <input
+        type="text"
+        placeholder="Default"
+        class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm text-ink-dark placeholder:text-ink-muted transition focus:outline-none focus:border-primary-500 focus:ring-3 focus:ring-primary-500/10"
+      />
+      <input
+        type="text"
+        value="Filled value"
+        class="rounded-mm-md border-2 border-primary-500 bg-surface-base px-4 py-2.5 text-sm text-ink-dark ring-3 ring-primary-500/10"
+      />
+      <input
+        type="text"
+        value="Email inválido"
+        class="rounded-mm-md border-2 border-error bg-error-bg px-4 py-2.5 text-sm text-ink-dark"
+      />
+      <input
+        type="text"
+        value="No editable"
+        disabled
+        class="rounded-mm-md border-2 border-border bg-surface-secondary px-4 py-2.5 text-sm text-ink-muted cursor-not-allowed"
+      />
+    </div>
+  </mm-canvas-frame>
+</div>

@@ -1,0 +1,243 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Plantillas"
+    title="Payments · Checkout · Wallets"
+    description="Formularios de pago, checkout summary y botones de wallets — todo con la firma MinimalMax."
+  />
+
+  <mm-canvas-frame
+    heading="Credit card form"
+    description="Form con preview live de la tarjeta — flip al focusear el CVC."
+    [snippets]="snippetsCreditCard"
+  >
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div
+        class="relative aspect-16/10 max-w-md rounded-mm-3xl overflow-hidden shadow-mm-elevated"
+        [style.perspective]="'1000px'"
+      >
+        <div
+          class="relative w-full h-full transition-transform duration-700"
+          style="transform-style: preserve-3d"
+          [style.transform]="flipped() ? 'rotateY(180deg)' : 'rotateY(0deg)'"
+        >
+          <div
+            class="absolute inset-0 rounded-mm-3xl p-6 bg-linear-to-br from-brand-deep via-brand-6 to-brand-pink text-white flex flex-col justify-between"
+            style="backface-visibility: hidden"
+          >
+            <div class="flex items-start justify-between">
+              <span
+                class="rounded-mm-md bg-white/20 backdrop-blur px-2 py-1 text-[10px] font-semibold uppercase tracking-wider"
+              >
+                Credit
+              </span>
+              <span class="font-display text-lg font-medium">MinimalMax</span>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <p class="text-[10px] uppercase tracking-wider text-white/60 font-semibold">
+                Número
+              </p>
+              <p class="font-mono text-lg md:text-xl tabular-nums tracking-wider">
+                {{ displayNumber() }}
+              </p>
+            </div>
+
+            <div class="flex items-end justify-between">
+              <div>
+                <p class="text-[10px] uppercase tracking-wider text-white/60 font-semibold">
+                  Titular
+                </p>
+                <p class="font-medium text-sm">{{ cardHolder.value }}</p>
+              </div>
+              <div>
+                <p class="text-[10px] uppercase tracking-wider text-white/60 font-semibold">
+                  Vence
+                </p>
+                <p class="font-mono text-sm">{{ cardExpiry.value }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="absolute inset-0 rounded-mm-3xl bg-linear-to-br from-surface-inverse to-surface-inverse-deep text-white p-6 flex flex-col justify-center gap-4"
+            style="backface-visibility: hidden; transform: rotateY(180deg)"
+          >
+            <div class="h-10 bg-black/50 -mx-6"></div>
+            <div class="bg-white/90 rounded-mm-sm text-ink-dark px-4 py-3 flex items-center justify-between">
+              <span class="font-mono">{{ cardCvc.value }}</span>
+              <span class="text-[10px] text-ink-muted">CVC</span>
+            </div>
+            <p class="text-[10px] text-white/60 leading-relaxed">
+              Este código se utiliza para confirmar la propiedad de la tarjeta. No lo
+              compartas con nadie.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <form class="flex flex-col gap-4 max-w-md">
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-medium text-ink-dark">Número de tarjeta</span>
+          <input
+            type="text"
+            [formControl]="cardNumber"
+            placeholder="1234 1234 1234 1234"
+            class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm font-mono text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition"
+          />
+        </label>
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-medium text-ink-dark">Titular</span>
+          <input
+            type="text"
+            [formControl]="cardHolder"
+            placeholder="Nombre como aparece en la tarjeta"
+            class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition"
+          />
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex flex-col gap-1.5">
+            <span class="text-xs font-medium text-ink-dark">Vence</span>
+            <input
+              type="text"
+              [formControl]="cardExpiry"
+              placeholder="MM/AA"
+              (focus)="flipped.set(false)"
+              class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm font-mono text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition"
+            />
+          </label>
+          <label class="flex flex-col gap-1.5">
+            <span class="text-xs font-medium text-ink-dark">CVC</span>
+            <input
+              type="text"
+              [formControl]="cardCvc"
+              placeholder="123"
+              maxlength="4"
+              (focus)="flipped.set(true)"
+              (blur)="flipped.set(false)"
+              class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm font-mono text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition"
+            />
+          </label>
+        </div>
+        <button
+          type="button"
+          mmRipple
+          class="mt-3 rounded-mm-md bg-cta px-5 py-3 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+        >
+          Pagar $26.78 USD
+        </button>
+      </form>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Wallets / 1-click pay"
+    description="Botones de Apple Pay / Google Pay / Stripe Link — patrones para checkout express."
+    [snippets]="snippetsWallets"
+  >
+    <div class="flex flex-col gap-3 max-w-md">
+      <button
+        type="button"
+        mmRipple
+        class="inline-flex items-center justify-center gap-2 rounded-mm-md bg-black px-5 py-3.5 text-sm font-semibold text-white hover:opacity-90 transition mm-press"
+      >
+        <svg class="size-5" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+        </svg>
+        Pay
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="inline-flex items-center justify-center gap-2 rounded-mm-md bg-surface-base border-2 border-ink-charcoal px-5 py-3.5 text-sm font-semibold text-ink-dark hover:bg-surface-secondary transition mm-press"
+      >
+        <span class="font-display text-base">G</span>
+        Pay
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="inline-flex items-center justify-center gap-2 rounded-mm-md bg-[#635BFF] px-5 py-3.5 text-sm font-semibold text-white hover:opacity-90 transition mm-press"
+      >
+        <svg class="size-4" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M13.479 9.883c-1.626-.604-2.512-1.067-2.512-1.803 0-.622.511-.977 1.413-.977 1.643 0 3.336.638 4.502 1.215l.654-4.084C16.595 3.726 14.846 3 12.501 3c-1.964 0-3.602.515-4.769 1.466-1.218.997-1.851 2.434-1.851 4.155 0 3.122 1.901 4.464 5.001 5.6 1.987.72 2.653 1.235 2.653 2.018 0 .763-.643 1.21-1.815 1.21-1.519 0-3.973-.747-5.595-1.708l-.66 4.142C7.027 20.79 9.249 21.5 11.504 21.5c2.082 0 3.823-.488 5.001-1.402 1.317-1.013 1.998-2.498 1.998-4.413 0-3.198-1.911-4.515-5.024-5.802z"/>
+        </svg>
+        Pay with Stripe
+      </button>
+
+      <div class="relative flex items-center my-2">
+        <span class="flex-1 h-px bg-border"></span>
+        <span class="px-3 text-xs text-ink-muted">o</span>
+        <span class="flex-1 h-px bg-border"></span>
+      </div>
+
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md border border-border bg-surface-base px-5 py-2.5 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+      >
+        Pagar con tarjeta de crédito
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Checkout summary"
+    description="Resumen de orden con items, subtotal, impuestos y total. Sticky en desktop."
+    [snippets]="snippetsCheckoutSummary"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="md:col-span-2 flex flex-col gap-3">
+        @for (item of cartItems; track item.name) {
+          <div
+            class="flex items-center gap-4 p-4 rounded-mm-xl border border-border-soft bg-surface-base shadow-mm-sm"
+          >
+            <span
+              class="size-12 rounded-mm-md bg-linear-to-br from-brand-6 to-brand-pink shrink-0"
+            ></span>
+            <div class="flex-1 min-w-0">
+              <p class="font-medium text-ink-dark">{{ item.name }}</p>
+              <p class="text-xs text-ink-muted">{{ item.desc }}</p>
+            </div>
+            <p class="font-mono font-medium text-ink-dark tabular-nums">
+              ${{ (item.amount / 100).toFixed(2) }}
+            </p>
+          </div>
+        }
+      </div>
+      <aside class="rounded-mm-2xl bg-surface-secondary/40 border border-border-soft p-5 h-fit md:sticky md:top-24">
+        <h4 class="font-display font-semibold text-ink-dark mb-4">Resumen</h4>
+        <dl class="flex flex-col gap-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-ink-secondary">Subtotal</dt>
+            <dd class="font-mono text-ink-dark tabular-nums">
+              ${{ (subtotal / 100).toFixed(2) }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-ink-secondary">IVA (16%)</dt>
+            <dd class="font-mono text-ink-dark tabular-nums">
+              ${{ (tax / 100).toFixed(2) }}
+            </dd>
+          </div>
+          <hr class="border-border-soft my-2" />
+          <div class="flex justify-between items-baseline">
+            <dt class="font-display font-semibold text-ink-dark">Total</dt>
+            <dd class="font-display text-xl font-medium text-ink-dark tabular-nums">
+              ${{ (total / 100).toFixed(2) }}
+            </dd>
+          </div>
+        </dl>
+        <button
+          type="button"
+          mmRipple
+          class="w-full mt-5 rounded-mm-md bg-brand-6 px-4 py-3 text-sm font-medium text-white shadow-mm-brand hover:shadow-mm-elevated transition mm-press"
+        >
+          Confirmar y pagar
+        </button>
+        <p class="text-[11px] text-ink-muted text-center mt-3">
+          Encriptado con TLS 1.3 · PCI DSS compliant
+        </p>
+      </aside>
+    </div>
+  </mm-canvas-frame>
+</div>

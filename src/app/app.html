@@ -1,0 +1,20 @@
+<div class="min-h-dvh bg-surface-app flex">
+  <mm-sidebar />
+
+  <div class="flex-1 min-w-0 flex flex-col">
+    <mm-topbar />
+
+    <main class="flex-1 min-w-0">
+      <div class="max-w-7xl mx-auto px-6 md:px-10 py-10 md:py-14 flex gap-10">
+        <div class="flex-1 min-w-0">
+          <mm-route-loader />
+          <router-outlet />
+        </div>
+        <mm-toc />
+      </div>
+    </main>
+  </div>
+
+  <mm-toast-host />
+  <mm-tour-host />
+</div>

@@ -1,0 +1,130 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Onboarding"
+    title="Tour / Coachmark"
+    description="Tour guiado paso a paso con spotlight oscuro + popover apuntando al elemento. Patrón Notion / Linear primera vez."
+  />
+
+  <mm-canvas-frame
+    heading="Demo: tour de 4 pasos"
+    description="Click en 'Empezar tour'. El spotlight resalta cada elemento, el popover explica qué hace."
+    [snippets]="snippetsDemo"
+  >
+    <div class="flex flex-col gap-6">
+      <button
+        type="button"
+        mmRipple
+        (click)="startTour()"
+        class="self-start rounded-mm-md bg-cta px-5 py-3 text-sm font-medium text-cta-fg shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        🎯 Empezar tour
+      </button>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 rounded-mm-2xl border border-border-soft bg-surface-secondary/30 p-6"
+      >
+        <div
+          id="tour-target-1"
+          class="rounded-mm-xl bg-surface-base border border-border-soft p-5 shadow-mm-sm"
+        >
+          <span
+            class="size-10 rounded-mm-md bg-linear-to-br from-brand-6 to-primary-500 grid place-items-center text-white mb-3"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2 4 6v6c0 5.5 3.84 10.7 8 12 4.16-1.3 8-6.5 8-12V6l-8-4z"></path>
+            </svg>
+          </span>
+          <h4 class="font-display text-base font-medium text-ink-dark">Inicio</h4>
+          <p class="text-xs text-ink-secondary mt-1">Vista general de tu workspace.</p>
+        </div>
+
+        <div
+          id="tour-target-2"
+          class="rounded-mm-xl bg-surface-base border border-border-soft p-5 shadow-mm-sm"
+        >
+          <span
+            class="size-10 rounded-mm-md bg-linear-to-br from-brand-pink to-fuchsia-500 grid place-items-center text-white mb-3"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+          </span>
+          <h4 class="font-display text-base font-medium text-ink-dark">Nuevo proyecto</h4>
+          <p class="text-xs text-ink-secondary mt-1">Crea un proyecto en segundos.</p>
+        </div>
+
+        <div
+          id="tour-target-3"
+          class="rounded-mm-xl bg-surface-base border border-border-soft p-5 shadow-mm-sm"
+        >
+          <span
+            class="size-10 rounded-mm-md bg-linear-to-br from-emerald-500 to-teal-500 grid place-items-center text-white mb-3"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </span>
+          <h4 class="font-display text-base font-medium text-ink-dark">Configuración</h4>
+          <p class="text-xs text-ink-secondary mt-1">Ajustes del workspace.</p>
+        </div>
+
+        <div
+          id="tour-target-4"
+          class="rounded-mm-xl bg-linear-to-br from-amber-500 to-orange-500 text-white p-5 shadow-mm-brand"
+        >
+          <span
+            class="size-10 rounded-mm-md bg-white/20 backdrop-blur grid place-items-center mb-3"
+          >
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </span>
+          <h4 class="font-display text-base font-medium">¡Listo!</h4>
+          <p class="text-xs text-white/80 mt-1">A construir.</p>
+        </div>
+      </div>
+
+      <div
+        class="rounded-mm-xl bg-surface-secondary/40 border border-border-soft p-4 text-xs text-ink-secondary"
+      >
+        💡 El tour respeta scroll: si el target está fuera de viewport, se hace
+        <code class="font-mono text-ink-dark">scrollIntoView</code>
+        automáticamente. Resize y scroll re-miden la posición.
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="API del TourService"
+    description="Service global inyectable. Cualquier feature puede disparar un tour propio con sus pasos."
+    [snippets]="snippetsApi"
+  >
+    <pre
+      class="font-mono text-xs leading-relaxed bg-surface-inverse text-white/90 p-5 rounded-mm-xl overflow-x-auto mm-scroll-thin"
+    ><code>// component.ts
+private readonly tour = inject(TourService);
+
+protected startOnboarding() &#123;
+  this.tour.start([
+    &#123;
+      targetId: 'sidebar-create',
+      title: 'Crea tu primer proyecto',
+      description: 'Click aquí para empezar.',
+      placement: 'right',
+    &#125;,
+    &#123;
+      targetId: 'topbar-theme',
+      title: 'Cambia el tema',
+      description: 'Light o dark, lo que prefieras.',
+    &#125;,
+  ]);
+&#125;
+
+// Métodos del service:
+// tour.next()     -> siguiente paso
+// tour.prev()     -> paso anterior
+// tour.skip()     -> cerrar tour
+// tour.complete() -> finalizar</code></pre>
+  </mm-canvas-frame>
+</div>
