@@ -1,0 +1,9 @@
+{
+  "duration": {
+    "instant": { "value": "0ms" },
+    "fast": { "value": "150ms" },
+    "normal": { "value": "300ms" },
+    "slow": { "value": "500ms" },
+    "slower": { "value": "800ms" }
+  }
+}

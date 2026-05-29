@@ -1,0 +1,11 @@
+{
+  "radius": {
+    "mm-sm": { "value": "4px" },
+    "mm-md": { "value": "8px" },
+    "mm-lg": { "value": "13px" },
+    "mm-xl": { "value": "16px" },
+    "mm-2xl": { "value": "20px" },
+    "mm-3xl": { "value": "24px" },
+    "mm-pill": { "value": "9999px" }
+  }
+}

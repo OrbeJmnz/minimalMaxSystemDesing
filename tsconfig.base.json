@@ -5,6 +5,11 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@minimax/tokens": ["packages/tokens/dist/tokens.d.ts"],
+      "@minimax/ui-angular": ["packages/ui-angular/src/public-api.ts"]
+    }
   }
 }

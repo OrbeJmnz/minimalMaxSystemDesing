@@ -1,0 +1,8 @@
+{
+  "font": {
+    "sans": { "value": "'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif" },
+    "display": { "value": "'Outfit', 'Helvetica Neue', Helvetica, Arial, sans-serif" },
+    "mid": { "value": "'Poppins', sans-serif" },
+    "mono": { "value": "'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif" }
+  }
+}

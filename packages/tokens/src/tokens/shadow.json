@@ -1,0 +1,10 @@
+{
+  "shadow": {
+    "mm-sm": { "value": "0 4px 6px rgba(0, 0, 0, 0.08)" },
+    "mm-md": { "value": "0 0 22.576px rgba(0, 0, 0, 0.08)" },
+    "mm-brand": { "value": "0 0 15px rgba(44, 30, 116, 0.16)" },
+    "mm-brand-offset": { "value": "6.5px 2px 17.5px rgba(44, 30, 116, 0.11)" },
+    "mm-elevated": { "value": "0 12px 16px -4px rgba(36, 36, 36, 0.08)" },
+    "mm-lift": { "value": "0 18px 40px -12px rgba(20, 86, 240, 0.25)" }
+  }
+}

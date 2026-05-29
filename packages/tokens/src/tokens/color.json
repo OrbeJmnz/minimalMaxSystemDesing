@@ -1,0 +1,46 @@
+{
+  "color": {
+    "brand-6": { "value": "#1456f0" },
+    "brand-deep": { "value": "#17437d" },
+    "brand-sky": { "value": "#3daeff" },
+    "brand-pink": { "value": "#ea5ec1" },
+
+    "primary-200": { "value": "#bfdbfe" },
+    "primary-light": { "value": "#60a5fa" },
+    "primary-500": { "value": "#3b82f6" },
+    "primary-600": { "value": "#2563eb" },
+    "primary-700": { "value": "#1d4ed8" },
+
+    "ink-base": { "value": "#222222" },
+    "ink-dark": { "value": "#18181b" },
+    "ink-charcoal": { "value": "#181e25" },
+    "ink-secondary": { "value": "#45515e" },
+    "ink-muted": { "value": "#8e8e93" },
+    "ink-helper": { "value": "#5f5f5f" },
+
+    "surface-base": { "value": "#ffffff" },
+    "surface-secondary": { "value": "#f0f0f0" },
+    "surface-app": { "value": "#f7f8fa" },
+    "surface-glass": { "value": "hsla(0, 0%, 100%, 0.4)" },
+    "border-soft": { "value": "#f2f3f5" },
+    "border": { "value": "#e5e7eb" },
+
+    "success": { "value": "#10b981" },
+    "success-bg": { "value": "#e8ffea" },
+    "warning": { "value": "#f59e0b" },
+    "warning-bg": { "value": "#fffbeb" },
+    "error": { "value": "#ef4444" },
+    "error-bg": { "value": "#fef2f2" },
+
+    "cta": { "value": "#181e25" },
+    "cta-fg": { "value": "#ffffff" },
+    "cta-hover": { "value": "#000000" },
+    "cta-soft": { "value": "#f0f0f0" },
+    "cta-soft-fg": { "value": "#18181b" },
+
+    "surface-inverse": { "value": "#18181b" },
+    "surface-inverse-deep": { "value": "#0d1117" },
+    "backdrop": { "value": "rgba(13, 17, 23, 0.55)" },
+    "backdrop-strong": { "value": "rgba(13, 17, 23, 0.85)" }
+  }
+}

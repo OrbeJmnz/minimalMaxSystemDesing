@@ -1,0 +1,9 @@
+{
+  "ease": {
+    "default": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
+    "out": { "value": "cubic-bezier(0, 0, 0.2, 1)" },
+    "in": { "value": "cubic-bezier(0.4, 0, 1, 1)" },
+    "in-out": { "value": "cubic-bezier(0.4, 0, 0.2, 1)" },
+    "bounce": { "value": "cubic-bezier(0.68, -0.55, 0.265, 1.55)" }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "animate": {
+    "fade-in": { "value": "fadeIn 300ms var(--ease-out) both" },
+    "fade-in-up": { "value": "fadeInUp 600ms var(--ease-out) both" },
+    "fade-in-down": { "value": "fadeInDown 400ms var(--ease-out) both" },
+    "scale-in": { "value": "scaleIn 400ms var(--ease-out) both" },
+    "slide-in-right": { "value": "slideInRight 300ms var(--ease-out) both" },
+    "slide-in-left": { "value": "slideInLeft 300ms var(--ease-out) both" },
+    "shimmer": { "value": "shimmer 1.5s linear infinite" },
+    "shake": { "value": "shake 380ms var(--ease-default) both" },
+    "spin-slow": { "value": "spin 1.2s linear infinite" },
+    "press": { "value": "press 200ms var(--ease-out) both" },
+    "pop": { "value": "pop 240ms var(--ease-bounce) both" }
+  }
+}

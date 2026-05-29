@@ -1,16 +1,21 @@
 {
-  "name": "mm-showcase",
+  "name": "minimax-monorepo",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx serve",
-    "build": "nx build",
-    "watch": "nx build --watch --configuration development",
-    "test": "nx test",
+    "start": "nx serve mm-showcase",
+    "build": "nx build mm-showcase",
+    "watch": "nx build mm-showcase --watch --configuration development",
+    "test": "nx test mm-showcase",
+    "tokens": "nx build tokens",
     "serve:ssr:mm-showcase": "node dist/mm-showcase/server/server.mjs"
   },
   "private": true,
   "packageManager": "npm@10.9.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "dependencies": {
     "@angular/cdk": "^21.2.11",
     "@angular/common": "^21.2.0",
@@ -43,6 +48,7 @@
     "nx": "22.7.5",
     "postcss": "^8.5.14",
     "prettier": "^3.8.1",
+    "style-dictionary": "^4.4.0",
     "tailwindcss": "^4.3.0",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
