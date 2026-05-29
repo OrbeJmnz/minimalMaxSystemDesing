@@ -1,0 +1,14 @@
+{
+  "name": "@minimax/ui-angular",
+  "version": "0.0.1",
+  "description": "MiniMax design system — componentes, directivas y servicios Angular reutilizables",
+  "license": "MIT",
+  "peerDependencies": {
+    "@angular/cdk": "^21.2.0",
+    "@angular/common": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@minimax/styles": "^0.1.0"
+  },
+  "sideEffects": false
+}

@@ -12,36 +12,44 @@ import {
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { OverlayService } from '../../../core/services/overlay.service';
+import { OverlayService } from '../../services/overlay.service';
 
-let modalCounter = 0;
+let drawerCounter = 0;
 
 @Component({
-  selector: 'mm-modal-shell',
+  selector: 'mm-drawer-shell',
   imports: [CdkTrapFocus],
   template: `
     @if (open()) {
       <div
-        class="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-6 mm-no-print"
+        class="fixed inset-0 z-50 mm-no-print"
         role="dialog"
         aria-modal="true"
         [attr.aria-labelledby]="titleId"
-        style="animation: fadeIn 200ms var(--ease-out) both;"
       >
         <button
           type="button"
           (click)="close.emit()"
           aria-label="Cerrar"
-          class="absolute inset-0 bg-black/55 backdrop-blur-sm cursor-default"
+          class="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default"
+          style="animation: fadeIn 220ms var(--ease-out) both;"
         ></button>
-        <div
+        <aside
           cdkTrapFocus
           [cdkTrapFocusAutoCapture]="true"
-          class="relative w-full md:max-w-lg rounded-t-mm-3xl md:rounded-mm-3xl bg-surface-base shadow-mm-elevated border border-border-soft overflow-hidden"
-          style="animation: scaleIn 240ms var(--ease-out) both;"
+          class="absolute top-0 bottom-0 w-full max-w-md bg-surface-base shadow-mm-elevated border-border-soft overflow-y-auto"
+          [class.right-0]="side() === 'right'"
+          [class.border-l]="side() === 'right'"
+          [class.left-0]="side() === 'left'"
+          [class.border-r]="side() === 'left'"
+          [style.animation]="
+            side() === 'right'
+              ? 'slideInRight 320ms var(--ease-out) both'
+              : 'slideInLeft 320ms var(--ease-out) both'
+          "
         >
           <header
-            class="flex items-center justify-between gap-3 px-6 py-4 border-b border-border-soft"
+            class="sticky top-0 z-10 flex items-center justify-between gap-3 px-6 py-4 border-b border-border-soft bg-surface-base/95 backdrop-blur-xl"
           >
             <div class="flex-1 min-w-0">
               @if (eyebrow()) {
@@ -56,7 +64,7 @@ let modalCounter = 0;
             <button
               type="button"
               (click)="close.emit()"
-              aria-label="Cerrar modal"
+              aria-label="Cerrar drawer"
               class="size-9 rounded-mm-md grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
             >
               <svg
@@ -75,29 +83,25 @@ let modalCounter = 0;
           <div class="px-6 py-5">
             <ng-content></ng-content>
           </div>
-          <footer
-            class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-soft bg-surface-secondary/30"
-          >
-            <ng-content select="[slot=actions]"></ng-content>
-          </footer>
-        </div>
+        </aside>
       </div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'contents' },
 })
-export class ModalShellComponent {
+export class DrawerShellComponent {
   readonly open = input.required<boolean>();
   readonly title = input.required<string>();
   readonly eyebrow = input<string>('');
+  readonly side = input<'left' | 'right'>('right');
   readonly close = output<void>();
 
-  protected readonly titleId = `mm-modal-title-${++modalCounter}`;
+  protected readonly titleId = `mm-drawer-title-${++drawerCounter}`;
   private readonly overlay = inject(OverlayService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly id = `modal-${modalCounter}`;
+  private readonly id = `drawer-${drawerCounter}`;
 
   constructor() {
     effect(() => {

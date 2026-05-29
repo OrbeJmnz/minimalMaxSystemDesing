@@ -10,7 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { TourService } from '../../../core/services/tour.service';
+import { TourService } from '../../services/tour.service';
 
 interface TargetBox {
   readonly top: number;

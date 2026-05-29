@@ -9,7 +9,7 @@
     "baseUrl": ".",
     "paths": {
       "@minimax/tokens": ["packages/tokens/dist/tokens.d.ts"],
-      "@minimax/ui-angular": ["packages/ui-angular/src/public-api.ts"]
+      "@minimax/ui-angular": ["./packages/ui-angular/src/index.ts"]
     }
   }
 }
