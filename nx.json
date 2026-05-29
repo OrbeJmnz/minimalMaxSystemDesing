@@ -40,8 +40,16 @@
     "production": ["default", "!{projectRoot}/.eslintrc.json", "!{projectRoot}/eslint.config.mjs"]
   },
   "release": {
+    "projects": ["tokens", "styles", "ui-angular"],
+    "projectsRelationship": "independent",
     "version": {
-      "preVersionCommand": "npx nx run-many -t build"
+      "preVersionCommand": "npx nx run-many -t build -p tokens ui-angular",
+      "conventionalCommits": true,
+      "updateDependents": "auto",
+      "preserveMatchingDependencyRanges": false
+    },
+    "changelog": {
+      "projectChangelogs": true
     }
   },
   "generators": {
