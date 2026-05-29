@@ -22,8 +22,11 @@ export class ThemeService {
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
       const stored = localStorage.getItem(this.storageKey) as ThemeMode | null;
-      const initial: ThemeMode =
-        stored ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      // matchMedia puede no existir en algunos entornos browser (jsdom, navegadores antiguos).
+      const prefersDark =
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initial: ThemeMode = stored ?? (prefersDark ? 'dark' : 'light');
       this.mode.set(initial);
     }
 
