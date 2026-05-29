@@ -1,0 +1,58 @@
+/* @minimax/styles — dark theme del ADN MiniMax.
+   Se activa con [data-theme='dark'] en <html>. Override de tokens + variante mm-dark. */
+
+@variant mm-dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+[data-theme='dark'] {
+  --color-surface-base: #161b22;
+  --color-surface-secondary: #0d1117;
+  --color-surface-app: #0d1117;
+  --color-surface-glass: hsla(220, 30%, 8%, 0.55);
+  --color-border-soft: #1f242c;
+  --color-border: #30363d;
+
+  --color-ink-base: #e6edf3;
+  --color-ink-dark: #ffffff;
+  --color-ink-charcoal: #f0f6fc;
+  --color-ink-secondary: #c9d1d9;
+  --color-ink-muted: #8b949e;
+  --color-ink-helper: #768390;
+
+  --color-cta: #1456f0;
+  --color-cta-fg: #ffffff;
+  --color-cta-hover: #2563eb;
+  --color-cta-soft: #21262d;
+  --color-cta-soft-fg: #e6edf3;
+
+  --color-error-bg: #2d1116;
+  --color-success-bg: #102a1c;
+  --color-warning-bg: #2d1f0a;
+
+  --shadow-mm-sm: 0 4px 6px rgba(0, 0, 0, 0.45);
+  --shadow-mm-md: 0 0 22.576px rgba(0, 0, 0, 0.4);
+  --shadow-mm-brand: 0 0 18px rgba(80, 110, 255, 0.35);
+  --shadow-mm-elevated: 0 14px 24px -6px rgba(0, 0, 0, 0.6);
+
+  color-scheme: dark;
+}
+
+[data-theme='dark'] ::selection {
+  background: var(--color-primary-500);
+  color: white;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  background-clip: padding-box;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-muted);
+  background-clip: padding-box;
+}
+
+[data-theme='dark'] input[type='date']::-webkit-datetime-edit,
+[data-theme='dark'] input[type='time']::-webkit-datetime-edit,
+[data-theme='dark'] input[type='datetime-local']::-webkit-datetime-edit {
+  color: var(--color-ink-dark);
+}

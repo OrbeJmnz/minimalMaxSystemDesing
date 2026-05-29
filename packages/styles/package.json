@@ -1,0 +1,19 @@
+{
+  "name": "@minimax/styles",
+  "version": "0.1.0",
+  "description": "MiniMax design system — keyframes, utilities y dark theme portables (CSS puro sobre @minimax/tokens)",
+  "license": "MIT",
+  "style": "./src/index.css",
+  "exports": {
+    ".": "./src/index.css",
+    "./keyframes.css": "./src/keyframes.css",
+    "./utilities.css": "./src/utilities.css",
+    "./dark.css": "./src/dark.css",
+    "./base.css": "./src/base.css"
+  },
+  "files": ["src"],
+  "peerDependencies": {
+    "@minimax/tokens": "^0.1.0"
+  },
+  "sideEffects": ["*.css"]
+}

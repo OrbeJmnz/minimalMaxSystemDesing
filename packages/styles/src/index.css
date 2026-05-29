@@ -1,0 +1,15 @@
+/* @minimax/styles — entrada principal del ADN MiniMax (CSS portable).
+ *
+ * Uso en un consumidor con Tailwind v4:
+ *   @import "tailwindcss";
+ *   @import "@minimax/styles";
+ *
+ * El orden importa: los tokens (@theme) se cargan primero porque keyframes,
+ * dark y utilities referencian sus variables.
+ */
+
+@import '@minimax/tokens/theme.css';
+@import './keyframes.css';
+@import './dark.css';
+@import './base.css';
+@import './utilities.css';

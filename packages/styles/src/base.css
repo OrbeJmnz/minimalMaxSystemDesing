@@ -1,0 +1,122 @@
+/* @minimax/styles — base/reset del ADN MiniMax.
+   Capa opt-in: tipografía base, selección, focus-visible, cursores e inputs de fecha.
+   Un consumidor que no la quiera puede importar los subpaths (keyframes/utilities/dark) en vez del index. */
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink-base);
+  background: var(--color-surface-app);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--color-brand-6);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-mm-md);
+}
+
+/* Cursores e interacción */
+button:not([disabled]):not([aria-disabled='true']),
+[role='button']:not([aria-disabled='true']),
+a[href],
+label:has(input[type='checkbox']:not([disabled])),
+label:has(input[type='radio']:not([disabled])),
+summary,
+[tabindex]:not([tabindex='-1']):not(input):not(textarea):not(select) {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+button:disabled,
+[aria-disabled='true'] {
+  cursor: not-allowed;
+}
+
+/* Inputs numéricos: oculta spinners nativos */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+/* Inputs de fecha/hora */
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'],
+input[type='month'],
+input[type='week'] {
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='time']::-webkit-calendar-picker-indicator,
+input[type='datetime-local']::-webkit-calendar-picker-indicator,
+input[type='month']::-webkit-calendar-picker-indicator,
+input[type='week']::-webkit-calendar-picker-indicator {
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+input[type='date']::-webkit-datetime-edit,
+input[type='time']::-webkit-datetime-edit,
+input[type='datetime-local']::-webkit-datetime-edit {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-ink-dark);
+}
+
+input[type='date']::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+input[type='date']::-webkit-datetime-edit-text,
+input[type='time']::-webkit-datetime-edit-text {
+  color: var(--color-ink-muted);
+  padding: 0 2px;
+}
+
+/* Accesibilidad: respeta reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-stagger] > * {
+    opacity: 1;
+  }
+}
