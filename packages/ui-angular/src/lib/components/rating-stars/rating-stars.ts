@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  model,
+  signal,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'mm-rating-stars',
@@ -16,7 +25,7 @@ import { ChangeDetectionStrategy, Component, computed, input, model, signal } fr
           [attr.role]="readonly() ? null : 'radio'"
           [attr.aria-checked]="readonly() ? null : value() === i"
           [attr.aria-label]="i + ' de ' + max() + ' estrellas'"
-          [disabled]="readonly()"
+          [disabled]="readonly() || disabled()"
           (click)="pick(i)"
           (mouseenter)="preview.set(i)"
           (focus)="preview.set(i)"
@@ -52,8 +61,11 @@ import { ChangeDetectionStrategy, Component, computed, input, model, signal } fr
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'inline-block' },
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => RatingStarsComponent), multi: true },
+  ],
 })
-export class RatingStarsComponent {
+export class RatingStarsComponent implements ControlValueAccessor {
   readonly value = model<number>(0);
   readonly max = input(5);
   readonly readonly = input(false);
@@ -62,6 +74,24 @@ export class RatingStarsComponent {
   readonly ariaLabel = input<string>('Rating');
 
   protected readonly preview = signal<number | null>(null);
+  protected readonly disabled = signal(false);
+
+  private onChange: (value: number) => void = () => {};
+  private onTouched: () => void = () => {};
+
+  // ControlValueAccessor — habilita formControlName / ngModel.
+  writeValue(value: number): void {
+    this.value.set(value ?? 0);
+  }
+  registerOnChange(fn: (value: number) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
+  }
 
   protected readonly stars = computed(() => Array.from({ length: this.max() }, (_, i) => i + 1));
 
@@ -83,7 +113,9 @@ export class RatingStarsComponent {
   }
 
   protected pick(value: number): void {
-    if (this.readonly()) return;
+    if (this.readonly() || this.disabled()) return;
     this.value.set(value);
+    this.onChange(value);
+    this.onTouched();
   }
 }

@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input, model } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  model,
+  signal,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'mm-color-picker',
@@ -10,8 +19,10 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
           <input
             type="color"
             [value]="value()"
+            [disabled]="disabled()"
             (input)="setFromInput($event)"
-            class="absolute inset-0 opacity-0 cursor-pointer"
+            (blur)="onTouched()"
+            class="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
             aria-label="Selector de color"
           />
           <div
@@ -27,9 +38,11 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
             <input
               type="text"
               [value]="value()"
+              [disabled]="disabled()"
               (input)="setFromText($event)"
+              (blur)="onTouched()"
               maxlength="7"
-              class="font-mono text-sm w-full rounded-mm-md border-2 border-border bg-surface-base px-3 py-1.5 text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition uppercase"
+              class="font-mono text-sm w-full rounded-mm-md border-2 border-border bg-surface-base px-3 py-1.5 text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition uppercase disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </label>
         </div>
@@ -43,7 +56,8 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
           @for (swatch of swatches(); track swatch) {
             <button
               type="button"
-              (click)="value.set(swatch)"
+              [disabled]="disabled()"
+              (click)="commit(swatch)"
               [attr.aria-label]="'Color ' + swatch"
               [attr.aria-pressed]="value().toLowerCase() === swatch.toLowerCase()"
               class="size-7 rounded-mm-md border-2 transition-all hover:scale-110 mm-press"
@@ -85,9 +99,37 @@ import { ChangeDetectionStrategy, Component, computed, input, model } from '@ang
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => ColorPickerComponent), multi: true },
+  ],
 })
-export class ColorPickerComponent {
+export class ColorPickerComponent implements ControlValueAccessor {
   readonly value = model<string>('#1456f0');
+  protected readonly disabled = signal(false);
+
+  private onChange: (value: string) => void = () => {};
+  protected onTouched: () => void = () => {};
+
+  // ControlValueAccessor — habilita formControlName / ngModel.
+  writeValue(value: string): void {
+    this.value.set(value ?? '#1456f0');
+  }
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
+  }
+
+  /** Escritura por interacción del usuario: actualiza el modelo y notifica al form. */
+  protected commit(value: string): void {
+    this.value.set(value);
+    this.onChange(value);
+    this.onTouched();
+  }
   readonly swatches = input<readonly string[]>([
     '#1456f0',
     '#ea5ec1',
@@ -105,18 +147,18 @@ export class ColorPickerComponent {
   readonly showContrast = input(true);
 
   protected setFromInput(event: Event): void {
-    this.value.set((event.target as HTMLInputElement).value);
+    this.commit((event.target as HTMLInputElement).value);
   }
 
   protected setFromText(event: Event): void {
     const raw = (event.target as HTMLInputElement).value;
     if (/^#[0-9a-fA-F]{6}$/.test(raw)) {
-      this.value.set(raw.toLowerCase());
+      this.commit(raw.toLowerCase());
     } else if (/^#[0-9a-fA-F]{3}$/.test(raw)) {
       const r = raw[1];
       const g = raw[2];
       const b = raw[3];
-      this.value.set(`#${r}${r}${g}${g}${b}${b}`.toLowerCase());
+      this.commit(`#${r}${r}${g}${g}${b}${b}`.toLowerCase());
     }
   }
 

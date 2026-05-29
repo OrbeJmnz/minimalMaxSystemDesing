@@ -5,10 +5,12 @@ import {
   ViewChildren,
   QueryList,
   computed,
+  forwardRef,
   input,
   model,
   signal,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'mm-otp-input',
@@ -23,12 +25,14 @@ import {
           autocomplete="one-time-code"
           maxlength="1"
           [value]="slot"
+          [disabled]="disabled()"
           [attr.aria-label]="'Dígito ' + (i + 1)"
           (input)="onInput(i, $event)"
           (keydown)="onKey(i, $event)"
           (paste)="onPaste($event)"
           (focus)="onFocus($event)"
-          class="size-12 text-center font-mono text-lg font-medium rounded-mm-md border-2 border-border bg-surface-base text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 tabular-nums"
+          (blur)="onTouched()"
+          class="size-12 text-center font-mono text-lg font-medium rounded-mm-md border-2 border-border bg-surface-base text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition-[border-color,box-shadow] duration-200 tabular-nums disabled:opacity-50 disabled:cursor-not-allowed"
           [class.!border-primary-500]="slot"
           [class.!bg-primary-200/20]="slot"
         />
@@ -37,11 +41,38 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'inline-block' },
+  providers: [
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => OtpInputComponent), multi: true },
+  ],
 })
-export class OtpInputComponent {
+export class OtpInputComponent implements ControlValueAccessor {
   readonly length = input(6);
   readonly value = model<string>('');
   readonly ariaLabel = input<string>('Código de verificación');
+  protected readonly disabled = signal(false);
+
+  private onChange: (value: string) => void = () => {};
+  protected onTouched: () => void = () => {};
+
+  // ControlValueAccessor — habilita formControlName / ngModel.
+  writeValue(value: string): void {
+    this.value.set(value ?? '');
+  }
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
+  }
+
+  /** Escritura por interacción del usuario: actualiza el modelo y notifica al form. */
+  private commit(value: string): void {
+    this.value.set(value);
+    this.onChange(value);
+  }
 
   @ViewChildren('slotInput') protected inputs!: QueryList<ElementRef<HTMLInputElement>>;
 
@@ -84,7 +115,7 @@ export class OtpInputComponent {
     const text = event.clipboardData?.getData('text') ?? '';
     const digits = text.replace(/\D/g, '').slice(0, this.length());
     if (!digits) return;
-    this.value.set(digits.padEnd(this.length(), '').slice(0, this.length()).trimEnd());
+    this.commit(digits.padEnd(this.length(), '').slice(0, this.length()).trimEnd());
     const focusIdx = Math.min(digits.length, this.length() - 1);
     queueMicrotask(() => this.focusInput(focusIdx));
   }
@@ -96,7 +127,7 @@ export class OtpInputComponent {
   private setSlot(index: number, digit: string): void {
     const current = this.value().padEnd(this.length(), ' ').split('');
     current[index] = digit || ' ';
-    this.value.set(current.join('').trimEnd());
+    this.commit(current.join('').trimEnd());
   }
 
   private focusInput(index: number): void {

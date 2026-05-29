@@ -1,10 +1,11 @@
 // @minimax/tokens — Style Dictionary build
 // Genera los tokens del ADN MiniMax a múltiples targets desde una sola fuente JSON.
 //
-// Fidelidad 1:1: usamos `transforms: []` (cero transforms de valor) y derivamos el
-// nombre de la CSS var directamente de `token.path.join('-')`. Así el output reproduce
-// EXACTAMENTE los nombres/valores del bloque @theme original — crítico porque Tailwind v4
-// genera las utilidades (bg-brand-6, rounded-mm-md, …) a partir del nombre de la variable.
+// Fidelidad 1:1: el único transform es `name/kebab` (solo afecta el nombre, no el valor)
+// y el nombre de la CSS var se deriva de `token.path.join('-')`; los valores se emiten
+// crudos (sin reescalado). Así el output reproduce EXACTAMENTE los nombres/valores del
+// bloque @theme original — crítico porque Tailwind v4 genera las utilidades
+// (bg-brand-6, rounded-mm-md, …) a partir del nombre de la variable.
 
 import StyleDictionary from 'style-dictionary';
 import { fileURLToPath } from 'node:url';

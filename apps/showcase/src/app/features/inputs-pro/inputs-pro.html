@@ -142,4 +142,50 @@
       </details>
     </div>
   </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Reactive Forms (ControlValueAccessor)"
+    description="OTP, Rating, Color picker y Pricing toggle implementan ControlValueAccessor — se enlazan con formControlName dentro de un FormGroup, con validación y estado disabled del form."
+    [snippets]="snippetsReactiveForms"
+  >
+    <form [formGroup]="cvaForm" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl">
+      <label class="flex flex-col gap-2">
+        <span class="text-xs font-medium text-ink-dark">Rating</span>
+        <mm-rating-stars formControlName="rating" size="lg" [showLabel]="true" />
+      </label>
+
+      <label class="flex flex-col gap-2">
+        <span class="text-xs font-medium text-ink-dark">Plan</span>
+        <mm-pricing-toggle formControlName="plan" />
+      </label>
+
+      <label class="flex flex-col gap-2 md:col-span-2">
+        <span class="text-xs font-medium text-ink-dark">Color de marca</span>
+        <mm-color-picker formControlName="color" [showContrast]="false" />
+      </label>
+
+      <label class="flex flex-col gap-2 md:col-span-2">
+        <span class="text-xs font-medium text-ink-dark">PIN (4 dígitos)</span>
+        <mm-otp-input formControlName="code" [length]="4" />
+      </label>
+    </form>
+
+    <div class="mt-4 flex flex-wrap items-center gap-3 max-w-2xl">
+      <button
+        type="button"
+        (click)="cvaForm.disabled ? cvaForm.enable() : cvaForm.disable()"
+        class="rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border-soft transition mm-press"
+      >
+        {{ cvaForm.disabled ? 'Habilitar' : 'Deshabilitar' }} formulario
+      </button>
+      <p class="text-xs text-ink-muted">
+        Demuestra <span class="font-mono text-ink-dark">setDisabledState</span> propagándose a los 4 controles.
+      </p>
+    </div>
+
+    <pre
+      class="mt-4 max-w-2xl rounded-mm-md bg-surface-secondary/40 border border-border-soft px-4 py-3 text-xs font-mono text-ink-secondary overflow-x-auto"
+      >{{ cvaValue() | json }}</pre
+    >
+  </mm-canvas-frame>
 </div>

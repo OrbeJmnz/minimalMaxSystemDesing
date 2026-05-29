@@ -1,4 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
@@ -23,12 +26,62 @@ import { RichTextEditorComponent } from '@minimax/ui-angular';
     ColorPickerComponent,
     PricingToggleComponent,
     RichTextEditorComponent,
+    ReactiveFormsModule,
+    JsonPipe,
   ],
   templateUrl: './inputs-pro.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
 })
 export class InputsProComponent {
+  // Reactive Forms: estos componentes implementan ControlValueAccessor, así que
+  // se enlazan con formControlName dentro de un FormGroup.
+  protected readonly cvaForm = new FormGroup({
+    rating: new FormControl(3, { nonNullable: true }),
+    color: new FormControl('#ea5ec1', { nonNullable: true }),
+    plan: new FormControl<PricingPeriod>('yearly', { nonNullable: true }),
+    code: new FormControl('', { nonNullable: true }),
+  });
+  protected readonly cvaValue = toSignal(this.cvaForm.valueChanges, {
+    initialValue: this.cvaForm.value,
+  });
+
+  protected readonly snippetsReactiveForms: readonly CanvasFrameSnippet[] = [
+    {
+      label: 'TS',
+      lang: 'ts',
+      title: 'inputs-pro.ts (extracto)',
+      code: `import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { RatingStarsComponent, ColorPickerComponent, PricingToggleComponent, OtpInputComponent } from '@minimax/ui-angular';
+
+@Component({
+  imports: [ReactiveFormsModule, RatingStarsComponent, ColorPickerComponent, PricingToggleComponent, OtpInputComponent],
+})
+export class Demo {
+  // Los 4 componentes implementan ControlValueAccessor → formControlName funciona.
+  readonly cvaForm = new FormGroup({
+    rating: new FormControl(3, { nonNullable: true }),
+    color: new FormControl('#ea5ec1', { nonNullable: true }),
+    plan: new FormControl('yearly', { nonNullable: true }),
+    code: new FormControl('', { nonNullable: true }),
+  });
+}`,
+    },
+    {
+      label: 'HTML',
+      lang: 'html',
+      title: 'inputs-pro.html',
+      code: `<form [formGroup]="cvaForm" class="flex flex-col gap-4">
+  <mm-rating-stars formControlName="rating" size="lg" />
+  <mm-color-picker formControlName="color" [showContrast]="false" />
+  <mm-pricing-toggle formControlName="plan" />
+  <mm-otp-input formControlName="code" [length]="4" />
+</form>
+
+<!-- form.value reactivo: -->
+<pre>{{ cvaForm.value | json }}</pre>`,
+    },
+  ];
   protected readonly otpValue = signal<string>('');
   protected readonly otp4Value = signal<string>('');
   protected readonly rating = signal<number>(0);
