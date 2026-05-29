@@ -11,8 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SRC = resolve(__dirname, 'src/tokens/*.json');
-const OUT = resolve(__dirname, 'dist') + '/';
+// Glob de Style Dictionary requiere forward slashes incluso en Windows.
+const SRC = resolve(__dirname, 'src/tokens/*.json').replace(/\\/g, '/');
+const OUT = resolve(__dirname, 'dist').replace(/\\/g, '/') + '/';
 
 const cssVar = (token) => `--${token.path.join('-')}`;
 
@@ -101,7 +102,7 @@ const sd = new StyleDictionary({
   source: [SRC],
   platforms: {
     css: {
-      transforms: [],
+      transforms: ['name/kebab'],
       buildPath: OUT,
       files: [
         { destination: 'theme.css', format: 'css/mm-theme' },
@@ -109,7 +110,7 @@ const sd = new StyleDictionary({
       ],
     },
     js: {
-      transforms: [],
+      transforms: ['name/kebab'],
       buildPath: OUT,
       files: [
         { destination: 'tokens.js', format: 'javascript/mm-tokens' },
@@ -117,7 +118,7 @@ const sd = new StyleDictionary({
       ],
     },
     figma: {
-      transforms: [],
+      transforms: ['name/kebab'],
       buildPath: OUT,
       files: [{ destination: 'figma.tokens.json', format: 'json/mm-figma' }],
     },
