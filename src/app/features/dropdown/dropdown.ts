@@ -308,6 +308,17 @@ protected readonly menuItems: readonly MenuItem[] = [
 // ClickOutsideDirective cierra el menú al click fuera.
 // El binding [mmClickOutsideEnabled] sólo lo activa cuando está abierto.`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — scaleIn',
+      code: `/* scaleIn — entrada con escala para menús/popovers (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+/* uso típico: class="origin-top animate-[scaleIn_180ms_var(--ease-out)]" */`,
+    },
   ];
 
   protected readonly snippetsCommandPalette: readonly CanvasFrameSnippet[] = [
@@ -416,6 +427,20 @@ protected onKeydown(event: KeyboardEvent): void {
   else if (event.key === 'ArrowUp')   this.paletteActive.update((i) => Math.max(0, i - 1));
   else if (event.key === 'Enter')     { const c = list[this.paletteActive()]; if (c) this.runCommand(c); }
 }`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — fadeIn + scaleIn',
+      code: `/* fadeIn — backdrop / overlay por opacidad (token --animate-fade-in) */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* scaleIn — entrada con escala para menús/popovers (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+/* uso típico: class="origin-top animate-[scaleIn_180ms_var(--ease-out)]" */`,
     },
   ];
 }

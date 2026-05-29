@@ -376,6 +376,26 @@ protected save(): void {
   this.toast.success('Cambios guardados');
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — animaciones del layout',
+      code: `/* fadeInDown — entrada desde arriba (banners/popups) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* fadeIn — aparición por opacidad */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* mm-check-pop — pop del check al activarse */
+@keyframes mm-check-pop {
+  0%   { transform: scale(0);   opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}`,
+    },
   ];
 
   protected readonly snippetsSidebar: readonly CanvasFrameSnippet[] = [
@@ -415,6 +435,17 @@ protected save(): void {
     </button>
   }
 </aside>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-check-pop',
+      code: `/* mm-check-pop — pop del check al activarse */
+@keyframes mm-check-pop {
+  0%   { transform: scale(0);   opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}`,
     },
   ];
 
@@ -473,6 +504,16 @@ protected discard(): void {
   this.dirty.set(false);
   this.toast.info('Cambios descartados');
   // Resetear los signals de input a sus valores originales si necesario
+}`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — fadeInDown',
+      code: `/* fadeInDown — entrada desde arriba (banners/popups) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }`,
     },
   ];

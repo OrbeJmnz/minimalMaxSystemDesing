@@ -724,6 +724,16 @@ protected invoiceStatus(status: 'paid' | 'pending' | 'overdue'): string {
   }
 </ul>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — fadeInDown',
+      code: `/* fadeInDown — entrada desde arriba */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}`,
+    },
   ];
 
   protected readonly snippetsAccordion: readonly CanvasFrameSnippet[] = [
@@ -792,6 +802,19 @@ protected readonly openAccordion = signal<string | null>('a1');
 protected toggleAccordion(id: string): void {
   this.openAccordion.update((current) => (current === id ? null : id));
 }`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — collapse',
+      code: `/* Colapso animado sin medir altura en JS: anima grid-template-rows 0fr -> 1fr */
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-normal) var(--ease-out);
+}
+.collapsible.is-open { grid-template-rows: 1fr; }
+.collapsible > div { overflow: hidden; }`,
     },
   ];
 

@@ -280,6 +280,21 @@ protected rejectOptionalCookies(): void {
   // POST /api/cookies/reject-optional
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — cookie banner',
+      code: `/* fadeInUp — entrada suave hacia arriba (token --animate-fade-in-up) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* data-stagger aplica este token a cada hijo del contenedor */
+[data-stagger] > * { opacity: 0; animation: var(--animate-fade-in-up); }
+
+/* fadeIn — aparición por opacidad */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`,
+    },
   ];
 
   protected readonly snippetsSticky: readonly CanvasFrameSnippet[] = [
@@ -325,6 +340,31 @@ protected rejectOptionalCookies(): void {
     }
   </button>
 </div>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — sticky CTA',
+      code: `/* mm-badge-pop — pop del badge contador */
+@keyframes mm-badge-pop {
+  0%   { transform: scale(0.6);  opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* mm-ping-strong — onda de ping infinita (bubble CTA) */
+@keyframes mm-ping-strong {
+  0%   { transform: scale(1);   opacity: 0.75; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* fadeInUp — entrada suave hacia arriba (token --animate-fade-in-up) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* data-stagger aplica este token a cada hijo del contenedor */
+[data-stagger] > * { opacity: 0; animation: var(--animate-fade-in-up); }`,
     },
   ];
 
@@ -390,6 +430,16 @@ constructor() {
   }
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — top banner',
+      code: `/* fadeInDown — entrada desde arriba (token --animate-fade-in-down) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}`,
+    },
   ];
 
   protected readonly snippetsNewsletter: readonly CanvasFrameSnippet[] = [
@@ -436,6 +486,31 @@ constructor() {
     </div>
   }
 </section>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — newsletter',
+      code: `/* scaleIn — entrada con escala (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* mm-check-pop — pop del check al activarse */
+@keyframes mm-check-pop {
+  0%   { transform: scale(0);   opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* fadeInUp — entrada suave hacia arriba (token --animate-fade-in-up) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* data-stagger aplica este token a cada hijo del contenedor */
+[data-stagger] > * { opacity: 0; animation: var(--animate-fade-in-up); }`,
     },
   ];
 }

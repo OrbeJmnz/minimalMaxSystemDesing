@@ -300,5 +300,17 @@ protected variantTone(id: EmptyVariantId): { accent: string; muted: string; fill
   <button class="bg-cta text-cta-fg px-3 py-1.5 text-xs">{{ variant.cta }}</button>
 </div>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — empty state sizes',
+      code: `/* fadeInUp — entrada suave hacia arriba (token --animate-fade-in-up) */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* data-stagger aplica este token a cada hijo del contenedor */
+[data-stagger] > * { opacity: 0; animation: var(--animate-fade-in-up); }`,
+    },
   ];
 }

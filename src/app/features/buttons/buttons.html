@@ -92,6 +92,7 @@
   <mm-canvas-frame
     heading="Con icono"
     description="Iconos lucide-style inline. El icono escala suavemente en hover."
+    [snippets]="snippetsIcon"
   >
     <div class="flex flex-wrap gap-3 items-center">
       <button
@@ -163,6 +164,7 @@
   <mm-canvas-frame
     heading="Estados"
     description="Hover, focus, disabled y loading con skeleton del texto."
+    [snippets]="snippetsStates"
   >
     <div class="flex flex-wrap gap-3 items-center">
       <button
@@ -232,6 +234,7 @@
   <mm-canvas-frame
     heading="Toast notifications"
     description="Sistema de notificaciones con 4 variantes — slide-in derecha, auto-dismiss, action button opcional."
+    [snippets]="snippetsToast"
   >
     <div class="flex flex-wrap gap-3">
       <button
@@ -276,6 +279,7 @@
   <mm-canvas-frame
     heading="Pill Filter Tabs"
     description="Indicador deslizante animado entre opciones — patrón signature MinimalMax."
+    [snippets]="snippetsPillTabs"
   >
     <div class="flex flex-col gap-4" >
       <mm-pill-tabs [tabs]="filterTabs" [(active)]="activeFilterTab"  />

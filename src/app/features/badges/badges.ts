@@ -187,6 +187,14 @@ protected statusClass(status: TeamMember['status']): string {
   }
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-scale',
+      code: `/* mm-hover-scale — escala 1.04 en hover */
+.mm-hover-scale { transition: transform var(--duration-normal) var(--ease-out); }
+.mm-hover-scale:hover { transform: scale(1.04); }`,
+    },
   ];
 
   protected readonly snippetsStats: readonly CanvasFrameSnippet[] = [
@@ -233,6 +241,22 @@ protected statusClass(status: TeamMember['status']): string {
   { label: 'A11y score', value: '98', trend: 'AAA',
     icon: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' },
 ];`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
     },
   ];
 

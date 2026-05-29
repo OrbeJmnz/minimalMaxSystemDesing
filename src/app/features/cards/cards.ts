@@ -555,6 +555,22 @@ export class CardsComponent {
   }
 </div>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
+    },
   ];
 
   protected readonly snippetsGlassCard: readonly CanvasFrameSnippet[] = [
@@ -640,6 +656,22 @@ export class CardsComponent {
   </article>
   <!-- ... resto en cards.html -->
 </div>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
     },
   ];
 
@@ -740,6 +772,22 @@ export class CardsComponent {
   }
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
+    },
   ];
 
   protected readonly snippetsArticleCards: readonly CanvasFrameSnippet[] = [
@@ -776,6 +824,33 @@ export class CardsComponent {
     </footer>
   </div>
 </article>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-shine',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-shine — barrido de luz diagonal en hover */
+.mm-card-shine { position: relative; overflow: hidden; isolation: isolate; }
+.mm-card-shine::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 850ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.mm-card-shine:hover::after { transform: translateX(100%); }`,
     },
   ];
 
@@ -848,6 +923,22 @@ export class CardsComponent {
     </div>
   </footer>
 </article>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
     },
   ];
 
@@ -967,6 +1058,32 @@ export class CardsComponent {
   </div>
 </article>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-spotlight',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-spotlight — halo radial que sigue al cursor (--mx/--my vía mousemove) */
+.mm-card-spotlight { position: relative; overflow: hidden; isolation: isolate; }
+.mm-card-spotlight::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(20, 86, 240, 0.18), transparent 45%);
+  opacity: 0; transition: opacity 300ms var(--ease-out);
+}
+.mm-card-spotlight:hover::before { opacity: 1; }`,
+    },
   ];
 
   protected readonly snippetsMusicPlayer: readonly CanvasFrameSnippet[] = [
@@ -1034,6 +1151,28 @@ export class CardsComponent {
   // ...
 ];`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-glow-pink',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-glow-pink — glow rosa en hover */
+.mm-card-glow-pink:hover {
+  box-shadow: 0 0 38px -8px rgba(234, 94, 193, 0.4),
+              0 20px 40px -12px rgba(0, 0, 0, 0.18);
+}`,
+    },
   ];
 
   protected readonly snippetsStatsHero: readonly CanvasFrameSnippet[] = [
@@ -1066,6 +1205,33 @@ export class CardsComponent {
     <mm-chart-sparkline [data]="heroStats.spark" variant="success" />
   </div>
 </article>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-shine',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-shine — barrido de luz diagonal en hover */
+.mm-card-shine { position: relative; overflow: hidden; isolation: isolate; }
+.mm-card-shine::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 850ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.mm-card-shine:hover::after { transform: translateX(100%); }`,
     },
   ];
 
@@ -1113,6 +1279,33 @@ export class CardsComponent {
   </div>
 </article>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-shine',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-shine — barrido de luz diagonal en hover */
+.mm-card-shine { position: relative; overflow: hidden; isolation: isolate; }
+.mm-card-shine::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 850ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+.mm-card-shine:hover::after { transform: translateX(100%); }`,
+    },
   ];
 
   protected readonly snippetsJobCards: readonly CanvasFrameSnippet[] = [
@@ -1156,6 +1349,48 @@ export class CardsComponent {
     }
   </div>
 </article>`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift + mm-card-spotlight + mm-card-gradient-border',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}
+
+/* mm-card-spotlight — halo radial que sigue al cursor (--mx/--my vía mousemove) */
+.mm-card-spotlight { position: relative; overflow: hidden; isolation: isolate; }
+.mm-card-spotlight::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
+              rgba(20, 86, 240, 0.18), transparent 45%);
+  opacity: 0; transition: opacity 300ms var(--ease-out);
+}
+.mm-card-spotlight:hover::before { opacity: 1; }
+
+/* mm-card-gradient-border — borde gradiente animado en rotación */
+.mm-card-gradient-border::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 2px;
+  background: linear-gradient(135deg, var(--color-brand-6), var(--color-brand-pink), var(--color-brand-6));
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#fff,#fff) content-box, linear-gradient(#fff,#fff);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  opacity: 0; transition: opacity 400ms var(--ease-out);
+  animation: mm-card-gradient-rotate 4s linear infinite;
+}
+.mm-card-gradient-border:hover::before { opacity: 1; }
+@keyframes mm-card-gradient-rotate {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}`,
     },
   ];
 

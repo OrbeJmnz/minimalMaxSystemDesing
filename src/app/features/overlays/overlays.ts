@@ -342,6 +342,17 @@ import { TooltipDirective } from '../../shared/directives/tooltip.directive';
 // hasta que el usuario cierra (✕ o click fuera).
 protected readonly popoverOpen = signal(false);`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — scaleIn',
+      code: `/* scaleIn — entrada con escala para menús/popovers (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+/* uso típico: class="origin-top animate-[scaleIn_180ms_var(--ease-out)]" */`,
+    },
   ];
 
   protected readonly snippetsCookieConsent: readonly CanvasFrameSnippet[] = [

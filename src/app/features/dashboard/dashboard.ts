@@ -422,6 +422,22 @@ protected readonly deviceSessions: readonly BarItem[] = [
   }
 </div>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-lift',
+      code: `/* mm-hover-lift — elevación suave en hover */
+.mm-hover-lift {
+  transition:
+    transform var(--duration-normal) var(--ease-out),
+    box-shadow var(--duration-normal) var(--ease-out);
+  will-change: transform;
+}
+.mm-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-mm-elevated);
+}`,
+    },
   ];
 
   protected readonly snippetsActivity: readonly CanvasFrameSnippet[] = [

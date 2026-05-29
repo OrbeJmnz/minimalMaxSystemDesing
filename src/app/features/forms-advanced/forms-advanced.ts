@@ -510,6 +510,17 @@ protected pickFromCombobox(tag: Tag): void {
   this.comboboxOpen.set(false);
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — scaleIn',
+      code: `/* scaleIn — entrada con escala para menús/popovers (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+/* uso típico: class="origin-top animate-[scaleIn_180ms_var(--ease-out)]" */`,
+    },
   ];
 
   protected readonly snippetsMultiSelect: readonly CanvasFrameSnippet[] = [
@@ -605,6 +616,17 @@ protected addToMulti(tag: Tag): void {
 protected removeFromMulti(tag: Tag): void {
   this.multiSelected.update((items) => items.filter((t) => t.id !== tag.id));
 }`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — scaleIn',
+      code: `/* scaleIn — entrada con escala para menús/popovers (token --animate-scale-in) */
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1); }
+}
+/* uso típico: class="origin-top animate-[scaleIn_180ms_var(--ease-out)]" */`,
     },
   ];
 }

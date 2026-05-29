@@ -147,6 +147,17 @@ export class NavigationComponent {
   { label: 'Navegación' }, // sin path = current page
 ];`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-badge-pop',
+      code: `/* mm-badge-pop — pop del badge/separador */
+@keyframes mm-badge-pop {
+  0%   { transform: scale(0.6);  opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}`,
+    },
   ];
 
   protected readonly snippetsTabsPill: readonly CanvasFrameSnippet[] = [

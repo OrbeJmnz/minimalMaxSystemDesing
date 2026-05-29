@@ -386,6 +386,17 @@ protected selectModel(id: string): void {
   this.selectedModel.set(id);
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-check-pop',
+      code: `/* mm-check-pop — pop del check al seleccionar opción */
+@keyframes mm-check-pop {
+  0%   { transform: scale(0);   opacity: 0; }
+  60%  { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); }
+}`,
+    },
   ];
 
   protected readonly snippetsTokenMeter: readonly CanvasFrameSnippet[] = [

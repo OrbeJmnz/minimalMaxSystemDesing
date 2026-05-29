@@ -441,6 +441,15 @@ protected jump(target: number): void {
   }
 </div>`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — progress',
+      code: `/* Barra de progreso — solo anima el ancho */
+.progress-fill {
+  transition: width 400ms var(--ease-out);
+}`,
+    },
   ];
 
   protected readonly snippetsIllustration: readonly CanvasFrameSnippet[] = [

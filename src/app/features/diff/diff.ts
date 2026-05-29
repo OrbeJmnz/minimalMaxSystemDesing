@@ -458,5 +458,18 @@ protected isHunkOpen(id: number): boolean {
   return this.hunksOpen().has(id);
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — collapse',
+      code: `/* Colapso animado sin medir altura en JS: anima grid-template-rows 0fr -> 1fr */
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-normal) var(--ease-out);
+}
+.collapsible.is-open { grid-template-rows: 1fr; }
+.collapsible > div { overflow: hidden; }`,
+    },
   ];
 }

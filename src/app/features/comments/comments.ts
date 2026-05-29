@@ -540,6 +540,22 @@ protected renderBody(text: string): string {
   );
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — animaciones del hilo',
+      code: `/* fadeInUp — entrada suave hacia arriba */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* fadeInDown — entrada desde arriba (banners/popups) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}`,
+    },
   ];
 
   protected readonly snippetsComposer: readonly CanvasFrameSnippet[] = [
@@ -641,6 +657,16 @@ protected insertMention(user: User): void {
     const pos = replaced.length;
     el.setSelectionRange(pos, pos);
   });
+}`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — fadeInUp',
+      code: `/* fadeInUp — entrada suave hacia arriba */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }`,
     },
   ];

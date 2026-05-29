@@ -637,6 +637,16 @@ protected deleteSelected(): void {
   this.clearSelection();
 }`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — fadeInDown',
+      code: `/* fadeInDown — entrada desde arriba (banners/popups) */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}`,
+    },
   ];
 
   protected readonly snippetsEmpty: readonly CanvasFrameSnippet[] = [

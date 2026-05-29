@@ -208,6 +208,14 @@ protected readonly brandSwatches: readonly Swatch[] = [
   { name: 'Primary 700', token: 'primary-700', hex: '#1d4ed8', text: 'light' },
 ];`,
     },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-scale',
+      code: `/* mm-hover-scale — escala 1.04 en hover */
+.mm-hover-scale { transition: transform var(--duration-normal) var(--ease-out); }
+.mm-hover-scale:hover { transform: scale(1.04); }`,
+    },
   ];
 
   protected readonly snippetsText: readonly CanvasFrameSnippet[] = [
@@ -236,6 +244,14 @@ protected readonly brandSwatches: readonly Swatch[] = [
   { name: 'Ink Secondary', token: 'ink-secondary', hex: '#45515e', text: 'light' },
   { name: 'Ink Muted', token: 'ink-muted', hex: '#8e8e93', text: 'light' },
 ];`,
+    },
+    {
+      label: 'CSS',
+      lang: 'css',
+      title: 'styles.css — mm-hover-scale',
+      code: `/* mm-hover-scale — escala 1.04 en hover */
+.mm-hover-scale { transition: transform var(--duration-normal) var(--ease-out); }
+.mm-hover-scale:hover { transform: scale(1.04); }`,
     },
   ];
 
