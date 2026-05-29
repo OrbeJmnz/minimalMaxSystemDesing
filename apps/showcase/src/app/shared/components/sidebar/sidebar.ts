@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { NavService } from '../../../core/services/nav.service';
-import { MobileNavService } from '../../../core/services/mobile-nav.service';
+import { MobileNavService } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-sidebar',

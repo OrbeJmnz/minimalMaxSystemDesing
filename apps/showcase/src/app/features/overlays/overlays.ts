@@ -4,12 +4,12 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ModalShellComponent } from '../../shared/components/modal-shell/modal-shell';
-import { DrawerShellComponent } from '../../shared/components/drawer-shell/drawer-shell';
-import { TooltipDirective } from '../../shared/directives/tooltip.directive';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
-import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ModalShellComponent } from '@minimax/ui-angular';
+import { DrawerShellComponent } from '@minimax/ui-angular';
+import { TooltipDirective } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
+import { ClickOutsideDirective } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-overlays',
@@ -280,7 +280,7 @@ protected readonly drawerOpen = signal(false);`,
       code: `// La directive TooltipDirective ya está en shared/directives.
 // Sólo importa y úsala — maneja hover, focus, posicionamiento y escape.
 
-import { TooltipDirective } from '../../shared/directives/tooltip.directive';
+import { TooltipDirective } from '@minimax/ui-angular';
 
 @Component({
   imports: [TooltipDirective],

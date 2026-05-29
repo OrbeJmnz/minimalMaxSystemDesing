@@ -3,12 +3,12 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ChartLineComponent, LinePoint } from '../../shared/components/charts/chart-line';
-import { ChartDonutComponent, DonutSlice } from '../../shared/components/charts/chart-donut';
-import { ChartBarComponent, BarItem } from '../../shared/components/charts/chart-bar';
-import { ChartSparklineComponent } from '../../shared/components/charts/chart-sparkline';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ChartLineComponent, LinePoint } from '@minimax/ui-angular';
+import { ChartDonutComponent, DonutSlice } from '@minimax/ui-angular';
+import { ChartBarComponent, BarItem } from '@minimax/ui-angular';
+import { ChartSparklineComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 interface StatCard {
   readonly label: string;

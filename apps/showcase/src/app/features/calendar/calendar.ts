@@ -3,12 +3,12 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
 import {
   CalendarComponent,
   CalendarEvent,
   DateRange,
-} from '../../shared/components/calendar/calendar';
+} from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-calendar-feature',
@@ -105,7 +105,7 @@ export class CalendarFeatureComponent {
       lang: 'ts',
       title: 'calendar.ts',
       code: `import { Component, signal } from '@angular/core';
-import { DateRange } from '../../shared/components/calendar/calendar';
+import { DateRange } from '@minimax/ui-angular';
 
 @Component({ selector: 'mm-calendar-feature', templateUrl: './calendar.html' })
 export class CalendarFeatureComponent {
@@ -144,7 +144,7 @@ export class CalendarFeatureComponent {
       lang: 'ts',
       title: 'calendar.ts (events data)',
       code: `import { Component, signal } from '@angular/core';
-import { CalendarEvent } from '../../shared/components/calendar/calendar';
+import { CalendarEvent } from '@minimax/ui-angular';
 
 @Component({ selector: 'mm-calendar-feature', templateUrl: './calendar.html' })
 export class CalendarFeatureComponent {

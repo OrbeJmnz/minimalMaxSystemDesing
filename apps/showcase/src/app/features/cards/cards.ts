@@ -3,8 +3,8 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ChartSparklineComponent } from '../../shared/components/charts/chart-sparkline';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ChartSparklineComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-cards',

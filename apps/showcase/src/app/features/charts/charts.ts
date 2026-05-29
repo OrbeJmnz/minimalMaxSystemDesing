@@ -3,13 +3,13 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ChartLineComponent, LinePoint } from '../../shared/components/charts/chart-line';
-import { BarItem, ChartBarComponent } from '../../shared/components/charts/chart-bar';
-import { ChartDonutComponent, DonutSlice } from '../../shared/components/charts/chart-donut';
-import { ChartSparklineComponent } from '../../shared/components/charts/chart-sparkline';
-import { ChartHeatmapComponent, HeatCell } from '../../shared/components/charts/chart-heatmap';
-import { ChartRingComponent } from '../../shared/components/charts/chart-ring';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ChartLineComponent, LinePoint } from '@minimax/ui-angular';
+import { BarItem, ChartBarComponent } from '@minimax/ui-angular';
+import { ChartDonutComponent, DonutSlice } from '@minimax/ui-angular';
+import { ChartSparklineComponent } from '@minimax/ui-angular';
+import { ChartHeatmapComponent, HeatCell } from '@minimax/ui-angular';
+import { ChartRingComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-charts',
@@ -244,7 +244,7 @@ export class ChartsComponent {
       label: 'TS',
       lang: 'ts',
       title: 'charts.ts (data)',
-      code: `import { LinePoint } from '../../shared/components/charts/chart-line';
+      code: `import { LinePoint } from '@minimax/ui-angular';
 
 protected readonly revenueData: readonly LinePoint[] = [
   { label: 'Ene', value: 12 },
@@ -331,7 +331,7 @@ protected readonly revenueData: readonly LinePoint[] = [
       label: 'TS',
       lang: 'ts',
       title: 'charts.ts (data)',
-      code: `import { BarItem } from '../../shared/components/charts/chart-bar';
+      code: `import { BarItem } from '@minimax/ui-angular';
 
 protected readonly trafficBars: readonly BarItem[] = [
   { label: 'Lun', value: 420 },
@@ -373,7 +373,7 @@ protected readonly categoryBars: readonly BarItem[] = [
       label: 'TS',
       lang: 'ts',
       title: 'charts.ts (data)',
-      code: `import { DonutSlice } from '../../shared/components/charts/chart-donut';
+      code: `import { DonutSlice } from '@minimax/ui-angular';
 
 protected readonly traffic: readonly DonutSlice[] = [
   { label: 'Orgánico', value: 4820, color: 'var(--color-brand-6)' },
@@ -444,7 +444,7 @@ protected readonly stack: readonly DonutSlice[] = [
       label: 'TS',
       lang: 'ts',
       title: 'charts.ts (data generator)',
-      code: `import { HeatCell } from '../../shared/components/charts/chart-heatmap';
+      code: `import { HeatCell } from '@minimax/ui-angular';
 
 protected readonly activityHeatmap: readonly HeatCell[] = this.generateHeatmap();
 

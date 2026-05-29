@@ -12,8 +12,8 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ToastService } from '../../core/services/toast.service';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ToastService } from '@minimax/ui-angular';
 
 interface CookiePreference {
   readonly id: 'essential' | 'analytics' | 'marketing' | 'personalization';

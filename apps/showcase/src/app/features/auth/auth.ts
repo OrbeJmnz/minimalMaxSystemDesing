@@ -3,9 +3,9 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
-import { PillTab, PillTabsComponent } from '../../shared/components/pill-tabs/pill-tabs';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
+import { PillTab, PillTabsComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-auth',
@@ -77,7 +77,7 @@ export class AuthComponent {
       lang: 'ts',
       title: 'auth.ts',
       code: `import { Component, signal } from '@angular/core';
-import { PillTab } from '../../shared/components/pill-tabs/pill-tabs';
+import { PillTab } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-auth',

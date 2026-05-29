@@ -3,9 +3,9 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { PillTab, PillTabsComponent } from '../../shared/components/pill-tabs/pill-tabs';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { PillTab, PillTabsComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 interface Step {
   readonly id: number;
@@ -173,8 +173,7 @@ export class NavigationComponent {
       label: 'TS',
       lang: 'ts',
       title: 'navigation.ts (pill tabs)',
-      code: `import { PillTab, PillTabsComponent } from
-  '../../shared/components/pill-tabs/pill-tabs';
+      code: `import { PillTab, PillTabsComponent } from '@minimax/ui-angular';
 
 protected readonly pillTabs: readonly PillTab[] = [
   { id: 'general',  label: 'General' },

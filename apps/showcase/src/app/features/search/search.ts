@@ -11,8 +11,8 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { EmptyStateComponent } from '@minimax/ui-angular';
 
 interface SearchResult {
   readonly id: string;

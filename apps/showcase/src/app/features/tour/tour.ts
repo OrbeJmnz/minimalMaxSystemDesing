@@ -3,9 +3,9 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
-import { TourService, TourStep } from '../../core/services/tour.service';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
+import { TourService, TourStep } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-tour',
@@ -91,7 +91,7 @@ export class TourComponent {
       lang: 'ts',
       title: 'tour.ts',
       code: `import { Component, inject } from '@angular/core';
-import { TourService, TourStep } from '../../core/services/tour.service';
+import { TourService, TourStep } from '@minimax/ui-angular';
 
 @Component({ /* ... */ })
 export class TourComponent {

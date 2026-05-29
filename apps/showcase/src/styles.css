@@ -1,8 +1,10 @@
 @import 'tailwindcss';
 @import '@minimax/styles';
 
-/* Escaneo de clases: templates del showcase. La librería ui-angular se añade en Fase 4. */
+/* Escaneo de clases: templates del showcase + librería de componentes del design system
+   (consumida vía source en el monorepo; sus clases Tailwind deben generarse aquí). */
 @source './**/*.{html,ts}';
+@source '../../../packages/ui-angular/src/**/*.{html,ts}';
 
 /* ============================================================================
    App shell specifics — NO forman parte del design system portable.

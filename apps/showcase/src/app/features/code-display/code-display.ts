@@ -3,9 +3,9 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
 import { CodeBlockComponent } from '../../shared/components/code-block/code-block';
-import { DiffViewerComponent } from '../../shared/components/diff-viewer/diff-viewer';
+import { DiffViewerComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-code-display',
@@ -232,7 +232,7 @@ npm start\`;`,
       label: 'TS',
       lang: 'ts',
       title: 'code-display.ts',
-      code: `import { DiffViewerComponent } from '../../shared/components/diff-viewer/diff-viewer';
+      code: `import { DiffViewerComponent } from '@minimax/ui-angular';
 
 @Component({
   imports: [DiffViewerComponent],

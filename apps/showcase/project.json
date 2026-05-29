@@ -8,6 +8,7 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
+      "dependsOn": ["tokens:build", "^build"],
       "options": {
         "browser": "apps/showcase/src/main.ts",
         "tsConfig": "apps/showcase/tsconfig.app.json",
@@ -55,6 +56,7 @@
     },
     "serve": {
       "executor": "@angular/build:dev-server",
+      "dependsOn": ["tokens:build"],
       "configurations": {
         "production": {
           "buildTarget": "mm-showcase:build:production"

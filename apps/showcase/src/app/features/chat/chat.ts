@@ -12,8 +12,8 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 interface ChatMessage {
   readonly id: string;

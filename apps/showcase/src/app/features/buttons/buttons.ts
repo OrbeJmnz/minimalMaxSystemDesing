@@ -3,10 +3,10 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { PillTab, PillTabsComponent } from '../../shared/components/pill-tabs/pill-tabs';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
-import { ToastService } from '../../core/services/toast.service';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { PillTab, PillTabsComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
+import { ToastService } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-buttons',
@@ -104,7 +104,7 @@ export class ButtonsComponent {
       lang: 'ts',
       title: 'buttons.ts',
       code: `import { Component } from '@angular/core';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { RippleDirective } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-buttons',
@@ -355,7 +355,7 @@ protected async triggerLoading(): Promise<void> {
       lang: 'ts',
       title: 'buttons.ts (extracto)',
       code: `import { inject } from '@angular/core';
-import { ToastService } from '../../core/services/toast.service';
+import { ToastService } from '@minimax/ui-angular';
 
 export class ButtonsComponent {
   private readonly toast = inject(ToastService);
@@ -410,7 +410,7 @@ export class ButtonsComponent {
       label: 'TS',
       lang: 'ts',
       title: 'buttons.ts (extracto)',
-      code: `import { PillTab, PillTabsComponent } from '../../shared/components/pill-tabs/pill-tabs';
+      code: `import { PillTab, PillTabsComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-buttons',

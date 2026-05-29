@@ -3,8 +3,8 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { DiffViewerComponent } from '../../shared/components/diff-viewer/diff-viewer';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { DiffViewerComponent } from '@minimax/ui-angular';
 
 interface SideBySideLine {
   readonly left?: { num: number; content: string };

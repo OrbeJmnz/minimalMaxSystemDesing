@@ -5,9 +5,9 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
-import { ToastService } from '../../core/services/toast.service';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ClickOutsideDirective } from '@minimax/ui-angular';
+import { ToastService } from '@minimax/ui-angular';
 
 interface Country {
   readonly code: string;
@@ -226,7 +226,7 @@ protected readonly nativeCountry = new FormControl<string>('mx', { nonNullable: 
       label: 'TS',
       lang: 'ts',
       title: 'forms.ts (extracto)',
-      code: `import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
+      code: `import { ClickOutsideDirective } from '@minimax/ui-angular';
 
 protected readonly selectOpen = signal(false);
 protected readonly customCountry = signal<Country>(this.countries[0]);

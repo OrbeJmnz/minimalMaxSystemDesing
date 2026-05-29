@@ -4,10 +4,10 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
-import { SkeletonComponent } from '../../shared/components/skeleton/skeleton';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { EmptyStateComponent } from '@minimax/ui-angular';
+import { SkeletonComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-states',
@@ -69,8 +69,8 @@ export class StatesComponent {
       label: 'TS',
       lang: 'ts',
       title: 'states.ts',
-      code: `import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+      code: `import { EmptyStateComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 @Component({
   imports: [EmptyStateComponent, RippleDirective],
@@ -116,7 +116,7 @@ export class StatesComponent {}
       lang: 'ts',
       title: 'states.ts',
       code: `import { signal } from '@angular/core';
-import { SkeletonComponent } from '../../shared/components/skeleton/skeleton';
+import { SkeletonComponent } from '@minimax/ui-angular';
 
 export class StatesComponent {
   protected readonly isLoading = signal(false);

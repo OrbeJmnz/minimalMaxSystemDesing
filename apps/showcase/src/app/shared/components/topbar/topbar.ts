@@ -10,8 +10,8 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { BreadcrumbService } from '../../../core/services/breadcrumb.service';
-import { MobileNavService } from '../../../core/services/mobile-nav.service';
-import { ThemeService } from '../../../core/services/theme.service';
+import { MobileNavService } from '@minimax/ui-angular';
+import { ThemeService } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-topbar',

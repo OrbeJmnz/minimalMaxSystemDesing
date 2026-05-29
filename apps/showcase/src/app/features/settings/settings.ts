@@ -3,10 +3,10 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { ModalShellComponent } from '../../shared/components/modal-shell/modal-shell';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
-import { ToastService } from '../../core/services/toast.service';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { ModalShellComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
+import { ToastService } from '@minimax/ui-angular';
 
 interface SettingsSection {
   readonly id: string;

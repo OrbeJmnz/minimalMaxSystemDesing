@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state';
-import { RippleDirective } from '../../shared/directives/ripple.directive';
+import { EmptyStateComponent } from '@minimax/ui-angular';
+import { RippleDirective } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-not-found',

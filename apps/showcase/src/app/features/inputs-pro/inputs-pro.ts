@@ -3,15 +3,15 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header';
-import { OtpInputComponent } from '../../shared/components/otp-input/otp-input';
-import { RatingStarsComponent } from '../../shared/components/rating-stars/rating-stars';
-import { ColorPickerComponent } from '../../shared/components/color-picker/color-picker';
+import { SectionHeaderComponent } from '@minimax/ui-angular';
+import { OtpInputComponent } from '@minimax/ui-angular';
+import { RatingStarsComponent } from '@minimax/ui-angular';
+import { ColorPickerComponent } from '@minimax/ui-angular';
 import {
   PricingPeriod,
   PricingToggleComponent,
-} from '../../shared/components/pricing-toggle/pricing-toggle';
-import { RichTextEditorComponent } from '../../shared/components/rich-text-editor/rich-text-editor';
+} from '@minimax/ui-angular';
+import { RichTextEditorComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-inputs-pro',
@@ -61,7 +61,7 @@ export class InputsProComponent {
       label: 'TS',
       lang: 'ts',
       title: 'inputs-pro.ts (extracto)',
-      code: `import { OtpInputComponent } from '../../shared/components/otp-input/otp-input';
+      code: `import { OtpInputComponent } from '@minimax/ui-angular';
 
 @Component({
   selector: 'mm-inputs-pro',
@@ -108,7 +108,7 @@ export class InputsProComponent {
       label: 'TS',
       lang: 'ts',
       title: 'inputs-pro.ts (extracto)',
-      code: `import { RatingStarsComponent } from '../../shared/components/rating-stars/rating-stars';
+      code: `import { RatingStarsComponent } from '@minimax/ui-angular';
 
 protected readonly rating = signal<number>(0);
 protected readonly readonlyRating = signal<number>(4);
@@ -139,7 +139,7 @@ protected readonly readonlyRating = signal<number>(4);
       label: 'TS',
       lang: 'ts',
       title: 'inputs-pro.ts (extracto)',
-      code: `import { ColorPickerComponent } from '../../shared/components/color-picker/color-picker';
+      code: `import { ColorPickerComponent } from '@minimax/ui-angular';
 
 protected readonly brandColor = signal<string>('#1456f0');
 
@@ -184,7 +184,7 @@ protected readonly brandColor = signal<string>('#1456f0');
       code: `import {
   PricingPeriod,
   PricingToggleComponent,
-} from '../../shared/components/pricing-toggle/pricing-toggle';
+} from '@minimax/ui-angular';
 
 protected readonly period = signal<PricingPeriod>('monthly');
 
@@ -234,7 +234,7 @@ protected readonly period = signal<PricingPeriod>('monthly');
       label: 'TS',
       lang: 'ts',
       title: 'inputs-pro.ts (extracto)',
-      code: `import { RichTextEditorComponent } from '../../shared/components/rich-text-editor/rich-text-editor';
+      code: `import { RichTextEditorComponent } from '@minimax/ui-angular';
 
 protected readonly bio = signal<string>(
   '<p>Soy <b>Orbe</b> y construyo cosas con MinimalMax. ' +
