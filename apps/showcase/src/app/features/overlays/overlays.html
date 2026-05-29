@@ -1,0 +1,511 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Overlays"
+    title="Modal · Drawer · Tooltip · Popover"
+    description="Componentes flotantes con backdrop, focus trap, escape para cerrar y body scroll lock."
+  />
+
+  <mm-canvas-frame
+    heading="Modal (centered)"
+    description="Dialog centrado con backdrop blur. Click outside, escape o ✕ para cerrar. Bottom sheet en móvil."
+    [snippets]="snippetsModal"
+  >
+    <button
+      type="button"
+      mmRipple
+      (click)="modalOpen.set(true)"
+      class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+    >
+      Abrir modal
+    </button>
+
+    <mm-modal-shell
+      [open]="modalOpen()"
+      title="Invitar a tu equipo"
+      eyebrow="Colaboración"
+      (close)="modalOpen.set(false)"
+    >
+      <p class="text-sm text-ink-secondary leading-relaxed">
+        Agrega miembros a tu workspace por email. Pueden ver y editar proyectos según sus permisos.
+      </p>
+      <div class="mt-4 flex flex-col gap-1.5">
+        <label class="text-xs font-medium text-ink-dark" for="modal-email">Email</label>
+        <input
+          id="modal-email"
+          type="email"
+          placeholder="tu@correo.com"
+          class="rounded-mm-md border-2 border-border bg-surface-base px-4 py-2.5 text-sm text-ink-dark focus:border-primary-500 focus:outline-none focus:ring-3 focus:ring-primary-500/10 transition"
+        />
+      </div>
+
+      <div slot="actions" class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="modalOpen.set(false)"
+          class="rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          mmRipple
+          (click)="modalOpen.set(false)"
+          class="rounded-mm-md bg-brand-6 px-4 py-2 text-sm font-medium text-white shadow-mm-brand hover:shadow-mm-elevated transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+        >
+          Enviar invitación
+        </button>
+      </div>
+    </mm-modal-shell>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Confirm dialog"
+    description="Modal de confirmación destructiva. Color rojo en el CTA primario para señalar peligro."
+    [snippets]="snippetsConfirmDialog"
+  >
+    <button
+      type="button"
+      mmRipple
+      (click)="confirmOpen.set(true)"
+      class="rounded-mm-md bg-error px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+    >
+      Eliminar proyecto…
+    </button>
+
+    <mm-modal-shell
+      [open]="confirmOpen()"
+      title="¿Eliminar este proyecto?"
+      eyebrow="Acción destructiva"
+      (close)="confirmOpen.set(false)"
+    >
+      <div class="flex items-start gap-4">
+        <span
+          class="size-12 rounded-mm-pill bg-error-bg text-error grid place-items-center shrink-0"
+        >
+          <svg
+            class="size-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            ></path>
+            <line x1="12" x2="12" y1="9" y2="13"></line>
+            <line x1="12" x2="12.01" y1="17" y2="17"></line>
+          </svg>
+        </span>
+        <p class="text-sm text-ink-secondary leading-relaxed">
+          Esta acción no se puede deshacer. Se eliminarán todos los archivos, configuraciones e
+          integraciones asociadas con el proyecto.
+        </p>
+      </div>
+
+      <div slot="actions" class="flex items-center gap-3">
+        <button
+          type="button"
+          (click)="confirmOpen.set(false)"
+          class="rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          mmRipple
+          (click)="confirmOpen.set(false)"
+          class="rounded-mm-md bg-error px-4 py-2 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+        >
+          Sí, eliminar
+        </button>
+      </div>
+    </mm-modal-shell>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Drawer (side panel)"
+    description="Panel lateral con slide-in. Útil para detalles, edición rápida, filtros avanzados."
+    [snippets]="snippetsDrawer"
+  >
+    <button
+      type="button"
+      mmRipple
+      (click)="drawerOpen.set(true)"
+      class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+    >
+      Abrir drawer →
+    </button>
+
+    <mm-drawer-shell
+      [open]="drawerOpen()"
+      title="Filtros avanzados"
+      eyebrow="Búsqueda"
+      side="right"
+      (close)="drawerOpen.set(false)"
+    >
+      <div class="flex flex-col gap-6">
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-medium text-ink-dark">Estado</span>
+          <select
+            class="rounded-mm-md border-2 border-border bg-surface-base px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+          >
+            <option>Todos</option>
+            <option>Activos</option>
+            <option>Archivados</option>
+          </select>
+        </label>
+        <label class="flex flex-col gap-1.5">
+          <span class="text-xs font-medium text-ink-dark">Fecha de creación</span>
+          <input
+            type="date"
+            class="rounded-mm-md border-2 border-border bg-surface-base px-3 py-2 text-sm focus:border-primary-500 focus:outline-none"
+          />
+        </label>
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="checkbox" class="peer sr-only" />
+          <span
+            class="size-5 rounded-mm-sm border-2 border-border grid place-items-center peer-checked:bg-brand-6 peer-checked:border-brand-6 peer-checked:[&>svg]:opacity-100 peer-checked:[&>svg]:scale-100 transition"
+          >
+            <svg
+              class="size-3 text-white opacity-0 scale-50 transition-all duration-200"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </span>
+          <span class="text-sm text-ink-dark">Solo mis proyectos</span>
+        </label>
+
+        <div
+          class="flex items-center gap-3 mt-2 sticky bottom-0 bg-surface-base py-3 -mx-6 px-6 border-t border-border-soft"
+        >
+          <button
+            type="button"
+            (click)="drawerOpen.set(false)"
+            class="flex-1 rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+          >
+            Limpiar
+          </button>
+          <button
+            type="button"
+            mmRipple
+            (click)="drawerOpen.set(false)"
+            class="flex-1 rounded-mm-md bg-cta px-4 py-2 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition-all duration-200 ease-in-out mm-press hover:-translate-y-0.25 active:-translate-y-0.5"
+          >
+            Aplicar
+          </button>
+        </div>
+      </div>
+    </mm-drawer-shell>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Tooltips"
+    description="Hover/focus → tooltip flotante. Cuatro posiciones disponibles."
+    [snippets]="snippetsTooltips"
+  >
+    <div class="flex flex-wrap gap-4 items-center">
+      <button
+        type="button"
+        mmTooltip="Crea un nuevo proyecto"
+        tooltipSide="top"
+        class="rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+      >
+        Tooltip arriba
+      </button>
+      <button
+        type="button"
+        mmTooltip="Configuración avanzada"
+        tooltipSide="bottom"
+        class="rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+      >
+        Tooltip abajo
+      </button>
+      <button
+        type="button"
+        mmTooltip="Guardar como plantilla"
+        tooltipSide="right"
+        class="rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+      >
+        Tooltip derecha
+      </button>
+      <button
+        type="button"
+        mmTooltip="Compartir con tu equipo"
+        tooltipSide="left"
+        class="rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+      >
+        Tooltip izquierda
+      </button>
+      <button
+        type="button"
+        mmTooltip="Documentación completa, atajos de teclado y guías de implementación para componentes"
+        tooltipSide="top"
+        aria-label="Ayuda"
+        class="size-10 rounded-mm-pill bg-surface-secondary text-ink-dark hover:bg-border grid place-items-center transition mm-press"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"></path>
+        </svg>
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Popover (click trigger)"
+    description="Como tooltip pero más grande y persistente. Click para abrir/cerrar."
+    [snippets]="snippetsPopover"
+  >
+    <div
+      class="relative inline-block"
+      (mmClickOutside)="popoverOpen.set(false)"
+      [mmClickOutsideEnabled]="popoverOpen()"
+    >
+      <button
+        type="button"
+        mmRipple
+        (click)="popoverOpen.set(!popoverOpen())"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+        [class.!bg-cta]="popoverOpen()"
+        [class.!text-white]="popoverOpen()"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4M12 8h.01"></path>
+        </svg>
+        Más info
+      </button>
+
+      @if (popoverOpen()) {
+        <div
+          class="absolute top-full mt-2 left-0 z-40 w-72 rounded-mm-xl border border-border-soft bg-surface-base shadow-mm-elevated p-4"
+          style="animation: scaleIn 200ms var(--ease-out) both; transform-origin: top left"
+          role="dialog"
+        >
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <h4 class="font-display text-sm font-semibold text-ink-dark">Datos sensibles</h4>
+            <button
+              type="button"
+              (click)="popoverOpen.set(false)"
+              aria-label="Cerrar"
+              class="size-6 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <p class="text-xs text-ink-secondary leading-relaxed">
+            Esta información se almacena cifrada con AES-256 en reposo. Solo tú y los miembros
+            autorizados de tu equipo pueden verla.
+          </p>
+          <button type="button" class="mt-3 text-xs font-semibold text-brand-6 hover:underline">
+            Ver política completa →
+          </button>
+        </div>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Cookie consent banner"
+    description="Banner sticky abajo con Accept/Reject/Customize. Patrón GDPR-compliant — categorías granulares con toggle."
+    [snippets]="snippetsCookieConsent"
+  >
+    <div class="flex flex-col gap-4">
+      <div class="flex gap-3">
+        <button
+          type="button"
+          mmRipple
+          (click)="reopenCookies()"
+          [disabled]="cookieOpen()"
+          class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg shadow-mm-sm hover:shadow-mm-elevated transition mm-press disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Reabrir cookie banner
+        </button>
+      </div>
+
+      <details class="rounded-mm-md bg-surface-secondary/40 border border-border-soft">
+        <summary class="px-4 py-2 text-xs font-medium text-ink-dark cursor-pointer">
+          Preferencias actuales
+        </summary>
+        <pre class="px-4 pb-3 text-xs font-mono text-ink-secondary">{{ cookiePrefs() | json }}</pre>
+      </details>
+    </div>
+
+    @if (cookieOpen()) {
+      <div
+        class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-40 rounded-mm-2xl border border-border-soft bg-surface-base shadow-mm-elevated p-5 mm-no-print"
+        style="animation: slideInRight 380ms var(--ease-out) both"
+        role="dialog"
+        aria-label="Consentimiento de cookies"
+      >
+        @if (cookieMode() === 'banner') {
+          <div class="flex items-start gap-3 mb-4">
+            <span
+              class="size-10 rounded-mm-pill bg-primary-200 text-primary-700 grid place-items-center shrink-0"
+            >
+              🍪
+            </span>
+            <div class="flex-1 min-w-0">
+              <h4 class="font-display text-sm font-semibold text-ink-dark">
+                Cookies en MinimalMax
+              </h4>
+              <p class="text-xs text-ink-secondary leading-relaxed mt-1">
+                Usamos cookies esenciales para que el sitio funcione, y analytics para mejorar la
+                experiencia. Tú decides.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2">
+            <button
+              type="button"
+              mmRipple
+              (click)="acceptAllCookies()"
+              class="w-full rounded-mm-md bg-cta px-4 py-2 text-sm font-medium text-cta-fg shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+            >
+              Aceptar todas
+            </button>
+            <div class="flex gap-2">
+              <button
+                type="button"
+                (click)="rejectAllCookies()"
+                class="flex-1 rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+              >
+                Rechazar
+              </button>
+              <button
+                type="button"
+                (click)="cookieMode.set('customize')"
+                class="flex-1 rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+              >
+                Personalizar
+              </button>
+            </div>
+          </div>
+        } @else {
+          <header class="flex items-center justify-between mb-4">
+            <h4 class="font-display text-sm font-semibold text-ink-dark">
+              Preferencias de cookies
+            </h4>
+            <button
+              type="button"
+              (click)="cookieMode.set('banner')"
+              aria-label="Volver"
+              class="size-7 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m15 18-6-6 6-6"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="flex flex-col gap-3 mb-4">
+            <label class="flex items-start justify-between gap-3 cursor-not-allowed opacity-60">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-ink-dark">Esenciales</p>
+                <p class="text-[11px] text-ink-muted">Necesarias para que el sitio funcione.</p>
+              </div>
+              <span class="relative inline-flex h-6 w-11 shrink-0 rounded-mm-pill bg-success">
+                <span
+                  class="absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-mm-sm translate-x-5"
+                ></span>
+              </span>
+            </label>
+
+            <label class="flex items-start justify-between gap-3 cursor-pointer">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-ink-dark">Analytics</p>
+                <p class="text-[11px] text-ink-muted">Métricas anónimas de uso.</p>
+              </div>
+              <input
+                type="checkbox"
+                [checked]="cookiePrefs().analytics"
+                (change)="
+                  cookiePrefs.update((p) => ({ ...p, analytics: $any($event.target).checked }))
+                "
+                class="peer sr-only"
+              />
+              <span
+                class="relative inline-flex h-6 w-11 shrink-0 rounded-mm-pill bg-border transition-colors duration-300 peer-checked:bg-brand-6 peer-checked:[&>span]:translate-x-5"
+              >
+                <span
+                  class="absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-mm-sm transition-transform duration-300"
+                ></span>
+              </span>
+            </label>
+
+            <label class="flex items-start justify-between gap-3 cursor-pointer">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-ink-dark">Marketing</p>
+                <p class="text-[11px] text-ink-muted">Personalización de anuncios.</p>
+              </div>
+              <input
+                type="checkbox"
+                [checked]="cookiePrefs().marketing"
+                (change)="
+                  cookiePrefs.update((p) => ({ ...p, marketing: $any($event.target).checked }))
+                "
+                class="peer sr-only"
+              />
+              <span
+                class="relative inline-flex h-6 w-11 shrink-0 rounded-mm-pill bg-border transition-colors duration-300 peer-checked:bg-brand-6 peer-checked:[&>span]:translate-x-5"
+              >
+                <span
+                  class="absolute top-0.5 left-0.5 size-5 rounded-full bg-white shadow-mm-sm transition-transform duration-300"
+                ></span>
+              </span>
+            </label>
+          </div>
+
+          <button
+            type="button"
+            mmRipple
+            (click)="saveCookiePrefs()"
+            class="w-full rounded-mm-md bg-cta px-4 py-2 text-sm font-medium text-cta-fg shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+          >
+            Guardar preferencias
+          </button>
+        }
+      </div>
+    }
+  </mm-canvas-frame>
+</div>

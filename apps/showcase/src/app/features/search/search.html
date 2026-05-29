@@ -1,0 +1,429 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Productividad"
+    title="Search Results Page"
+    description="Página de resultados con facets sidebar · highlighting de términos · sort dropdown · empty state con sugerencias. Patrón perfecto para docs, catálogos, dashboards."
+  />
+
+  <mm-canvas-frame
+    heading="Search results completo"
+    description="Input de query con echo en results · facets sidebar (tipo · fecha · autor) · highlighting con <mark> · sort (relevancia · fecha · popularidad) · contador de resultados."
+    [snippets]="snippetsSearch"
+  >
+    <div class="grid md:grid-cols-[260px_1fr] gap-6">
+      <aside class="space-y-5">
+        <section>
+          <header class="flex items-center justify-between mb-2 px-2">
+            <h4 class="text-[11px] uppercase tracking-wider text-ink-secondary font-semibold">
+              Tipo
+            </h4>
+            @if (hasActiveFilters()) {
+              <button
+                type="button"
+                (click)="clearFilters()"
+                class="text-[10px] text-brand-6 hover:underline transition"
+              >
+                Limpiar
+              </button>
+            }
+          </header>
+          <div class="flex flex-col gap-0.5">
+            @for (facet of typeFacets(); track facet.id) {
+              <label
+                class="group/facet flex items-center gap-2 cursor-pointer hover:bg-surface-secondary/50 px-2 py-1.5 rounded-mm-sm transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isTypeSelected(facet.id)"
+                  (change)="toggleType(facet.id)"
+                  class="peer sr-only"
+                />
+                <span
+                  class="size-4 rounded-mm-sm border-2 border-border bg-surface-base grid place-items-center transition-all peer-checked:bg-brand-6 peer-checked:border-brand-6"
+                >
+                  <svg
+                    class="size-2.5 text-white transition-all duration-200"
+                    [class.opacity-0]="!isTypeSelected(facet.id)"
+                    [class.scale-50]="!isTypeSelected(facet.id)"
+                    [class.opacity-100]="isTypeSelected(facet.id)"
+                    [class.scale-100]="isTypeSelected(facet.id)"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <path d="M20 6 9 17l-5-5"></path>
+                  </svg>
+                </span>
+                <span class="flex-1 text-sm text-ink-dark">{{ facet.label }}</span>
+                <span
+                  class="rounded-mm-pill bg-surface-secondary text-ink-secondary px-1.5 py-0.5 text-[10px] font-mono tabular-nums"
+                >
+                  {{ facet.count }}
+                </span>
+              </label>
+            }
+          </div>
+        </section>
+
+        <section>
+          <h4
+            class="text-[11px] uppercase tracking-wider text-ink-secondary font-semibold mb-2 px-2"
+          >
+            Fecha
+          </h4>
+          <div class="flex flex-col gap-0.5">
+            @for (range of dateRanges; track range.id) {
+              <label
+                class="flex items-center gap-2 cursor-pointer hover:bg-surface-secondary/50 px-2 py-1.5 rounded-mm-sm transition-colors"
+              >
+                <input
+                  type="radio"
+                  name="date-range"
+                  [value]="range.id"
+                  [checked]="selectedDateRange() === range.id"
+                  (change)="setDateRange(range.id)"
+                  class="peer sr-only"
+                />
+                <span
+                  class="size-4 rounded-full border-2 border-border bg-surface-base grid place-items-center transition-all"
+                  [class.border-brand-6]="selectedDateRange() === range.id"
+                >
+                  <span
+                    class="size-2 rounded-full transition-transform duration-200"
+                    [class.bg-brand-6]="selectedDateRange() === range.id"
+                    [class.scale-0]="selectedDateRange() !== range.id"
+                    [class.scale-100]="selectedDateRange() === range.id"
+                  ></span>
+                </span>
+                <span class="text-sm text-ink-dark">{{ range.label }}</span>
+              </label>
+            }
+          </div>
+        </section>
+
+        <section>
+          <h4
+            class="text-[11px] uppercase tracking-wider text-ink-secondary font-semibold mb-2 px-2"
+          >
+            Autor
+          </h4>
+          <div class="flex flex-col gap-0.5 max-h-44 overflow-y-auto mm-scroll-thin">
+            @for (facet of authorFacets(); track facet.id) {
+              <label
+                class="flex items-center gap-2 cursor-pointer hover:bg-surface-secondary/50 px-2 py-1.5 rounded-mm-sm transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="isAuthorSelected(facet.id)"
+                  (change)="toggleAuthor(facet.id)"
+                  class="peer sr-only"
+                />
+                <span
+                  class="size-4 rounded-mm-sm border-2 border-border bg-surface-base grid place-items-center transition-all peer-checked:bg-brand-6 peer-checked:border-brand-6"
+                >
+                  <svg
+                    class="size-2.5 text-white transition-all duration-200"
+                    [class.opacity-0]="!isAuthorSelected(facet.id)"
+                    [class.scale-50]="!isAuthorSelected(facet.id)"
+                    [class.opacity-100]="isAuthorSelected(facet.id)"
+                    [class.scale-100]="isAuthorSelected(facet.id)"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                  >
+                    <path d="M20 6 9 17l-5-5"></path>
+                  </svg>
+                </span>
+                <span class="flex-1 text-sm text-ink-dark truncate">{{ facet.label }}</span>
+                <span
+                  class="rounded-mm-pill bg-surface-secondary text-ink-secondary px-1.5 py-0.5 text-[10px] font-mono tabular-nums shrink-0"
+                >
+                  {{ facet.count }}
+                </span>
+              </label>
+            }
+          </div>
+        </section>
+      </aside>
+
+      <section class="space-y-4 min-w-0">
+        <div
+          class="relative rounded-mm-xl border border-border bg-surface-base shadow-mm-sm transition-all focus-within:border-brand-6 focus-within:shadow-mm-brand"
+        >
+          <svg
+            class="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-ink-muted pointer-events-none"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m21 21-4.3-4.3"></path>
+          </svg>
+          <input
+            type="search"
+            [value]="query()"
+            (input)="onQuery($event)"
+            placeholder="Buscar en el workspace…"
+            class="mm-input-bare w-full pl-12 pr-12 py-3.5 text-sm text-ink-dark placeholder:text-ink-muted"
+            aria-label="Búsqueda"
+          />
+          @if (query()) {
+            <button
+              type="button"
+              (click)="clearQuery()"
+              aria-label="Limpiar búsqueda"
+              class="absolute right-3 top-1/2 -translate-y-1/2 size-7 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12"></path>
+              </svg>
+            </button>
+          }
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <p class="text-xs text-ink-muted">
+            <span class="font-mono tabular-nums text-ink-dark font-semibold">{{
+              resultCount()
+            }}</span>
+            de
+            <span class="font-mono tabular-nums">{{ totalCount() }}</span>
+            resultados
+            @if (query()) {
+              para <span class="font-semibold text-ink-dark">"{{ query() }}"</span>
+            }
+          </p>
+          <div class="inline-flex items-center gap-2">
+            <span class="text-[11px] uppercase tracking-wider text-ink-muted font-semibold">
+              Ordenar:
+            </span>
+            <nav
+              class="inline-flex items-center gap-0.5 rounded-mm-pill bg-surface-secondary p-0.5"
+              role="tablist"
+            >
+              @for (sort of sortOptions; track sort.id) {
+                <button
+                  type="button"
+                  role="tab"
+                  [attr.aria-selected]="sortMode() === sort.id"
+                  (click)="setSortMode(sort.id)"
+                  class="rounded-mm-pill px-2.5 py-1 text-[11px] font-medium transition-all duration-200 mm-press"
+                  [class.bg-surface-base]="sortMode() === sort.id"
+                  [class.shadow-mm-sm]="sortMode() === sort.id"
+                  [class.text-ink-dark]="sortMode() === sort.id"
+                  [class.text-ink-secondary]="sortMode() !== sort.id"
+                >
+                  {{ sort.label }}
+                </button>
+              }
+            </nav>
+          </div>
+        </div>
+
+        @if (results().length > 0) {
+          <ul data-stagger-rows class="flex flex-col gap-3">
+            @for (result of results(); track result.id) {
+              <li>
+                <article
+                  class="group rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm hover:shadow-mm-elevated hover:border-brand-6 transition-all duration-200 cursor-pointer mm-press"
+                >
+                  <header class="flex items-start gap-3 mb-2">
+                    <span
+                      class="size-9 shrink-0 rounded-mm-md grid place-items-center transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105"
+                      [class]="typeMeta(result.type).tone"
+                    >
+                      <svg
+                        class="size-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path [attr.d]="typeMeta(result.type).icon"></path>
+                      </svg>
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <h4
+                        class="font-display text-base font-medium text-ink-dark leading-snug"
+                        [innerHTML]="highlight(result.title)"
+                      ></h4>
+                      <div class="flex items-center gap-2 mt-1 flex-wrap">
+                        @if (result.author) {
+                          <span class="text-[11px] text-ink-secondary">{{ result.author }}</span>
+                          <span class="text-ink-muted text-[11px]">·</span>
+                        }
+                        <span class="text-[11px] text-ink-muted font-mono">{{ result.date }}</span>
+                        @if (result.tag) {
+                          <span
+                            class="rounded-mm-pill bg-surface-secondary text-ink-secondary px-2 py-0.5 text-[10px] font-semibold"
+                          >
+                            {{ result.tag }}
+                          </span>
+                        }
+                      </div>
+                    </div>
+                    <svg
+                      class="size-4 text-ink-muted shrink-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                  </header>
+                  <p
+                    class="text-sm text-ink-secondary leading-relaxed line-clamp-2"
+                    [innerHTML]="highlight(result.snippet)"
+                  ></p>
+                </article>
+              </li>
+            }
+          </ul>
+        } @else {
+          <mm-empty-state
+            title="Sin resultados"
+            [description]="
+              query()
+                ? 'No encontramos nada para esa búsqueda. Prueba con otros términos o quita algunos filtros.'
+                : 'Empieza a escribir para buscar.'
+            "
+            variant="warning"
+          >
+            <svg
+              slot="icon"
+              class="relative size-8"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+              <path d="M8 11h6"></path>
+            </svg>
+            @if (hasActiveFilters()) {
+              <button
+                slot="actions"
+                type="button"
+                (click)="clearFilters()"
+                class="rounded-mm-md bg-cta text-cta-fg px-4 py-2 text-xs font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+              >
+                Limpiar todos los filtros
+              </button>
+            }
+          </mm-empty-state>
+        }
+      </section>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Facets sidebar (standalone)"
+    description="El bloque de filtros con checkboxes (multi) y radio (single). Contadores auto-actualizados via computed."
+    [snippets]="snippetsFacets"
+  >
+    <aside class="max-w-xs space-y-5">
+      <section>
+        <h4 class="text-[11px] uppercase tracking-wider text-ink-secondary font-semibold mb-2 px-2">
+          Tipo
+        </h4>
+        <div class="flex flex-col gap-0.5">
+          @for (facet of typeFacets(); track facet.id) {
+            <label
+              class="flex items-center gap-2 cursor-pointer hover:bg-surface-secondary/50 px-2 py-1.5 rounded-mm-sm transition-colors"
+            >
+              <input
+                type="checkbox"
+                [checked]="isTypeSelected(facet.id)"
+                (change)="toggleType(facet.id)"
+                class="peer sr-only"
+              />
+              <span
+                class="size-4 rounded-mm-sm border-2 border-border bg-surface-base grid place-items-center transition-all peer-checked:bg-brand-6 peer-checked:border-brand-6"
+              >
+                <svg
+                  class="size-2.5 text-white transition-all duration-200"
+                  [class.opacity-0]="!isTypeSelected(facet.id)"
+                  [class.opacity-100]="isTypeSelected(facet.id)"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                >
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+              </span>
+              <span class="flex-1 text-sm text-ink-dark">{{ facet.label }}</span>
+              <span
+                class="rounded-mm-pill bg-surface-secondary text-ink-secondary px-1.5 py-0.5 text-[10px] font-mono tabular-nums"
+              >
+                {{ facet.count }}
+              </span>
+            </label>
+          }
+        </div>
+      </section>
+    </aside>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="No results empty"
+    description="Cuando la query no devuelve nada. Mensaje contextual + acción para limpiar filtros si están activos."
+    [snippets]="snippetsNoResults"
+  >
+    <mm-empty-state
+      title="Sin resultados"
+      description="No encontramos nada para esa búsqueda. Prueba con términos más generales o limpia los filtros activos."
+      variant="warning"
+    >
+      <svg
+        slot="icon"
+        class="relative size-8"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+        <path d="M8 11h6"></path>
+      </svg>
+      <button
+        slot="actions"
+        type="button"
+        class="rounded-mm-md bg-cta text-cta-fg px-4 py-2 text-xs font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        Limpiar filtros
+      </button>
+      <button
+        slot="actions"
+        type="button"
+        class="rounded-mm-md border border-border bg-surface-base px-4 py-2 text-xs font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+      >
+        Ver todas las páginas
+      </button>
+    </mm-empty-state>
+  </mm-canvas-frame>
+</div>

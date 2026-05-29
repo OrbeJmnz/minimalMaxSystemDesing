@@ -1,0 +1,756 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Páginas completas"
+    title="Profile / Account Settings"
+    description="Página de configuración multi-sección con sidebar local, dirty banner sticky, danger zone con confirmación por tipeo. Patrón portable para cualquier app SaaS."
+  />
+
+  <mm-canvas-frame
+    heading="Settings completo"
+    description="Sidebar con 7 secciones · switch por contenido · dirty banner sticky cuando hay cambios · danger zone con modal de confirmación por tipeo."
+    [snippets]="snippetsLayout"
+  >
+    <div class="space-y-5">
+      <div
+        class="rounded-mm-2xl border border-border-soft bg-surface-base shadow-mm-sm grid grid-cols-1 md:grid-cols-[220px_1fr] overflow-hidden"
+      >
+        <aside
+          class="md:border-r md:border-b-0 border-b border-border-soft p-2 bg-surface-secondary/20"
+        >
+          <div class="flex md:flex-col gap-0.5 overflow-x-auto md:overflow-visible mm-scroll-thin">
+            @for (section of sections; track section.id) {
+              <button
+                type="button"
+                (click)="setSection(section.id)"
+                [attr.aria-current]="activeSection() === section.id ? 'page' : null"
+                class="group relative flex items-center gap-2.5 px-3 py-2 rounded-mm-md text-left transition-all duration-200 mm-press shrink-0 md:w-full"
+                [class.bg-surface-base]="activeSection() === section.id"
+                [class.shadow-mm-sm]="activeSection() === section.id"
+                [class.text-ink-dark]="activeSection() === section.id"
+                [class.text-ink-secondary]="activeSection() !== section.id"
+                [class.hover:bg-surface-base/60]="activeSection() !== section.id"
+                [class.hover:text-ink-dark]="activeSection() !== section.id"
+              >
+                <span
+                  class="size-7 shrink-0 rounded-mm-sm grid place-items-center transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105"
+                  [class.bg-brand-6]="activeSection() === section.id"
+                  [class.text-white]="activeSection() === section.id"
+                  [class.bg-surface-secondary]="activeSection() !== section.id"
+                  [class.text-ink-muted]="activeSection() !== section.id"
+                >
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path [attr.d]="section.icon"></path>
+                  </svg>
+                </span>
+                <span class="text-sm font-medium truncate">{{ section.label }}</span>
+                @if (activeSection() === section.id) {
+                  <span
+                    class="hidden md:block ml-auto size-1.5 rounded-full bg-brand-6 shrink-0"
+                    style="animation: mm-check-pop 320ms var(--ease-bounce) both"
+                  ></span>
+                }
+              </button>
+            }
+          </div>
+        </aside>
+
+        <main class="p-5 md:p-7 min-w-0">
+          @switch (activeSection()) {
+            @case ('account') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3 class="font-display text-lg font-medium text-ink-dark">Cuenta</h3>
+                  <p class="text-xs text-ink-muted mt-1">Tu perfil público y datos personales</p>
+                </header>
+
+                <div class="flex items-center gap-4 pb-5 border-b border-border-soft">
+                  <span
+                    class="size-16 rounded-mm-pill bg-linear-to-br from-brand-6 to-brand-pink grid place-items-center font-display font-semibold text-white text-xl shadow-mm-brand"
+                  >
+                    OJ
+                  </span>
+                  <div class="flex flex-col gap-1.5">
+                    <button
+                      type="button"
+                      class="rounded-mm-md border border-border bg-surface-base px-3 py-1.5 text-xs font-medium hover:border-ink-dark transition mm-press w-fit"
+                    >
+                      Cambiar avatar
+                    </button>
+                    <p class="text-[11px] text-ink-muted">PNG, JPG o GIF · 1MB máx.</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label class="flex flex-col gap-1.5">
+                    <span class="text-xs font-medium text-ink-dark">Nombre completo</span>
+                    <input
+                      type="text"
+                      [value]="nameInput()"
+                      (input)="onName($event)"
+                      class="rounded-mm-md border border-border bg-surface-base px-3 py-2 text-sm focus:border-brand-6 focus:shadow-mm-brand outline-none transition"
+                    />
+                  </label>
+                  <label class="flex flex-col gap-1.5">
+                    <span class="text-xs font-medium text-ink-dark">Handle</span>
+                    <div
+                      class="flex items-stretch rounded-mm-md border border-border bg-surface-base overflow-hidden focus-within:border-brand-6 focus-within:shadow-mm-brand transition"
+                    >
+                      <span
+                        class="grid place-items-center px-3 text-xs text-ink-muted bg-surface-secondary border-r border-border"
+                      >
+                        @
+                      </span>
+                      <input
+                        type="text"
+                        [value]="handleInput()"
+                        (input)="onHandle($event)"
+                        class="mm-input-bare flex-1 px-3 py-2 text-sm text-ink-dark"
+                      />
+                    </div>
+                  </label>
+                  <label class="flex flex-col gap-1.5 sm:col-span-2">
+                    <span class="text-xs font-medium text-ink-dark">Email</span>
+                    <input
+                      type="email"
+                      [value]="emailInput()"
+                      (input)="onEmail($event)"
+                      class="rounded-mm-md border border-border bg-surface-base px-3 py-2 text-sm focus:border-brand-6 focus:shadow-mm-brand outline-none transition"
+                    />
+                  </label>
+                  <label class="flex flex-col gap-1.5 sm:col-span-2">
+                    <span class="text-xs font-medium text-ink-dark">Bio</span>
+                    <textarea
+                      rows="3"
+                      [value]="bioInput()"
+                      (input)="onBio($event)"
+                      class="rounded-mm-md border border-border bg-surface-base px-3 py-2 text-sm resize-none focus:border-brand-6 focus:shadow-mm-brand outline-none transition"
+                    ></textarea>
+                  </label>
+                </div>
+              </div>
+            }
+
+            @case ('security') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3 class="font-display text-lg font-medium text-ink-dark">Seguridad</h3>
+                  <p class="text-xs text-ink-muted mt-1">Contraseña, 2FA y sesiones activas</p>
+                </header>
+
+                <div
+                  class="rounded-mm-xl border border-border-soft bg-surface-base p-4 flex items-center justify-between gap-3"
+                >
+                  <div class="flex items-center gap-3 min-w-0">
+                    <span
+                      class="size-10 rounded-mm-md bg-success-bg text-success grid place-items-center"
+                    >
+                      <svg
+                        class="size-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <rect x="3" y="11" width="18" height="11" rx="2" />
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p class="font-medium text-sm text-ink-dark">2FA habilitado</p>
+                      <p class="text-xs text-ink-muted">
+                        Autenticación con app TOTP · Google Authenticator
+                      </p>
+                    </div>
+                  </div>
+                  <label class="inline-flex cursor-pointer items-center shrink-0">
+                    <input
+                      type="checkbox"
+                      [checked]="twoFAEnabled()"
+                      (change)="toggleTwoFA()"
+                      class="peer sr-only"
+                    />
+                    <span
+                      class="relative inline-flex items-center w-11 h-6 rounded-mm-pill bg-border transition-colors peer-checked:bg-brand-6 peer-checked:[&>span]:translate-x-5"
+                    >
+                      <span
+                        class="block size-5 rounded-full bg-white shadow-mm-sm transform translate-x-0.5 transition-transform"
+                      ></span>
+                    </span>
+                  </label>
+                </div>
+
+                <div class="rounded-mm-xl border border-border-soft bg-surface-base p-4">
+                  <h4 class="font-medium text-sm text-ink-dark mb-1">Cambiar contraseña</h4>
+                  <p class="text-xs text-ink-muted mb-3">
+                    Te enviaremos un link de reseteo a tu email.
+                  </p>
+                  <button
+                    type="button"
+                    class="rounded-mm-md border border-border bg-surface-base px-4 py-1.5 text-xs font-medium hover:border-ink-dark transition mm-press"
+                  >
+                    Enviar link de reseteo
+                  </button>
+                </div>
+
+                <div class="rounded-mm-xl border border-border-soft bg-surface-base p-4">
+                  <h4 class="font-medium text-sm text-ink-dark mb-3">Sesiones activas</h4>
+                  <ul class="space-y-2">
+                    <li class="flex items-center justify-between gap-3 text-sm">
+                      <div class="flex items-center gap-2">
+                        <span class="size-2 rounded-full bg-success animate-pulse"></span>
+                        <span class="font-medium text-ink-dark">Chrome · macOS</span>
+                        <span
+                          class="text-[10px] rounded-mm-pill bg-success-bg text-success px-1.5 py-0.5 font-semibold"
+                        >
+                          Esta sesión
+                        </span>
+                      </div>
+                      <span class="text-[11px] text-ink-muted font-mono">CDMX · ahora</span>
+                    </li>
+                    <li class="flex items-center justify-between gap-3 text-sm">
+                      <div class="flex items-center gap-2">
+                        <span class="size-2 rounded-full bg-ink-muted"></span>
+                        <span class="font-medium text-ink-dark">Safari · iOS</span>
+                      </div>
+                      <button type="button" class="text-[11px] text-error hover:underline">
+                        Cerrar
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            }
+
+            @case ('billing') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3 class="font-display text-lg font-medium text-ink-dark">Facturación</h3>
+                  <p class="text-xs text-ink-muted mt-1">Plan, método de pago e historial</p>
+                </header>
+
+                <div
+                  class="rounded-mm-2xl bg-linear-to-br from-brand-6 to-brand-pink p-5 text-white shadow-mm-brand"
+                >
+                  <div class="flex items-start justify-between mb-4">
+                    <div>
+                      <p class="text-[10px] uppercase tracking-wider opacity-80 font-semibold">
+                        Plan actual
+                      </p>
+                      <h4 class="font-display text-2xl font-medium mt-0.5">Growth</h4>
+                    </div>
+                    <span
+                      class="rounded-mm-pill bg-white/20 backdrop-blur px-3 py-1 text-[10px] font-semibold uppercase tracking-wider"
+                    >
+                      Activo
+                    </span>
+                  </div>
+                  <div class="grid grid-cols-3 gap-3 text-xs opacity-90">
+                    <div>
+                      <p class="opacity-70 mb-0.5">Próximo cobro</p>
+                      <p class="font-mono">15 jun</p>
+                    </div>
+                    <div>
+                      <p class="opacity-70 mb-0.5">Monto</p>
+                      <p class="font-mono">$284 USD</p>
+                    </div>
+                    <div>
+                      <p class="opacity-70 mb-0.5">Periodo</p>
+                      <p class="font-mono">Mensual</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    class="mt-5 rounded-mm-md bg-white text-ink-dark px-4 py-2 text-xs font-semibold hover:shadow-mm-sm transition mm-press"
+                  >
+                    Cambiar plan
+                  </button>
+                </div>
+
+                <div
+                  class="rounded-mm-xl border border-border-soft bg-surface-base p-4 flex items-center gap-3"
+                >
+                  <span class="rounded-mm-md bg-cta text-cta-fg px-3 py-2 font-mono text-xs">
+                    VISA
+                  </span>
+                  <div class="flex-1">
+                    <p class="font-medium text-sm text-ink-dark font-mono">•••• •••• •••• 4242</p>
+                    <p class="text-[11px] text-ink-muted">Expira 09/27</p>
+                  </div>
+                  <button type="button" class="text-xs text-brand-6 font-medium hover:underline">
+                    Cambiar
+                  </button>
+                </div>
+              </div>
+            }
+
+            @case ('integrations') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3 class="font-display text-lg font-medium text-ink-dark">Integraciones</h3>
+                  <p class="text-xs text-ink-muted mt-1">Servicios conectados a tu workspace</p>
+                </header>
+
+                <ul class="grid grid-cols-1 gap-2">
+                  @for (int of integrations(); track int.id) {
+                    <li
+                      class="flex items-center gap-3 rounded-mm-xl border border-border-soft bg-surface-base p-4 hover:shadow-mm-sm transition-all"
+                    >
+                      <span
+                        [class]="
+                          'size-10 rounded-mm-md bg-linear-to-br shadow-mm-brand grid place-items-center text-white shrink-0 ' +
+                          int.tone
+                        "
+                      >
+                        <svg
+                          class="size-5"
+                          viewBox="0 0 24 24"
+                          [attr.fill]="int.id === 'github' ? 'currentColor' : 'none'"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <path [attr.d]="int.icon"></path>
+                        </svg>
+                      </span>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <p class="font-medium text-sm text-ink-dark">{{ int.name }}</p>
+                          @if (int.connected) {
+                            <span
+                              class="inline-flex items-center gap-1 rounded-mm-pill bg-success-bg text-success px-1.5 py-0.5 text-[10px] font-semibold"
+                            >
+                              <span class="size-1 rounded-full bg-success animate-pulse"></span>
+                              Conectado
+                            </span>
+                          }
+                        </div>
+                        <p class="text-xs text-ink-muted truncate mt-0.5">
+                          {{ int.description }}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        (click)="toggleIntegration(int.id)"
+                        class="rounded-mm-md px-3 py-1.5 text-xs font-medium transition mm-press shrink-0"
+                        [class.bg-surface-secondary]="int.connected"
+                        [class.text-ink-dark]="int.connected"
+                        [class.hover:bg-border]="int.connected"
+                        [class.bg-cta]="!int.connected"
+                        [class.text-cta-fg]="!int.connected"
+                        [class.hover:bg-cta-hover]="!int.connected"
+                      >
+                        {{ int.connected ? 'Desconectar' : 'Conectar' }}
+                      </button>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @case ('notifications') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3 class="font-display text-lg font-medium text-ink-dark">Notificaciones</h3>
+                  <p class="text-xs text-ink-muted mt-1">Cómo quieres mantenerte al día</p>
+                </header>
+
+                <ul
+                  class="rounded-mm-xl border border-border-soft bg-surface-base overflow-hidden divide-y divide-border-soft"
+                >
+                  @for (
+                    notif of [
+                      {
+                        signal: emailNotif,
+                        label: 'Email transaccionales',
+                        desc: 'Confirmaciones de cuenta y facturación',
+                      },
+                      {
+                        signal: pushNotif,
+                        label: 'Push notifications',
+                        desc: 'Activity en tiempo real en el browser',
+                      },
+                      {
+                        signal: digestNotif,
+                        label: 'Digest semanal',
+                        desc: 'Resumen cada lunes a las 9am',
+                      },
+                      {
+                        signal: mentionsNotif,
+                        label: 'Menciones (@)',
+                        desc: 'Cuando alguien te menciona en comentarios',
+                      },
+                      {
+                        signal: marketingNotif,
+                        label: 'Marketing',
+                        desc: 'Novedades del producto y tips',
+                      },
+                    ];
+                    track notif.label
+                  ) {
+                    <li class="flex items-center justify-between gap-3 p-4">
+                      <div class="min-w-0">
+                        <p class="text-sm font-medium text-ink-dark">{{ notif.label }}</p>
+                        <p class="text-xs text-ink-muted">{{ notif.desc }}</p>
+                      </div>
+                      <label class="inline-flex cursor-pointer items-center shrink-0">
+                        <input
+                          type="checkbox"
+                          [checked]="notif.signal()"
+                          (change)="notif.signal.set(!notif.signal()); markDirty()"
+                          class="peer sr-only"
+                        />
+                        <span
+                          class="relative inline-flex items-center w-11 h-6 rounded-mm-pill bg-border transition-colors peer-checked:bg-brand-6 peer-checked:[&>span]:translate-x-5"
+                        >
+                          <span
+                            class="block size-5 rounded-full bg-white shadow-mm-sm transform translate-x-0.5 transition-transform"
+                          ></span>
+                        </span>
+                      </label>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @case ('team') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header class="flex items-center justify-between gap-3">
+                  <div>
+                    <h3 class="font-display text-lg font-medium text-ink-dark">Equipo</h3>
+                    <p class="text-xs text-ink-muted mt-1">
+                      {{ team.length }} miembros · Plan Growth permite hasta 10
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    mmRipple
+                    class="rounded-mm-md bg-cta text-cta-fg px-4 py-2 text-xs font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+                  >
+                    + Invitar
+                  </button>
+                </header>
+
+                <ul
+                  class="rounded-mm-xl border border-border-soft bg-surface-base overflow-hidden divide-y divide-border-soft"
+                >
+                  @for (member of team; track member.email) {
+                    <li
+                      class="group/m flex items-center gap-3 p-4 hover:bg-surface-secondary/40 transition-colors"
+                    >
+                      <span
+                        [class]="
+                          'size-10 shrink-0 rounded-mm-pill bg-linear-to-br grid place-items-center font-display font-semibold text-white text-sm shadow-mm-sm ' +
+                          member.tone
+                        "
+                      >
+                        {{ member.initials }}
+                      </span>
+                      <div class="flex-1 min-w-0">
+                        <p class="font-medium text-sm text-ink-dark">{{ member.name }}</p>
+                        <p class="text-xs text-ink-muted truncate">{{ member.email }}</p>
+                      </div>
+                      <span
+                        class="rounded-mm-pill px-2.5 py-1 text-[10px] font-semibold shrink-0"
+                        [class]="roleClass(member.role)"
+                      >
+                        {{ roleLabel(member.role) }}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Más opciones"
+                        class="size-8 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition opacity-0 group-hover/m:opacity-100 mm-press"
+                      >
+                        <svg
+                          class="size-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="1"></circle>
+                          <circle cx="19" cy="12" r="1"></circle>
+                          <circle cx="5" cy="12" r="1"></circle>
+                        </svg>
+                      </button>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @case ('danger') {
+              <div class="space-y-5" style="animation: fadeIn 220ms var(--ease-out) both">
+                <header>
+                  <h3
+                    class="font-display text-lg font-medium text-error inline-flex items-center gap-2"
+                  >
+                    <svg
+                      class="size-5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                      ></path>
+                    </svg>
+                    Danger zone
+                  </h3>
+                  <p class="text-xs text-ink-muted mt-1">
+                    Acciones irreversibles que afectan tu cuenta
+                  </p>
+                </header>
+
+                <div class="rounded-mm-xl border border-error/30 bg-error-bg/30 p-4 space-y-3">
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                      <p class="font-medium text-sm text-ink-dark">Exportar todos mis datos</p>
+                      <p class="text-xs text-ink-muted">
+                        Recibirás un ZIP con tu información en 24 horas
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      class="rounded-mm-md border border-border bg-surface-base px-4 py-2 text-xs font-medium text-ink-dark hover:border-ink-dark transition mm-press shrink-0"
+                    >
+                      Solicitar export
+                    </button>
+                  </div>
+
+                  <div class="border-t border-error/20 pt-3 flex items-start justify-between gap-3">
+                    <div class="min-w-0">
+                      <p class="font-medium text-sm text-error">Eliminar cuenta</p>
+                      <p class="text-xs text-ink-muted">
+                        Esta acción es permanente. Se eliminarán proyectos, equipo, integraciones y
+                        datos personales.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      (click)="openDelete()"
+                      class="rounded-mm-md bg-error text-white px-4 py-2 text-xs font-medium hover:bg-red-600 transition mm-press shrink-0"
+                    >
+                      Eliminar cuenta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          }
+        </main>
+      </div>
+
+      @if (dirty()) {
+        <div
+          class="sticky bottom-4 z-10 mx-auto max-w-2xl rounded-mm-xl bg-cta text-cta-fg shadow-mm-elevated px-5 py-3 flex flex-wrap items-center justify-between gap-3"
+          style="animation: fadeInDown 240ms var(--ease-out) both"
+        >
+          <span class="inline-flex items-center gap-2 text-sm">
+            <span class="size-2 rounded-full bg-warning animate-pulse"></span>
+            Tienes cambios sin guardar
+          </span>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              (click)="discard()"
+              class="rounded-mm-md bg-white/10 hover:bg-white/20 px-3 py-1.5 text-xs font-medium transition mm-press"
+            >
+              Descartar
+            </button>
+            <button
+              type="button"
+              (click)="save()"
+              mmRipple
+              class="rounded-mm-md bg-brand-6 hover:bg-primary-700 px-4 py-1.5 text-xs font-semibold transition mm-press"
+            >
+              Guardar cambios
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (deleteModalOpen()) {
+      <mm-modal-shell [open]="deleteModalOpen()" title="¿Eliminar cuenta?" (close)="closeDelete()">
+        <div class="space-y-4">
+          <header class="flex items-center gap-3">
+            <span
+              class="size-10 rounded-mm-pill bg-error-bg text-error grid place-items-center shrink-0"
+            >
+              <svg
+                class="size-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                ></path>
+              </svg>
+            </span>
+            <div>
+              <h3 class="font-display text-lg font-medium text-ink-dark">¿Eliminar cuenta?</h3>
+              <p class="text-xs text-ink-muted">Esta acción no se puede deshacer.</p>
+            </div>
+          </header>
+          <p class="text-sm text-ink-secondary leading-relaxed">
+            Se eliminarán todos tus proyectos, equipo, integraciones y datos personales. Para
+            confirmar, escribe <strong class="font-mono text-error">ELIMINAR</strong> abajo:
+          </p>
+          <input
+            type="text"
+            [value]="deleteConfirm()"
+            (input)="onDeleteConfirm($event)"
+            placeholder="ELIMINAR"
+            class="w-full rounded-mm-md border border-border bg-surface-base px-3 py-2 text-sm font-mono focus:border-error focus:shadow-[0_0_0_3px_rgba(239,68,68,0.15)] outline-none transition"
+          />
+          <div class="flex items-center justify-end gap-2 pt-2">
+            <button
+              type="button"
+              (click)="closeDelete()"
+              class="rounded-mm-md border border-border bg-surface-base px-4 py-2 text-xs font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              (click)="confirmDelete()"
+              [disabled]="!canDelete()"
+              class="rounded-mm-md bg-error text-white px-4 py-2 text-xs font-medium hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed transition mm-press"
+            >
+              Eliminar permanentemente
+            </button>
+          </div>
+        </div>
+      </mm-modal-shell>
+    }
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Sidebar de secciones (standalone)"
+    description="Navigation interno con icono + label · indicador activo con dot · hover lift en icono. Patrón portable para cualquier settings/admin page."
+    [snippets]="snippetsSidebar"
+  >
+    <aside
+      class="max-w-xs flex flex-col gap-0.5 p-2 rounded-mm-xl bg-surface-base border border-border-soft shadow-mm-sm"
+    >
+      @for (section of sections; track section.id) {
+        <button
+          type="button"
+          (click)="setSection(section.id)"
+          [attr.aria-current]="activeSection() === section.id ? 'page' : null"
+          class="group relative flex items-center gap-2.5 px-3 py-2.5 rounded-mm-md text-left transition-all duration-200 mm-press"
+          [class.bg-surface-secondary]="activeSection() === section.id"
+          [class.text-ink-dark]="activeSection() === section.id"
+          [class.text-ink-secondary]="activeSection() !== section.id"
+          [class.hover:bg-surface-secondary/50]="activeSection() !== section.id"
+          [class.hover:text-ink-dark]="activeSection() !== section.id"
+        >
+          <span
+            class="size-7 rounded-mm-sm grid place-items-center transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105"
+            [class.bg-brand-6]="activeSection() === section.id"
+            [class.text-white]="activeSection() === section.id"
+            [class.bg-surface-secondary]="activeSection() !== section.id"
+            [class.text-ink-muted]="activeSection() !== section.id"
+          >
+            <svg
+              class="size-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path [attr.d]="section.icon"></path>
+            </svg>
+          </span>
+          <span class="text-sm font-medium flex-1 truncate">{{ section.label }}</span>
+          @if (activeSection() === section.id) {
+            <span
+              class="size-1.5 rounded-full bg-brand-6 shrink-0"
+              style="animation: mm-check-pop 320ms var(--ease-bounce) both"
+            ></span>
+          }
+        </button>
+      }
+    </aside>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Dirty banner sticky"
+    description="Aparece cuando hay cambios sin guardar. Patrón anti-frustración: dot pulsante + acciones claras. Slide-down en entry."
+    [snippets]="snippetsDirty"
+  >
+    <div class="space-y-3">
+      <p class="text-xs text-ink-muted italic">
+        El banner aparece automáticamente cuando editas cualquier campo del settings de arriba.
+      </p>
+      <div
+        class="rounded-mm-xl bg-cta text-cta-fg shadow-mm-elevated px-5 py-3 flex flex-wrap items-center justify-between gap-3"
+      >
+        <span class="inline-flex items-center gap-2 text-sm">
+          <span class="size-2 rounded-full bg-warning animate-pulse"></span>
+          Tienes cambios sin guardar
+        </span>
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="rounded-mm-md bg-white/10 hover:bg-white/20 px-3 py-1.5 text-xs font-medium transition mm-press"
+          >
+            Descartar
+          </button>
+          <button
+            type="button"
+            mmRipple
+            class="rounded-mm-md bg-brand-6 hover:bg-primary-700 px-4 py-1.5 text-xs font-semibold transition mm-press"
+          >
+            Guardar cambios
+          </button>
+        </div>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Danger zone con confirm-by-typing"
+    description="Patrón anti-mistake de GitHub: el botón destructivo solo se habilita cuando tipeas exactamente la palabra de confirmación."
+    [snippets]="snippetsDanger"
+  >
+    <div class="rounded-mm-xl border border-error/30 bg-error-bg/30 p-4 space-y-3 max-w-xl">
+      <div class="flex items-start justify-between gap-3">
+        <div class="min-w-0">
+          <p class="font-medium text-sm text-error">Eliminar cuenta</p>
+          <p class="text-xs text-ink-muted">Acción permanente. Tipea ELIMINAR para confirmar.</p>
+        </div>
+        <button
+          type="button"
+          (click)="openDelete()"
+          class="rounded-mm-md bg-error text-white px-4 py-2 text-xs font-medium hover:bg-red-600 transition mm-press shrink-0"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </mm-canvas-frame>
+</div>

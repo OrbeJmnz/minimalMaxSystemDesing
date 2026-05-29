@@ -1,0 +1,381 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Plantillas"
+    title="Layouts portátiles"
+    description="Esqueletos de página listos para copy-paste. Cada layout es responsive y respeta los tokens MinimalMax."
+  />
+
+  <mm-canvas-frame
+    heading="Hero centrado (landing)"
+    description="Patrón de landing — hero centrado con CTA, beneficios en grid debajo. Width contenido + whitespace generoso."
+    [snippets]="snippetsHeroCentrado"
+  >
+    <div
+      class="rounded-mm-2xl border border-border-soft bg-linear-to-b from-surface-base via-surface-base to-surface-secondary/40 p-10 md:p-16 text-center"
+    >
+      <span
+        class="inline-flex items-center gap-2 rounded-mm-pill bg-primary-200/60 text-primary-700 px-3 py-1 text-xs font-semibold"
+      >
+        <span class="size-1.5 rounded-full bg-primary-700 animate-pulse"></span>
+        Lanzamiento v0.3
+      </span>
+      <h1
+        class="font-display text-4xl md:text-6xl font-medium leading-[1.05] tracking-tight text-ink-dark mt-6 max-w-3xl mx-auto"
+      >
+        Construye productos premium en menos tiempo.
+      </h1>
+      <p class="text-base md:text-lg text-ink-secondary mt-5 max-w-xl mx-auto">
+        70 componentes accesibles con el ADN MinimalMax — copiables, portables y listos para
+        producción.
+      </p>
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-8">
+        <button
+          type="button"
+          class="rounded-mm-md bg-cta px-6 py-3 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+        >
+          Empezar ahora →
+        </button>
+        <button
+          type="button"
+          class="rounded-mm-md border border-border bg-surface-base px-6 py-3 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+        >
+          Ver demo
+        </button>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto text-left">
+        <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+          <span class="block text-2xl">⚡</span>
+          <p class="font-display font-medium text-ink-dark mt-2">Rapidez</p>
+          <p class="text-xs text-ink-muted">0.4s rebuild · Vite + esbuild</p>
+        </div>
+        <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+          <span class="block text-2xl">♿</span>
+          <p class="font-display font-medium text-ink-dark mt-2">Accesible</p>
+          <p class="text-xs text-ink-muted">WCAG AA · focus visible · ARIA</p>
+        </div>
+        <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+          <span class="block text-2xl">📦</span>
+          <p class="font-display font-medium text-ink-dark mt-2">Portable</p>
+          <p class="text-xs text-ink-muted">Copia la carpeta · funciona ya</p>
+        </div>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Split asymmetric (content + visual)"
+    description="50/50 con contenido a la izquierda, mockup/imagen a la derecha. Stack vertical en mobile."
+    [snippets]="snippetsSplitAsymmetric"
+  >
+    <div
+      class="rounded-mm-2xl border border-border-soft bg-surface-base p-8 md:p-12 grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
+    >
+      <div>
+        <span
+          class="inline-flex items-center rounded-mm-pill bg-brand-pink/15 text-brand-pink px-3 py-1 text-xs font-semibold"
+        >
+          Producto
+        </span>
+        <h2 class="font-display text-3xl md:text-4xl font-medium text-ink-dark leading-tight mt-4">
+          Tu galería de componentes, sin reinventar la rueda.
+        </h2>
+        <p class="text-base text-ink-secondary mt-4 leading-relaxed">
+          Cada pieza es 100% portátil. Copia, pega y funciona. Sin librerías externas, sin opiniones
+          de design system rígidas.
+        </p>
+        <ul class="flex flex-col gap-2 mt-6">
+          <li class="flex items-center gap-2 text-sm text-ink-dark">
+            <svg
+              class="size-5 text-success shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            Tokens consistentes en @theme
+          </li>
+          <li class="flex items-center gap-2 text-sm text-ink-dark">
+            <svg
+              class="size-5 text-success shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            Dark mode con un toggle
+          </li>
+          <li class="flex items-center gap-2 text-sm text-ink-dark">
+            <svg
+              class="size-5 text-success shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+            SSR + zoneless out of the box
+          </li>
+        </ul>
+        <button
+          type="button"
+          class="mt-8 rounded-mm-md bg-brand-6 px-5 py-2.5 text-sm font-medium text-white shadow-mm-brand hover:shadow-mm-elevated transition mm-press"
+        >
+          Explorar componentes
+        </button>
+      </div>
+      <div
+        class="aspect-video rounded-mm-2xl bg-linear-to-br from-brand-6 via-primary-500 to-brand-pink shadow-mm-brand relative overflow-hidden"
+      >
+        <div class="absolute inset-0 bg-grid opacity-30"></div>
+        <div
+          class="absolute inset-6 rounded-mm-xl bg-surface-base/15 backdrop-blur-md border border-white/20 flex items-center justify-center"
+        >
+          <span class="font-display text-white text-4xl font-medium">Mockup</span>
+        </div>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Dashboard (sidebar + canvas)"
+    description="Layout app-like — sidebar fijo + topbar + main con grid de stats y tabla."
+    [snippets]="snippetsDashboard"
+  >
+    <div class="rounded-mm-2xl border border-border-soft overflow-hidden">
+      <div class="grid grid-cols-12 min-h-[500px]">
+        <aside
+          class="col-span-3 bg-surface-secondary/40 border-r border-border-soft p-4 flex flex-col gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <span class="size-8 rounded-mm-md bg-linear-to-br from-brand-6 to-brand-pink"></span>
+            <span class="font-display font-semibold text-ink-dark">Acme</span>
+          </div>
+          <nav class="flex flex-col gap-2">
+            <a class="rounded-mm-md bg-cta text-white px-3 py-2 text-sm font-medium cursor-pointer">
+              Dashboard
+            </a>
+            <a
+              class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >
+              Proyectos
+            </a>
+            <a
+              class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >
+              Reportes
+            </a>
+            <a
+              class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >
+              Equipo
+            </a>
+          </nav>
+        </aside>
+        <section class="col-span-9 flex flex-col">
+          <header class="flex items-center justify-between px-6 py-3 border-b border-border-soft">
+            <span class="font-display font-medium text-ink-dark">Dashboard</span>
+            <span class="size-8 rounded-mm-pill bg-linear-to-br from-brand-6 to-brand-pink"></span>
+          </header>
+          <div class="flex-1 p-6 space-y-4">
+            <div class="grid grid-cols-3 gap-3">
+              <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+                <p class="text-xs text-ink-muted">MRR</p>
+                <p class="font-display text-2xl font-medium text-ink-dark">$24.8K</p>
+              </div>
+              <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+                <p class="text-xs text-ink-muted">Activos</p>
+                <p class="font-display text-2xl font-medium text-ink-dark">1,284</p>
+              </div>
+              <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+                <p class="text-xs text-ink-muted">Churn</p>
+                <p class="font-display text-2xl font-medium text-success">2.1%</p>
+              </div>
+            </div>
+            <div class="rounded-mm-xl bg-surface-base border border-border-soft p-4">
+              <p class="text-xs text-ink-muted mb-3">Ingresos últimos 30 días</p>
+              <div class="flex items-end justify-between gap-1.5 h-24">
+                @for (i of [60, 75, 50, 90, 70, 95, 80, 100, 88]; track $index) {
+                  <span
+                    [style.height.%]="i"
+                    class="flex-1 rounded-mm-sm bg-linear-to-t from-brand-6 to-primary-500"
+                  ></span>
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Marketing 3-cols (pricing)"
+    description="Tres tarjetas de plan con el medio destacado. Patrón clásico SaaS."
+    [snippets]="snippetsMarketing3Cols"
+  >
+    <div
+      class="rounded-mm-2xl border border-border-soft bg-linear-to-b from-surface-secondary/30 to-surface-base p-8"
+    >
+      <div class="text-center mb-10">
+        <h2 class="font-display text-3xl md:text-4xl font-medium text-ink-dark">Planes simples</h2>
+        <p class="text-ink-secondary mt-2">Sin sorpresas. Upgrade o cancela cuando quieras.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+        <article class="rounded-mm-2xl bg-surface-base border border-border-soft p-6 flex flex-col">
+          <h3 class="font-display text-lg font-semibold text-ink-dark">Free</h3>
+          <p class="text-xs text-ink-muted mt-1">Para empezar</p>
+          <p class="font-display text-4xl font-medium text-ink-dark mt-6">$0</p>
+          <ul class="flex flex-col gap-2 mt-6 text-sm text-ink-secondary flex-1">
+            <li>✓ Hasta 3 proyectos</li>
+            <li>✓ Soporte comunidad</li>
+            <li>✓ Tokens base</li>
+          </ul>
+          <button
+            class="mt-6 rounded-mm-md border border-border bg-surface-base py-2 text-sm font-medium hover:border-ink-dark transition"
+          >
+            Empezar gratis
+          </button>
+        </article>
+
+        <article
+          class="relative rounded-mm-2xl bg-cta text-white p-6 flex flex-col shadow-mm-elevated -translate-y-2"
+        >
+          <span
+            class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-mm-pill bg-brand-6 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider shadow-mm-brand"
+          >
+            Popular
+          </span>
+          <h3 class="font-display text-lg font-semibold">Pro</h3>
+          <p class="text-xs text-white/60 mt-1">Para freelancers</p>
+          <p class="font-display text-4xl font-medium mt-6">
+            $19<span class="text-base text-white/60 font-normal">/mes</span>
+          </p>
+          <ul class="flex flex-col gap-2 mt-6 text-sm text-white/80 flex-1">
+            <li>✓ Proyectos ilimitados</li>
+            <li>✓ Soporte prioritario</li>
+            <li>✓ Componentes premium</li>
+            <li>✓ Sin marca de agua</li>
+          </ul>
+          <button
+            class="mt-6 rounded-mm-md bg-brand-6 py-2 text-sm font-medium shadow-mm-brand hover:shadow-mm-elevated transition"
+          >
+            Probar 7 días gratis
+          </button>
+        </article>
+
+        <article class="rounded-mm-2xl bg-surface-base border border-border-soft p-6 flex flex-col">
+          <h3 class="font-display text-lg font-semibold text-ink-dark">Team</h3>
+          <p class="text-xs text-ink-muted mt-1">Para equipos</p>
+          <p class="font-display text-4xl font-medium text-ink-dark mt-6">
+            $49<span class="text-base text-ink-muted font-normal">/mes</span>
+          </p>
+          <ul class="flex flex-col gap-2 mt-6 text-sm text-ink-secondary flex-1">
+            <li>✓ Todo lo de Pro</li>
+            <li>✓ Hasta 10 seats</li>
+            <li>✓ SSO + Audit log</li>
+            <li>✓ Soporte dedicado</li>
+          </ul>
+          <button
+            class="mt-6 rounded-mm-md border border-border bg-surface-base py-2 text-sm font-medium hover:border-ink-dark transition"
+          >
+            Contactar ventas
+          </button>
+        </article>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Settings (2 cols con nav lateral)"
+    description="Layout para páginas de configuración — tabs verticales a la izquierda, contenido a la derecha."
+    [snippets]="snippetsSettings"
+  >
+    <div
+      class="rounded-mm-2xl border border-border-soft overflow-hidden grid grid-cols-12 min-h-96"
+    >
+      <aside class="col-span-4 border-r border-border-soft bg-surface-secondary/30 p-4">
+        <p class="text-[10px] uppercase tracking-wider font-semibold text-ink-muted px-2 mb-2">
+          Cuenta
+        </p>
+        <nav class="flex flex-col gap-2">
+          <a
+            class="rounded-mm-md bg-surface-base shadow-mm-sm px-3 py-2 text-sm font-medium text-ink-dark cursor-pointer"
+            >Perfil</a
+          >
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Notificaciones</a
+          >
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Seguridad</a
+          >
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Sesiones</a
+          >
+        </nav>
+        <p class="text-[10px] uppercase tracking-wider font-semibold text-ink-muted px-2 mt-4 mb-2">
+          Workspace
+        </p>
+        <nav class="flex flex-col gap-2">
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Miembros</a
+          >
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Facturación</a
+          >
+          <a
+            class="rounded-mm-md text-ink-secondary hover:bg-surface-secondary px-3 py-2 text-sm cursor-pointer"
+            >Integraciones</a
+          >
+        </nav>
+      </aside>
+      <section class="col-span-8 p-6">
+        <h3 class="font-display text-xl font-semibold text-ink-dark">Perfil</h3>
+        <p class="text-sm text-ink-secondary mt-1">Tu información pública en MinimalMax.</p>
+        <div class="mt-6 flex items-center gap-4">
+          <span
+            class="size-16 rounded-mm-pill bg-linear-to-br from-brand-6 to-brand-pink grid place-items-center text-white font-display font-semibold"
+          >
+            OJ
+          </span>
+          <div>
+            <button
+              class="rounded-mm-md bg-surface-secondary px-3 py-1.5 text-xs font-medium text-ink-dark"
+            >
+              Cambiar foto
+            </button>
+            <p class="text-[11px] text-ink-muted mt-1">PNG o JPG, máx 2 MB.</p>
+          </div>
+        </div>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <input
+            type="text"
+            value="Orbe"
+            class="rounded-mm-md border-2 border-border bg-surface-base px-3 py-2 text-sm"
+          />
+          <input
+            type="text"
+            value="Jimenez"
+            class="rounded-mm-md border-2 border-border bg-surface-base px-3 py-2 text-sm"
+          />
+        </div>
+      </section>
+    </div>
+  </mm-canvas-frame>
+</div>

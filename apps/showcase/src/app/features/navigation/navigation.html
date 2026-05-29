@@ -1,0 +1,293 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Navegación"
+    title="Breadcrumbs · Tabs · Pagination · Stepper"
+    description="Componentes para mover usuarios entre vistas y procesos multi-paso."
+  />
+
+  <mm-canvas-frame
+    heading="Breadcrumbs"
+    description="Migajas de ruta con separador chevron. Última posición es current page (no clickeable)."
+    [snippets]="snippetsBreadcrumbs"
+  >
+    <nav data-stagger class="flex items-center gap-2 text-sm flex-wrap" aria-label="Breadcrumb">
+      @for (crumb of breadcrumb; track crumb.label; let last = $last; let first = $first) {
+        @if (!first) {
+          <svg
+            class="size-3.5 text-ink-muted shrink-0 transition-transform duration-300"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m9 6 6 6-6 6"></path>
+          </svg>
+        }
+        @if (crumb.path && !last) {
+          <a
+            [href]="crumb.path"
+            class="relative text-ink-muted hover:text-ink-dark transition-all duration-200 font-medium hover:-translate-y-0.5 inline-block after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 hover:after:w-full"
+          >
+            {{ crumb.label }}
+          </a>
+        } @else {
+          <span
+            class="font-display font-medium text-ink-dark relative"
+            style="animation: mm-badge-pop 360ms var(--ease-bounce) both"
+            >{{ crumb.label }}</span
+          >
+        }
+      }
+    </nav>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Tabs (pill animado)"
+    description="Indicador deslizante entre opciones — la firma de MinimalMax."
+    [snippets]="snippetsTabsPill"
+  >
+    <div class="flex flex-col gap-4">
+      <mm-pill-tabs [tabs]="pillTabs" [(active)]="activeTab" />
+      <div class="p-5 rounded-mm-xl bg-surface-secondary/50 border border-border-soft">
+        <p class="text-sm text-ink-secondary">
+          Contenido de la pestaña
+          <span class="font-mono text-ink-dark">{{ activeTab() }}</span
+          >. El indicador se desliza suavemente entre las opciones usando ViewChildren y signals.
+        </p>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Tabs (underline)"
+    description="Variante clásica con bar underline animado — ideal para apps de productividad."
+    [snippets]="snippetsTabsUnderline"
+  >
+    <nav class="relative flex items-center gap-6 border-b border-border-soft" role="tablist">
+      @for (tab of pillTabs; track tab.id) {
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeTab() === tab.id"
+          (click)="activeTab.set(tab.id)"
+          class="relative pb-3 text-sm font-medium transition-all duration-200 hover:-translate-y-px"
+          [class.text-ink-dark]="activeTab() === tab.id"
+          [class.text-ink-muted]="activeTab() !== tab.id"
+          [class.hover:text-ink-dark]="activeTab() !== tab.id"
+        >
+          {{ tab.label }}
+          @if (activeTab() === tab.id) {
+            <span
+              class="absolute -bottom-px left-0 right-0 h-0.5 rounded-mm-pill bg-linear-to-r from-brand-6 via-primary-500 to-brand-pink"
+              style="animation: mm-tab-underline 320ms var(--ease-out) both"
+            ></span>
+          }
+        </button>
+      }
+    </nav>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Pagination"
+    description="Navegación entre páginas con elipsis cuando hay muchas. Botones prev/next con disabled states."
+    [snippets]="snippetsPagination"
+  >
+    <div class="flex flex-col gap-4">
+      <nav data-stagger class="inline-flex items-center gap-1" aria-label="Paginación">
+        <button
+          type="button"
+          mmRipple
+          (click)="goToPage(currentPage() - 1)"
+          [disabled]="currentPage() === 1"
+          aria-label="Página anterior"
+          class="group size-10 rounded-mm-md grid place-items-center text-ink-dark hover:bg-surface-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 mm-press hover:-translate-y-px"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        @for (page of pageNumbers(); track $index) {
+          @if (page === 'gap') {
+            <span class="size-10 grid place-items-center text-ink-muted">…</span>
+          } @else {
+            <button
+              type="button"
+              mmRipple
+              (click)="goToPage(page)"
+              [attr.aria-current]="currentPage() === page ? 'page' : null"
+              class="size-10 rounded-mm-md text-sm font-medium transition mm-press"
+              [class.bg-cta]="currentPage() === page"
+              [class.text-white]="currentPage() === page"
+              [class.shadow-mm-sm]="currentPage() === page"
+              [class.text-ink-dark]="currentPage() !== page"
+              [class.hover:bg-surface-secondary]="currentPage() !== page"
+            >
+              {{ page }}
+            </button>
+          }
+        }
+
+        <button
+          type="button"
+          mmRipple
+          (click)="goToPage(currentPage() + 1)"
+          [disabled]="currentPage() === totalPages"
+          aria-label="Página siguiente"
+          class="group size-10 rounded-mm-md grid place-items-center text-ink-dark hover:bg-surface-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 mm-press hover:-translate-y-px"
+        >
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </button>
+      </nav>
+
+      <p class="text-xs text-ink-muted">
+        Mostrando <span class="font-mono text-ink-dark">{{ (currentPage() - 1) * 10 + 1 }}</span> —
+        <span class="font-mono text-ink-dark">{{ currentPage() * 10 }}</span> de
+        <span class="font-mono text-ink-dark">{{ totalPages * 10 }}</span> resultados
+      </p>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Stepper / Wizard"
+    description="Proceso multi-paso con check en pasos completados. Patrón para onboarding y checkout."
+    [snippets]="snippetsStepper"
+  >
+    <div class="flex flex-col gap-6">
+      <ol class="flex items-start gap-2 md:gap-4" aria-label="Progreso del flujo">
+        @for (step of steps; track step.id; let last = $last) {
+          <li
+            class="flex-1 flex items-center gap-2 md:gap-4"
+            [attr.aria-current]="step.id === currentStep() ? 'step' : null"
+          >
+            <button
+              type="button"
+              (click)="goToStep(step.id)"
+              [disabled]="step.id > currentStep() + 1"
+              [attr.aria-label]="'Paso ' + step.id + ': ' + step.label"
+              class="group flex flex-col items-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 hover:enabled:-translate-y-0.5 transition-transform duration-200"
+            >
+              <span
+                class="size-10 rounded-mm-pill grid place-items-center font-display text-sm font-semibold transition-all duration-500 ease-bounce group-hover:enabled:scale-110"
+                [class.bg-brand-6]="step.id < currentStep()"
+                [class.text-white]="step.id < currentStep()"
+                [class.shadow-mm-brand]="step.id <= currentStep()"
+                [class.bg-cta]="step.id === currentStep()"
+                [class.text-white!]="step.id === currentStep()"
+                [class.bg-surface-secondary]="step.id > currentStep()"
+                [class.text-ink-muted]="step.id > currentStep()"
+                [style.animation]="
+                  step.id === currentStep() ? 'mm-step-active 2.4s var(--ease-out) infinite' : null
+                "
+              >
+                @if (step.id < currentStep()) {
+                  <svg
+                    class="size-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    style="animation: mm-check-pop 420ms var(--ease-bounce) both"
+                  >
+                    <path d="M20 6 9 17l-5-5"></path>
+                  </svg>
+                } @else {
+                  <span
+                    [style.animation]="
+                      step.id === currentStep()
+                        ? 'mm-badge-pop 320ms var(--ease-bounce) both'
+                        : null
+                    "
+                  >
+                    {{ step.id }}
+                  </span>
+                }
+              </span>
+              <span class="flex flex-col items-center text-center min-w-0">
+                <span
+                  class="text-xs font-medium transition-colors duration-300"
+                  [class.text-ink-dark]="step.id <= currentStep()"
+                  [class.text-ink-muted]="step.id > currentStep()"
+                >
+                  {{ step.label }}
+                </span>
+                <span class="text-[11px] text-ink-muted hidden md:block">
+                  {{ step.description }}
+                </span>
+              </span>
+            </button>
+
+            @if (!last) {
+              <span
+                class="relative flex-1 h-0.5 rounded-mm-pill bg-border overflow-hidden mt-5 md:mt-0"
+              >
+                <span
+                  class="absolute inset-0 origin-left rounded-mm-pill bg-linear-to-r from-brand-6 to-primary-500 transition-transform duration-500 ease-out"
+                  [style.transform]="step.id < currentStep() ? 'scaleX(1)' : 'scaleX(0)'"
+                ></span>
+              </span>
+            }
+          </li>
+        }
+      </ol>
+
+      <div
+        class="p-6 rounded-mm-2xl bg-surface-secondary/40 border border-border-soft min-h-32 flex flex-col gap-2"
+      >
+        <span class="text-[11px] uppercase tracking-wider text-ink-muted font-semibold">
+          Paso {{ currentStep() }} de {{ steps.length }}
+        </span>
+        <h4 class="font-display text-lg font-medium text-ink-dark">
+          {{ steps[currentStep() - 1].label }}
+        </h4>
+        <p class="text-sm text-ink-secondary">
+          {{ steps[currentStep() - 1].description }} — aquí iría el formulario correspondiente al
+          paso actual.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          mmRipple
+          (click)="prevStep()"
+          [disabled]="currentStep() === 1"
+          class="rounded-mm-md border border-border bg-surface-base px-5 py-2.5 text-sm font-medium text-ink-dark hover:border-ink-dark disabled:opacity-40 disabled:cursor-not-allowed transition mm-press"
+        >
+          ← Atrás
+        </button>
+        <button
+          type="button"
+          mmRipple
+          (click)="nextStep()"
+          [disabled]="currentStep() === steps.length"
+          class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated disabled:opacity-40 disabled:cursor-not-allowed transition mm-press"
+        >
+          {{ currentStep() === steps.length - 1 ? 'Finalizar' : 'Siguiente →' }}
+        </button>
+      </div>
+    </div>
+  </mm-canvas-frame>
+</div>

@@ -1,0 +1,179 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Productividad"
+    title="Kanban board"
+    description="4 columnas con tasks arrastrables ENTRE columnas. Reusa el motor de pointer events. Drop indicator visible donde caerá la card."
+  />
+
+  <mm-canvas-frame
+    heading="Tablero de proyectos"
+    description="Arrastra cualquier card desde su título. Suelta sobre otra card (insertar antes) o sobre una columna vacía (al final)."
+    [snippets]="snippetsBoard"
+  >
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 select-none"
+      [class.touch-none]="draggingId()"
+    >
+      @for (col of columns(); track col.id) {
+        <div
+          [attr.data-k-col]="col.id"
+          class="rounded-mm-xl bg-surface-secondary/40 border border-border-soft min-h-72 flex flex-col transition-colors"
+          [class.!border-brand-6]="overColumnId() === col.id && draggingId()"
+          [class.!bg-primary-200/10]="overColumnId() === col.id && draggingId()"
+        >
+          <header class="flex items-center justify-between px-3 py-2.5 border-b border-border-soft">
+            <span class="flex items-center gap-2">
+              <span [class]="'size-2 rounded-full ' + col.tone"></span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-ink-dark">
+                {{ col.label }}
+              </span>
+              <span
+                class="rounded-mm-pill bg-surface-base px-2 py-0.5 text-[10px] font-mono text-ink-muted"
+              >
+                {{ col.tasks.length }}
+              </span>
+            </span>
+            <button
+              type="button"
+              aria-label="Agregar tarea"
+              class="size-6 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-base transition mm-press"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 5v14M5 12h14"></path>
+              </svg>
+            </button>
+          </header>
+
+          <div class="flex-1 p-2 flex flex-col gap-2">
+            @for (task of col.tasks; track task.id) {
+              @if (overTaskId() === task.id && draggingId() && draggingId() !== task.id) {
+                <div
+                  class="h-1 rounded-mm-pill bg-linear-to-r from-brand-6 to-brand-pink shadow-mm-brand"
+                  style="animation: mm-drop-indicator 1.2s var(--ease-out) infinite"
+                  aria-hidden="true"
+                ></div>
+              }
+              <article
+                [attr.data-k-task]="task.id"
+                [style.transform]="
+                  draggingId() === task.id
+                    ? 'translate3d(' +
+                      dragOffset().x +
+                      'px, ' +
+                      dragOffset().y +
+                      'px, 0) rotate(2deg) scale(1.04)'
+                    : ''
+                "
+                [style.transition]="draggingId() === task.id ? 'none' : 'all 200ms var(--ease-out)'"
+                class="rounded-mm-md bg-surface-base border border-border-soft p-3 shadow-mm-sm cursor-grab hover:shadow-mm-elevated"
+                [class.!shadow-mm-elevated]="draggingId() === task.id"
+                [class.!cursor-grabbing]="draggingId() === task.id"
+                [class.pointer-events-none]="draggingId() === task.id"
+                [class.opacity-50]="
+                  draggingId() && draggingId() !== task.id && overTaskId() !== task.id
+                "
+                [class.scale-[0.98]]="
+                  draggingId() && draggingId() !== task.id && overTaskId() !== task.id
+                "
+                [class.relative]="draggingId() === task.id"
+                [class.z-30]="draggingId() === task.id"
+                (pointerdown)="onPointerDown(task.id, $event)"
+              >
+                <div class="flex items-start justify-between gap-2 mb-2">
+                  <span
+                    class="rounded-mm-pill px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider"
+                    [class]="priorityClass(task.priority)"
+                  >
+                    {{ task.priority }}
+                  </span>
+                  @if (task.due) {
+                    <span class="text-[10px] text-ink-muted font-mono">
+                      {{ task.due }}
+                    </span>
+                  }
+                </div>
+                <p class="text-sm font-medium text-ink-dark leading-snug">
+                  {{ task.title }}
+                </p>
+                @if (task.description) {
+                  <p class="text-xs text-ink-muted mt-1 leading-relaxed">
+                    {{ task.description }}
+                  </p>
+                }
+                @if (task.tags && task.tags.length) {
+                  <div class="flex flex-wrap gap-1 mt-2">
+                    @for (tag of task.tags; track tag) {
+                      <span
+                        class="rounded-mm-sm bg-surface-secondary text-ink-secondary px-1.5 py-0.5 text-[10px] font-mono"
+                      >
+                        #{{ tag }}
+                      </span>
+                    }
+                  </div>
+                }
+                <footer
+                  class="flex items-center justify-between mt-3 pt-3 border-t border-border-soft"
+                >
+                  <div class="flex -space-x-1.5">
+                    @for (a of task.assignees; track a.initials) {
+                      <span
+                        [class]="
+                          'size-6 rounded-mm-pill grid place-items-center text-white font-display font-semibold text-[10px] ring-2 ring-surface-base bg-linear-to-br ' +
+                          a.tone
+                        "
+                        [attr.title]="a.name"
+                      >
+                        {{ a.initials }}
+                      </span>
+                    }
+                  </div>
+                  <span class="flex items-center gap-2 text-ink-muted">
+                    <svg
+                      class="size-3.5"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                      ></path>
+                    </svg>
+                    <span class="text-[10px] font-mono">3</span>
+                  </span>
+                </footer>
+              </article>
+            }
+
+            @if (col.tasks.length === 0) {
+              <div
+                class="flex-1 rounded-mm-md border-2 border-dashed border-border-soft grid place-items-center text-xs text-ink-muted px-4 py-8 text-center"
+                [class.!border-brand-6]="overColumnId() === col.id && draggingId()"
+              >
+                @if (overColumnId() === col.id && draggingId()) {
+                  Suelta aquí
+                } @else {
+                  Sin tareas
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <p class="text-xs text-ink-muted mt-4">
+      💡 Arrastra cualquier card desde su cuerpo entre las 4 columnas — touch + mouse + stylus.
+    </p>
+  </mm-canvas-frame>
+</div>

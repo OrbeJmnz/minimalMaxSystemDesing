@@ -1,0 +1,72 @@
+{
+  "name": "mm-showcase",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/showcase/src",
+  "prefix": "mm",
+  "generators": {},
+  "targets": {
+    "build": {
+      "executor": "@angular/build:application",
+      "options": {
+        "browser": "apps/showcase/src/main.ts",
+        "tsConfig": "apps/showcase/tsconfig.app.json",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/showcase/public"
+          }
+        ],
+        "styles": ["apps/showcase/src/styles.css"],
+        "server": "apps/showcase/src/main.server.ts",
+        "outputMode": "server",
+        "security": {
+          "allowedHosts": []
+        },
+        "ssr": {
+          "entry": "apps/showcase/src/server.ts"
+        },
+        "outputPath": "dist/mm-showcase"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kB",
+              "maximumError": "1MB"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "4kB",
+              "maximumError": "8kB"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production",
+      "outputs": ["{options.outputPath}"]
+    },
+    "serve": {
+      "executor": "@angular/build:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "mm-showcase:build:production"
+        },
+        "development": {
+          "buildTarget": "mm-showcase:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "test": {
+      "executor": "@angular/build:unit-test"
+    }
+  }
+}

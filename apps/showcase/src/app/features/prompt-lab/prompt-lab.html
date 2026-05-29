@@ -1,0 +1,456 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="AI Lab"
+    title="Prompt Lab"
+    description="El playground de modelos MinimalMax — input expansivo, suggested prompts, token meter, streaming letra por letra y model selector. La identidad AI del showcase."
+  />
+
+  <mm-canvas-frame
+    heading="Prompt input completo"
+    description="Textarea autosize · model selector · token counter · botón generate con streaming simulado · acciones (stop, regenerate, copy)."
+    background="dotted"
+    [snippets]="snippetsPromptInput"
+  >
+    <div class="flex flex-col gap-5">
+      <div data-stagger class="flex flex-wrap items-center gap-2">
+        @for (suggestion of suggestedPrompts; track suggestion.label) {
+          <button
+            type="button"
+            mmRipple
+            (click)="applySuggestion(suggestion)"
+            class="group inline-flex items-center gap-2 rounded-mm-pill border border-border bg-surface-base px-3 py-1.5 text-xs font-medium text-ink-secondary hover:border-ink-dark hover:text-ink-dark transition-all duration-200 mm-press hover:-translate-y-px"
+          >
+            <svg
+              class="size-3.5 text-brand-6 transition-transform duration-300 group-hover:rotate-12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path [attr.d]="suggestion.icon"></path>
+            </svg>
+            {{ suggestion.label }}
+          </button>
+        }
+      </div>
+
+      <div
+        class="relative rounded-mm-2xl border border-border bg-surface-base shadow-mm-sm transition-all duration-200 focus-within:border-brand-6 focus-within:shadow-mm-brand"
+      >
+        <textarea
+          #promptArea
+          [value]="promptText()"
+          (input)="onPromptInput($event)"
+          placeholder="Escribe tu prompt o elige una sugerencia arriba…"
+          rows="3"
+          class="mm-input-bare w-full resize-none px-5 pt-5 pb-2 text-sm text-ink-dark placeholder:text-ink-muted font-sans"
+          [class.opacity-60]="generating()"
+          [disabled]="generating()"
+          aria-label="Prompt"
+        ></textarea>
+
+        <div
+          class="flex items-center justify-between gap-3 px-3 pb-3 pt-1 border-t border-border-soft"
+        >
+          <div class="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+            <button
+              type="button"
+              (click)="toggleModel()"
+              class="relative inline-flex items-center gap-2 rounded-mm-pill bg-surface-secondary px-3 py-1.5 text-xs font-medium text-ink-dark hover:bg-border transition-all duration-200 mm-press"
+              [attr.aria-expanded]="modelOpen()"
+            >
+              <span
+                [class]="
+                  'size-5 rounded-mm-sm bg-linear-to-br grid place-items-center text-white text-[10px] font-bold ' +
+                  activeModel().tone
+                "
+              >
+                {{ activeModel().tag.charAt(0) }}
+              </span>
+              {{ activeModel().name }}
+              <svg
+                class="size-3.5 text-ink-muted transition-transform duration-300"
+                [class.rotate-180]="modelOpen()"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="m6 9 6 6 6-6"></path>
+              </svg>
+            </button>
+
+            @if (modelOpen()) {
+              <div
+                class="absolute bottom-full left-3 mb-2 z-20 w-80 rounded-mm-xl border border-border bg-surface-base shadow-mm-elevated p-1 flex flex-col gap-0.5"
+                style="animation: fadeInUp 220ms var(--ease-out) both"
+                role="listbox"
+              >
+                @for (model of models; track model.id) {
+                  <button
+                    type="button"
+                    role="option"
+                    [attr.aria-selected]="selectedModel() === model.id"
+                    (click)="selectModel(model.id)"
+                    class="group flex items-center gap-3 rounded-mm-md p-2.5 text-left hover:bg-surface-secondary transition-colors"
+                    [class.bg-surface-secondary]="selectedModel() === model.id"
+                  >
+                    <span
+                      [class]="
+                        'size-9 rounded-mm-md bg-linear-to-br shadow-mm-brand grid place-items-center text-white text-xs font-semibold transition-transform duration-300 group-hover:scale-110 ' +
+                        model.tone
+                      "
+                    >
+                      {{ model.tag.charAt(0) }}
+                    </span>
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2">
+                        <p class="font-medium text-sm text-ink-dark truncate">
+                          {{ model.name }}
+                        </p>
+                        <span
+                          class="rounded-mm-pill bg-surface-secondary text-ink-muted px-1.5 py-0.5 text-[10px] font-semibold"
+                        >
+                          {{ model.tag }}
+                        </span>
+                      </div>
+                      <p class="text-xs text-ink-muted truncate">{{ model.description }}</p>
+                    </div>
+                    @if (selectedModel() === model.id) {
+                      <svg
+                        class="size-4 text-brand-6"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="3"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M20 6 9 17l-5-5"></path>
+                      </svg>
+                    }
+                  </button>
+                }
+              </div>
+            }
+
+            <div class="flex items-center gap-2 text-xs">
+              <div class="relative w-24 h-1.5 rounded-mm-pill bg-border overflow-hidden">
+                <div
+                  class="absolute inset-y-0 left-0 rounded-mm-pill transition-all duration-200"
+                  [class.bg-brand-6]="!tokenOver()"
+                  [class.bg-error]="tokenOver()"
+                  [style.width.%]="tokenPercent()"
+                ></div>
+              </div>
+              <span
+                class="font-mono tabular-nums"
+                [class.text-ink-muted]="!tokenOver()"
+                [class.text-error]="tokenOver()"
+                [class.font-semibold]="tokenOver()"
+              >
+                {{ tokenCount() }}/{{ tokenLimit }} tk
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            @if (promptText().length > 0 && !generating()) {
+              <button
+                type="button"
+                (click)="clearPrompt()"
+                class="size-9 rounded-mm-md grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+                aria-label="Limpiar prompt"
+              >
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 6 6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+            }
+
+            @if (generating()) {
+              <button
+                type="button"
+                (click)="stop()"
+                mmRipple
+                class="inline-flex items-center gap-2 rounded-mm-pill bg-error text-white px-4 py-2 text-xs font-semibold shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+              >
+                <span class="size-2.5 rounded-sm bg-white"></span>
+                Detener
+              </button>
+            } @else {
+              <button
+                type="button"
+                (click)="generate()"
+                [disabled]="!canGenerate()"
+                mmRipple
+                class="inline-flex items-center gap-2 rounded-mm-pill bg-cta text-cta-fg px-5 py-2 text-xs font-semibold shadow-mm-brand disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-mm-elevated hover:-translate-y-px transition-all duration-200 mm-press"
+              >
+                <svg class="size-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="m12 2 2.39 7.36H22l-6.18 4.49L18.21 21 12 16.51 5.79 21l2.39-7.15L2 9.36h7.61L12 2z"
+                  ></path>
+                </svg>
+                Generar
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      @if (streamedText() || generating()) {
+        <article
+          class="rounded-mm-2xl border border-border-soft bg-surface-base p-6 shadow-mm-sm"
+          style="animation: fadeInUp 320ms var(--ease-out) both"
+        >
+          <header
+            class="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-border-soft"
+          >
+            <div class="flex items-center gap-2">
+              <span
+                [class]="
+                  'size-8 rounded-mm-md bg-linear-to-br grid place-items-center text-white text-xs font-bold shadow-mm-brand ' +
+                  activeModel().tone
+                "
+              >
+                {{ activeModel().tag.charAt(0) }}
+              </span>
+              <div>
+                <p class="text-sm font-medium text-ink-dark">{{ activeModel().name }}</p>
+                <p class="text-[11px] text-ink-muted">
+                  @if (generating()) {
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
+                      Generando…
+                    </span>
+                  } @else {
+                    Listo · {{ streamedText().length }} caracteres
+                  }
+                </p>
+              </div>
+            </div>
+
+            @if (!generating()) {
+              <div class="flex items-center gap-1">
+                <button
+                  type="button"
+                  (click)="copyResponse()"
+                  class="inline-flex items-center gap-1.5 rounded-mm-md px-2.5 py-1.5 text-xs font-medium text-ink-secondary hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+                  aria-label="Copiar respuesta"
+                >
+                  <svg
+                    class="size-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="9" y="9" width="13" height="13" rx="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copiar
+                </button>
+                <button
+                  type="button"
+                  (click)="regenerate()"
+                  class="inline-flex items-center gap-1.5 rounded-mm-md px-2.5 py-1.5 text-xs font-medium text-ink-secondary hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+                  aria-label="Regenerar"
+                >
+                  <svg
+                    class="size-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M21 12a9 9 0 1 1-9-9c2.4 0 4.7 1 6.4 2.6L21 8M21 3v5h-5"></path>
+                  </svg>
+                  Regenerar
+                </button>
+              </div>
+            }
+          </header>
+
+          <div class="text-sm text-ink-dark leading-relaxed whitespace-pre-wrap font-sans">
+            {{ streamedText() }}
+            @if (generating()) {
+              <span
+                class="inline-block w-1.5 h-4 bg-brand-6 align-text-bottom ml-0.5 animate-pulse"
+              ></span>
+            }
+          </div>
+        </article>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Model selector (standalone)"
+    description="El picker como pieza aislada — útil para reusar fuera del prompt lab. Cada modelo con su gradient + tag."
+    [snippets]="snippetsModelSelector"
+  >
+    <div data-stagger class="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl">
+      @for (model of models; track model.id) {
+        <button
+          type="button"
+          (click)="selectModel(model.id)"
+          [attr.aria-pressed]="selectedModel() === model.id"
+          class="group flex items-center gap-3 rounded-mm-xl border bg-surface-base p-4 text-left transition-all duration-200 mm-press hover:-translate-y-0.5"
+          [class.border-brand-6]="selectedModel() === model.id"
+          [class.shadow-mm-brand]="selectedModel() === model.id"
+          [class.border-border-soft]="selectedModel() !== model.id"
+          [class.shadow-mm-sm]="selectedModel() !== model.id"
+          [class.hover:border-ink-dark]="selectedModel() !== model.id"
+        >
+          <span
+            [class]="
+              'size-12 shrink-0 rounded-mm-md bg-linear-to-br shadow-mm-brand grid place-items-center text-white text-sm font-semibold transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105 ' +
+              model.tone
+            "
+          >
+            {{ model.tag.charAt(0) }}
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <p class="font-medium text-sm text-ink-dark truncate">{{ model.name }}</p>
+              <span
+                class="rounded-mm-pill bg-surface-secondary text-ink-secondary px-1.5 py-0.5 text-[10px] font-semibold"
+              >
+                {{ model.tag }}
+              </span>
+            </div>
+            <p class="text-xs text-ink-muted truncate mt-0.5">{{ model.description }}</p>
+          </div>
+          @if (selectedModel() === model.id) {
+            <span
+              class="size-6 rounded-mm-pill bg-brand-6 text-white grid place-items-center shrink-0"
+              style="animation: mm-check-pop 320ms var(--ease-bounce) both"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 6 9 17l-5-5"></path>
+              </svg>
+            </span>
+          }
+        </button>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Token meter"
+    description="Barra de progreso con tope. Cambia a rojo cuando excedes el límite — patrón para forms con character/token caps."
+    [snippets]="snippetsTokenMeter"
+  >
+    <div class="flex flex-col gap-3 max-w-md">
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-ink-secondary font-medium">Uso de tokens</span>
+        <span
+          class="font-mono tabular-nums"
+          [class.text-ink-dark]="!tokenOver()"
+          [class.text-error]="tokenOver()"
+          [class.font-semibold]="tokenOver()"
+        >
+          {{ tokenCount() }} / {{ tokenLimit }}
+        </span>
+      </div>
+      <div class="relative h-2 rounded-mm-pill bg-border overflow-hidden">
+        <div
+          class="absolute inset-y-0 left-0 rounded-mm-pill transition-all duration-300"
+          [class.bg-linear-to-r]="!tokenOver()"
+          [class.from-brand-6]="!tokenOver()"
+          [class.to-primary-500]="!tokenOver()"
+          [class.bg-error]="tokenOver()"
+          [style.width.%]="tokenPercent()"
+        ></div>
+      </div>
+      <p class="text-[11px] text-ink-muted">
+        Escribe en el textarea de arriba para ver el medidor actualizarse en tiempo real (1 token ≈
+        4 caracteres).
+      </p>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Historial de prompts"
+    description="Lista de prompts recientes con preview de respuesta · click restaura el prompt al editor. Patrón típico de playgrounds."
+    [snippets]="snippetsHistory"
+  >
+    <ol data-stagger class="flex flex-col gap-2 max-w-3xl">
+      @for (entry of history(); track entry.id) {
+        <li>
+          <button
+            type="button"
+            (click)="restoreFromHistory(entry)"
+            class="group w-full flex items-start gap-3 rounded-mm-xl border border-border-soft bg-surface-base p-4 text-left shadow-mm-sm hover:shadow-mm-elevated hover:border-brand-6 transition-all duration-200 mm-press"
+          >
+            <span
+              class="size-9 shrink-0 rounded-mm-md bg-primary-200 text-primary-700 grid place-items-center transition-transform duration-300 group-hover:rotate-6"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M12 8v4l3 3M22 12a10 10 0 1 1-10-10"></path>
+                <path d="M22 4v6h-6"></path>
+              </svg>
+            </span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <p class="font-medium text-sm text-ink-dark truncate">{{ entry.prompt }}</p>
+                <span
+                  class="shrink-0 rounded-mm-pill bg-surface-secondary text-ink-secondary px-2 py-0.5 text-[10px] font-semibold"
+                >
+                  {{ entry.model }}
+                </span>
+              </div>
+              <p class="text-xs text-ink-muted line-clamp-2 leading-relaxed whitespace-pre-line">
+                {{ entry.preview }}
+              </p>
+              <p class="text-[11px] text-ink-muted mt-2 font-mono">{{ entry.time }}</p>
+            </div>
+            <svg
+              class="size-4 text-ink-muted shrink-0 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </li>
+      }
+    </ol>
+  </mm-canvas-frame>
+</div>

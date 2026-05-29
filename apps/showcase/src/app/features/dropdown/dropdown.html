@@ -1,0 +1,378 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Acciones"
+    title="Dropdown · Menu · Command Palette"
+    description="Menús contextuales y la navegación rápida con ⌘K — patrón Linear/Raycast."
+  />
+
+  <mm-canvas-frame
+    heading="Dropdown menu (acciones)"
+    description="Menú contextual con items, atajos de teclado y opción destructiva al final."
+    [snippets]="snippetsDropdownMenu"
+  >
+    <div
+      class="relative inline-block"
+      (mmClickOutside)="menuOpen.set(false)"
+      [mmClickOutsideEnabled]="menuOpen()"
+    >
+      <button
+        type="button"
+        mmRipple
+        (click)="menuOpen.set(!menuOpen())"
+        [class.!bg-cta]="menuOpen()"
+        [class.!text-white]="menuOpen()"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-surface-secondary px-4 py-2 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+        [attr.aria-expanded]="menuOpen()"
+      >
+        Acciones
+        <svg
+          class="size-4 transition-transform duration-300"
+          [class.rotate-180]="menuOpen()"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+
+      @if (menuOpen()) {
+        <div
+          class="absolute z-40 top-full mt-2 left-0 w-60 rounded-mm-xl border border-border-soft bg-surface-base shadow-mm-elevated overflow-hidden py-1"
+          style="animation: scaleIn 200ms var(--ease-out) both; transform-origin: top left"
+          role="menu"
+        >
+          @for (item of menuItems; track item.id; let last = $last) {
+            @if (item.destructive && !last) {
+              <div class="border-t border-border-soft my-1"></div>
+            }
+            <button
+              type="button"
+              role="menuitem"
+              (click)="menuOpen.set(false)"
+              class="w-full flex items-center justify-between gap-3 px-3 py-2 text-sm transition cursor-pointer"
+              [class.text-ink-dark]="!item.destructive"
+              [class.hover:bg-surface-secondary]="!item.destructive"
+              [class.text-error]="item.destructive"
+              [class.hover:bg-error-bg]="item.destructive"
+            >
+              <span class="flex items-center gap-2.5">
+                <svg
+                  class="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path [attr.d]="item.icon"></path>
+                </svg>
+                {{ item.label }}
+              </span>
+              @if (item.shortcut) {
+                <kbd
+                  class="font-mono text-[10px] px-1.5 py-0.5 rounded-mm-sm border border-border bg-surface-secondary text-ink-muted"
+                >
+                  {{ item.shortcut }}
+                </kbd>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="User menu (avatar dropdown)"
+    description="Menú de usuario con avatar, info de cuenta y opciones de logout."
+    [snippets]="snippetsUserMenu"
+  >
+    <div
+      class="relative inline-block"
+      (mmClickOutside)="userMenuOpen.set(false)"
+      [mmClickOutsideEnabled]="userMenuOpen()"
+    >
+      <button
+        type="button"
+        (click)="userMenuOpen.set(!userMenuOpen())"
+        class="inline-flex items-center gap-2 rounded-mm-pill p-1 pr-3 hover:bg-surface-secondary transition mm-press"
+      >
+        <span
+          class="size-8 rounded-mm-pill bg-linear-to-br from-brand-6 to-brand-pink grid place-items-center text-white text-xs font-semibold"
+        >
+          OJ
+        </span>
+        <span class="text-sm font-medium text-ink-dark">Orbe</span>
+        <svg
+          class="size-4 text-ink-muted transition-transform"
+          [class.rotate-180]="userMenuOpen()"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+
+      @if (userMenuOpen()) {
+        <div
+          class="absolute z-40 top-full right-0 mt-2 w-64 rounded-mm-xl border border-border-soft bg-surface-base shadow-mm-elevated overflow-hidden"
+          style="animation: scaleIn 200ms var(--ease-out) both; transform-origin: top right"
+        >
+          <div class="px-4 py-3 border-b border-border-soft">
+            <p class="font-display text-sm font-semibold text-ink-dark">Orbe Jimenez</p>
+            <p class="text-xs text-ink-muted">orbe@MinimalMax.dev</p>
+          </div>
+          <div class="py-1">
+            <button
+              class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-ink-dark hover:bg-surface-secondary transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Mi perfil
+            </button>
+            <button
+              class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-ink-dark hover:bg-surface-secondary transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="3"></circle>
+                <path
+                  d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                ></path>
+              </svg>
+              Configuración
+            </button>
+            <button
+              class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-ink-dark hover:bg-surface-secondary transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"></path>
+              </svg>
+              Ayuda
+            </button>
+          </div>
+          <div class="border-t border-border-soft py-1">
+            <button
+              class="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-error hover:bg-error-bg transition"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"></path>
+              </svg>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Command Palette (⌘K)"
+    description="Búsqueda fuzzy de comandos y rutas. ↑↓ para navegar, ⏎ para ejecutar, ESC para cerrar."
+    [snippets]="snippetsCommandPalette"
+  >
+    <button
+      type="button"
+      mmRipple
+      (click)="openPalette()"
+      class="inline-flex items-center gap-3 rounded-mm-md bg-surface-secondary px-4 py-2.5 text-sm font-medium text-ink-dark hover:bg-border transition mm-press"
+    >
+      <svg
+        class="size-4 text-ink-muted"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      Buscar comando…
+      <kbd
+        class="font-mono text-[10px] px-1.5 py-0.5 rounded-mm-sm border border-border bg-surface-base text-ink-muted"
+      >
+        ⌘K
+      </kbd>
+    </button>
+
+    @if (paletteOpen()) {
+      <div
+        class="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4"
+        role="dialog"
+        aria-modal="true"
+        style="animation: fadeIn 200ms var(--ease-out) both"
+      >
+        <button
+          type="button"
+          (click)="closePalette()"
+          aria-label="Cerrar"
+          class="absolute inset-0 bg-black/55 backdrop-blur-sm cursor-default"
+        ></button>
+
+        <div
+          class="relative w-full max-w-xl rounded-mm-2xl border border-border-soft bg-surface-base shadow-mm-elevated overflow-hidden"
+          style="animation: scaleIn 240ms var(--ease-out) both; transform-origin: top"
+        >
+          <div class="flex items-center gap-3 px-4 py-3 border-b border-border-soft">
+            <svg
+              class="size-5 text-ink-muted shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <input
+              #commandInput
+              type="text"
+              [formControl]="paletteQuery"
+              placeholder="Buscar comando o navegar a…"
+              class="flex-1 bg-transparent text-base text-ink-dark placeholder:text-ink-muted focus:outline-none"
+            />
+            <kbd
+              class="font-mono text-[10px] px-1.5 py-0.5 rounded-mm-sm border border-border bg-surface-secondary text-ink-muted"
+            >
+              ESC
+            </kbd>
+          </div>
+
+          <ul class="max-h-96 overflow-y-auto py-2">
+            @for (group of groupedCommands(); track group.group) {
+              <li>
+                <p
+                  class="px-3 py-1.5 text-[10px] uppercase tracking-wider font-semibold text-ink-muted"
+                >
+                  {{ group.group }}
+                </p>
+                <ul>
+                  @for (cmd of group.items; track cmd.id) {
+                    <li>
+                      <button
+                        type="button"
+                        (mousedown)="runCommand(cmd)"
+                        (mouseenter)="paletteActive.set(filteredCommands().indexOf(cmd))"
+                        class="w-full flex items-center justify-between gap-3 mx-2 px-3 py-2 rounded-mm-md text-sm transition-colors cursor-pointer"
+                        [class.bg-primary-200/40]="
+                          filteredCommands()[paletteActive()]?.id === cmd.id
+                        "
+                      >
+                        <span class="flex items-center gap-3 min-w-0">
+                          <span
+                            class="size-8 rounded-mm-md grid place-items-center shrink-0"
+                            [class.bg-brand-6]="filteredCommands()[paletteActive()]?.id === cmd.id"
+                            [class.text-white]="filteredCommands()[paletteActive()]?.id === cmd.id"
+                            [class.bg-surface-secondary]="
+                              filteredCommands()[paletteActive()]?.id !== cmd.id
+                            "
+                            [class.text-ink-secondary]="
+                              filteredCommands()[paletteActive()]?.id !== cmd.id
+                            "
+                          >
+                            <svg
+                              class="size-4"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <path [attr.d]="cmd.icon"></path>
+                            </svg>
+                          </span>
+                          <span class="flex flex-col items-start min-w-0">
+                            <span class="font-medium text-ink-dark truncate">
+                              {{ cmd.label }}
+                            </span>
+                            <span class="text-xs text-ink-muted truncate">{{ cmd.hint }}</span>
+                          </span>
+                        </span>
+                        @if (filteredCommands()[paletteActive()]?.id === cmd.id) {
+                          <kbd
+                            class="font-mono text-[10px] px-1.5 py-0.5 rounded-mm-sm border border-border bg-surface-base text-ink-muted shrink-0"
+                          >
+                            ⏎
+                          </kbd>
+                        }
+                      </button>
+                    </li>
+                  }
+                </ul>
+              </li>
+            } @empty {
+              <li class="px-4 py-8 text-center text-sm text-ink-muted">
+                Sin comandos para "{{ paletteQuery.value }}"
+              </li>
+            }
+          </ul>
+
+          <footer
+            class="flex items-center justify-between px-4 py-2 border-t border-border-soft bg-surface-secondary/40 text-[11px] text-ink-muted"
+          >
+            <span class="flex items-center gap-3">
+              <span class="flex items-center gap-1">
+                <kbd class="font-mono px-1 rounded bg-surface-base border border-border">↑</kbd>
+                <kbd class="font-mono px-1 rounded bg-surface-base border border-border">↓</kbd>
+                navegar
+              </span>
+              <span class="flex items-center gap-1">
+                <kbd class="font-mono px-1 rounded bg-surface-base border border-border">⏎</kbd>
+                ejecutar
+              </span>
+            </span>
+            <span>MinimalMax · ⌘K Palette</span>
+          </footer>
+        </div>
+      </div>
+    }
+  </mm-canvas-frame>
+</div>

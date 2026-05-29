@@ -1,0 +1,200 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Visualización"
+    title="Charts · Line · Bar · Donut · Sparkline · Heatmap · Ring"
+    description="6 tipos de gráficas SVG custom — cero dependencias externas, animaciones con tokens MinimalMax, respetan dark mode."
+  />
+
+  <mm-canvas-frame
+    heading="Stat cards con sparklines"
+    description="Patrón de dashboard — número grande + trend + mini-spark inline. Se anima al cargar."
+    [snippets]="snippetsStats"
+  >
+    <div data-stagger class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      @for (stat of statCards; track stat.label) {
+        <div
+          class="group rounded-mm-2xl bg-surface-base border border-border-soft p-5 shadow-mm-sm mm-hover-lift"
+        >
+          <div class="flex items-start justify-between mb-2">
+            <p class="text-xs text-ink-muted font-medium">{{ stat.label }}</p>
+            <span
+              class="rounded-mm-pill px-1.5 py-0.5 text-[10px] font-semibold"
+              [class.bg-success-bg]="stat.trend === 'up'"
+              [class.text-success]="stat.trend === 'up'"
+              [class.bg-error-bg]="stat.trend === 'down'"
+              [class.text-error]="stat.trend === 'down'"
+            >
+              {{ stat.delta }}
+            </span>
+          </div>
+          <p class="font-display text-2xl font-medium text-ink-dark tabular-nums">
+            {{ stat.value }}
+          </p>
+          <div class="h-9 mt-2">
+            <mm-chart-sparkline [data]="stat.spark" [variant]="stat.variant" />
+          </div>
+        </div>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Line chart (revenue 12m)"
+    description="Línea con area gradient + grid + dots animados. La línea se 'dibuja' al cargar."
+    [snippets]="snippetsLine"
+  >
+    <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+      <div class="flex items-baseline justify-between mb-4">
+        <div>
+          <p class="text-xs text-ink-muted">Ingresos totales 2026</p>
+          <p class="font-display text-3xl font-medium text-ink-dark tabular-nums">$364.2K</p>
+        </div>
+        <span class="rounded-mm-pill bg-success-bg text-success px-2.5 py-1 text-xs font-semibold">
+          ↑ 28.4% YoY
+        </span>
+      </div>
+      <mm-chart-line
+        [data]="revenueData"
+        [width]="720"
+        [height]="200"
+        variant="brand"
+        ariaLabel="Ingresos por mes durante 2026"
+      />
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Line chart (small + variantes)"
+    description="Misma componente con tamaños y variantes de color."
+    [snippets]="snippetsLineSmall"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-1">Sign-ups esta semana</p>
+        <p class="font-display text-xl font-medium text-ink-dark mb-3 tabular-nums">336</p>
+        <mm-chart-line
+          [data]="signupsData"
+          [width]="360"
+          [height]="120"
+          variant="success"
+          [showDots]="false"
+          ariaLabel="Sign-ups por día"
+        />
+      </div>
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-1">Tendencia variant pink</p>
+        <p class="font-display text-xl font-medium text-ink-dark mb-3 tabular-nums">52</p>
+        <mm-chart-line
+          [data]="signupsData"
+          [width]="360"
+          [height]="120"
+          variant="pink"
+          [showGrid]="false"
+          ariaLabel="Tendencia"
+        />
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Bar chart"
+    description="Barras verticales con animación grow desde el bottom. Hover muestra el valor."
+    [snippets]="snippetsBar"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-1">Tráfico semanal</p>
+        <p class="font-display text-xl font-medium text-ink-dark mb-4 tabular-nums">
+          3,710 visitas
+        </p>
+        <mm-chart-bar [data]="trafficBars" [height]="180" variant="gradient" />
+      </div>
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-1">Distribución por categoría</p>
+        <p class="font-display text-xl font-medium text-ink-dark mb-4 tabular-nums">125 PRs</p>
+        <mm-chart-bar [data]="categoryBars" [height]="180" />
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Donut chart"
+    description="Donut con total centrado + legend. Cada segmento se dibuja con delay."
+    [snippets]="snippetsDonut"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-4">Fuentes de tráfico</p>
+        <mm-chart-donut [data]="traffic" totalLabel="visitas" />
+      </div>
+      <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+        <p class="text-xs text-ink-muted mb-4">Stack del equipo</p>
+        <mm-chart-donut [data]="stack" totalLabel="seats" [size]="180" />
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Progress rings"
+    description="Anillos circulares con gradient stroke — gauges para % de progreso, salud, métricas."
+    [snippets]="snippetsRings"
+  >
+    <div data-stagger class="flex flex-wrap items-center justify-around gap-4">
+      @for (ring of progressRings; track ring.label) {
+        <mm-chart-ring
+          [value]="ring.value"
+          [label]="ring.label"
+          [variant]="ring.variant"
+          [size]="140"
+          [thickness]="12"
+        />
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Heatmap (activity calendar)"
+    description="Estilo GitHub contributions — celdas más oscuras = más actividad. Hover muestra el valor."
+    [snippets]="snippetsHeatmap"
+  >
+    <div class="rounded-mm-xl border border-border-soft bg-surface-base p-5 shadow-mm-sm">
+      <div class="flex items-baseline justify-between mb-4">
+        <div>
+          <p class="text-xs text-ink-muted">Actividad últimos 140 días</p>
+          <p class="font-display text-xl font-medium text-ink-dark tabular-nums">
+            386 contribuciones
+          </p>
+        </div>
+        <span class="text-xs text-ink-muted font-mono">Hasta 2026-05-16</span>
+      </div>
+      <mm-chart-heatmap [data]="activityHeatmap" [cellSize]="14" />
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="API de uso"
+    description="Cada chart acepta data + size + variant. Todos respetan dark mode + reduced-motion."
+    [snippets]="snippetsApi"
+  >
+    <pre
+      class="font-mono text-xs leading-relaxed bg-surface-inverse text-white/90 p-5 rounded-mm-xl overflow-x-auto"
+    ><code>&lt;mm-chart-line
+  [data]="data"             // readonly &#123; label, value &#125;[]
+  [width]="720" [height]="200"
+  variant="brand"            // brand | success | warning | pink
+  [showArea]="true"          // gradient fill
+  [showDots]="true"          // puntos en cada valor
+  [showGrid]="true"          // grid lines
+/&gt;
+
+&lt;mm-chart-bar [data]="bars" variant="gradient" /&gt;
+
+&lt;mm-chart-donut [data]="slices" totalLabel="total" /&gt;
+
+&lt;mm-chart-sparkline [data]="[12,18,14,22,28]" variant="success" /&gt;
+
+&lt;mm-chart-ring [value]="78" label="Cobertura" variant="brand" /&gt;
+
+&lt;mm-chart-heatmap [data]="cells" [cellSize]="14" /&gt;</code></pre>
+  </mm-canvas-frame>
+</div>

@@ -1,0 +1,460 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Marketing"
+    title="Marketing patterns"
+    description="Patrones de captación y comunicación: cookie banner (GDPR-style con preferencias granulares) · sticky CTA flotante (Intercom-style) · top banner con countdown live · newsletter inline. Cero deps externas."
+  />
+
+  <mm-canvas-frame
+    heading="Cookie banner (GDPR)"
+    description="Modo simple con 3 botones (aceptar todas · solo esenciales · personalizar). Click en Personalizar expande a vista con toggles por categoría. Banner inferior sticky con slide-up."
+    [snippets]="snippetsCookie"
+  >
+    <div class="flex flex-col gap-4">
+      @if (!cookieOpen()) {
+        <button
+          type="button"
+          (click)="reopenCookies()"
+          class="self-start inline-flex items-center gap-2 rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+        >
+          <span class="text-base">🍪</span>
+          Reabrir banner de cookies
+        </button>
+      }
+
+      @if (cookieOpen()) {
+        <div
+          class="rounded-mm-2xl border border-border bg-surface-base shadow-mm-elevated overflow-hidden"
+          style="animation: fadeInUp 320ms var(--ease-out) both"
+        >
+          @if (!cookieExpanded()) {
+            <div class="flex flex-col md:flex-row gap-4 p-5">
+              <div class="flex items-start gap-3 flex-1 min-w-0">
+                <span
+                  class="size-10 shrink-0 rounded-mm-md bg-primary-200 text-primary-700 grid place-items-center text-lg"
+                >
+                  🍪
+                </span>
+                <div>
+                  <h3 class="font-display text-base font-medium text-ink-dark mb-1">
+                    Usamos cookies para mejorar tu experiencia
+                  </h3>
+                  <p class="text-xs text-ink-secondary leading-relaxed">
+                    Algunas son esenciales para que el sitio funcione · otras nos ayudan a entender
+                    cómo lo usas. Puedes elegir qué aceptar.
+                    <a class="text-brand-6 underline cursor-pointer">Política de privacidad</a>
+                  </p>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-2 shrink-0 md:flex-nowrap">
+                <button
+                  type="button"
+                  (click)="cookieExpanded.set(true)"
+                  class="rounded-mm-md border border-border bg-surface-base px-3 py-2 text-xs font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+                >
+                  Personalizar
+                </button>
+                <button
+                  type="button"
+                  (click)="rejectOptionalCookies()"
+                  class="rounded-mm-md bg-surface-secondary px-3 py-2 text-xs font-medium text-ink-dark hover:bg-border transition mm-press"
+                >
+                  Solo esenciales
+                </button>
+                <button
+                  type="button"
+                  (click)="acceptAllCookies()"
+                  class="rounded-mm-md bg-cta text-cta-fg px-4 py-2 text-xs font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+                >
+                  Aceptar todas
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="p-5" style="animation: fadeIn 220ms var(--ease-out) both">
+              <header class="flex items-center justify-between gap-3 mb-4">
+                <div>
+                  <h3 class="font-display text-base font-medium text-ink-dark">
+                    Preferencias de cookies
+                  </h3>
+                  <p class="text-xs text-ink-muted mt-0.5">
+                    Activa solo lo que quieras compartir con nosotros.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  (click)="cookieExpanded.set(false)"
+                  aria-label="Volver"
+                  class="size-7 rounded-mm-sm grid place-items-center text-ink-muted hover:text-ink-dark hover:bg-surface-secondary transition mm-press"
+                >
+                  <svg
+                    class="size-3.5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m15 18-6-6 6-6"></path>
+                  </svg>
+                </button>
+              </header>
+
+              <ul data-stagger-rows class="space-y-1">
+                @for (pref of cookiePrefs(); track pref.id) {
+                  <li>
+                    <label
+                      class="group/p flex items-start gap-3 p-3 rounded-mm-md hover:bg-surface-secondary/40 transition-colors cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        [checked]="isCookieAccepted(pref.id)"
+                        [disabled]="pref.required"
+                        (change)="toggleCookiePref(pref.id)"
+                        class="peer sr-only"
+                      />
+                      <span
+                        class="relative inline-flex items-center w-10 h-5.5 rounded-mm-pill bg-border transition-colors peer-checked:bg-brand-6 peer-disabled:opacity-60 peer-checked:[&>span]:translate-x-4.5 mt-0.5 shrink-0"
+                      >
+                        <span
+                          class="block size-4 rounded-full bg-white shadow-mm-sm transform translate-x-0.5 transition-transform"
+                        ></span>
+                      </span>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-ink-dark inline-flex items-center gap-2">
+                          {{ pref.label }}
+                          @if (pref.required) {
+                            <span
+                              class="text-[10px] uppercase tracking-wider text-success font-semibold"
+                            >
+                              · Requerida
+                            </span>
+                          }
+                        </p>
+                        <p class="text-xs text-ink-muted leading-relaxed mt-0.5">
+                          {{ pref.description }}
+                        </p>
+                      </div>
+                    </label>
+                  </li>
+                }
+              </ul>
+
+              <footer
+                class="flex items-center justify-end gap-2 mt-4 pt-4 border-t border-border-soft"
+              >
+                <button
+                  type="button"
+                  (click)="rejectOptionalCookies()"
+                  class="rounded-mm-md bg-surface-secondary px-4 py-2 text-xs font-medium text-ink-dark hover:bg-border transition mm-press"
+                >
+                  Rechazar opcionales
+                </button>
+                <button
+                  type="button"
+                  (click)="saveCookiePrefs()"
+                  class="rounded-mm-md bg-cta text-cta-fg px-4 py-2 text-xs font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+                >
+                  Guardar preferencias
+                </button>
+              </footer>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Sticky CTA flotante (Intercom-style)"
+    description="Bubble esquina inferior con badge de unread. Click expande panel con shortcuts (docs · chat · tour). Patrón estándar de growth + support."
+    [snippets]="snippetsSticky"
+  >
+    <div
+      class="relative min-h-72 rounded-mm-2xl bg-surface-secondary/40 border border-border-soft p-6 overflow-hidden"
+    >
+      <p class="text-xs text-ink-muted italic mb-3">
+        Click en el bubble inferior derecho para expandir el panel.
+      </p>
+
+      <div class="absolute bottom-6 right-6 flex flex-col items-end gap-3">
+        @if (stickyCtaOpen()) {
+          <div
+            class="w-80 max-w-[calc(100vw-3rem)] rounded-mm-2xl bg-surface-base border border-border-soft shadow-mm-elevated overflow-hidden"
+            style="animation: fadeInUp 320ms var(--ease-out) both"
+          >
+            <header class="bg-linear-to-br from-brand-6 to-brand-pink text-white p-4">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="size-2 rounded-full bg-white animate-pulse"></span>
+                <span class="text-[10px] uppercase tracking-wider font-semibold opacity-90">
+                  En línea
+                </span>
+              </div>
+              <h3 class="font-display text-lg font-medium leading-tight">¿Necesitas ayuda?</h3>
+              <p class="text-xs opacity-90 mt-1">Respondemos en menos de 5 minutos.</p>
+            </header>
+            <div class="p-3 space-y-1.5">
+              @for (
+                item of [
+                  { icon: '📚', label: 'Buscar en docs', sublabel: '38 guías · cmd+K' },
+                  { icon: '💬', label: 'Chat con soporte', sublabel: 'Sofia · Diego en línea' },
+                  { icon: '🎥', label: 'Tour del producto', sublabel: '4 min · paso a paso' },
+                  { icon: '📅', label: 'Agendar una demo', sublabel: '20 min · Calendly' },
+                ];
+                track item.label
+              ) {
+                <button
+                  type="button"
+                  class="group/i w-full flex items-center gap-3 rounded-mm-md p-2.5 text-left hover:bg-surface-secondary transition mm-press"
+                >
+                  <span
+                    class="size-9 rounded-mm-md bg-surface-secondary text-base grid place-items-center transition-transform duration-300 group-hover/i:scale-110 group-hover/i:rotate-3"
+                  >
+                    {{ item.icon }}
+                  </span>
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-ink-dark">{{ item.label }}</p>
+                    <p class="text-[11px] text-ink-muted truncate">{{ item.sublabel }}</p>
+                  </div>
+                  <svg
+                    class="size-3.5 text-ink-muted opacity-0 group-hover/i:opacity-100 group-hover/i:translate-x-1 transition-all"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </button>
+              }
+            </div>
+            <footer
+              class="px-4 py-3 border-t border-border-soft bg-surface-secondary/30 flex items-center justify-between text-[11px] text-ink-muted"
+            >
+              <span class="inline-flex items-center gap-1">
+                <span class="size-1.5 rounded-full bg-success animate-pulse"></span>
+                Respuesta promedio: 3 min
+              </span>
+              <button
+                type="button"
+                (click)="closeStickyCta()"
+                class="text-ink-muted hover:text-ink-dark transition"
+              >
+                Cerrar
+              </button>
+            </footer>
+          </div>
+        }
+
+        <button
+          type="button"
+          (click)="toggleStickyCta()"
+          [attr.aria-label]="stickyCtaOpen() ? 'Cerrar panel de ayuda' : 'Abrir panel de ayuda'"
+          [attr.aria-expanded]="stickyCtaOpen()"
+          class="relative size-14 rounded-mm-pill bg-cta text-cta-fg shadow-mm-elevated grid place-items-center transition-all duration-300 hover:scale-105 hover:shadow-[0_20px_40px_-8px_rgba(20,86,240,0.5)] mm-press"
+        >
+          <svg
+            class="size-6 transition-transform duration-300"
+            [class.rotate-180]="stickyCtaOpen()"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            @if (stickyCtaOpen()) {
+              <path d="M18 6 6 18M6 6l12 12"></path>
+            } @else {
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            }
+          </svg>
+
+          @if (!stickyCtaOpen() && stickyCtaUnread() > 0) {
+            <span
+              class="absolute -top-1 -right-1 size-5 rounded-full bg-error text-white text-[10px] font-bold grid place-items-center ring-2 ring-surface-base"
+              style="animation: mm-badge-pop 380ms var(--ease-bounce) both"
+            >
+              {{ stickyCtaUnread() }}
+            </span>
+          }
+
+          @if (!stickyCtaOpen() && stickyCtaUnread() > 0) {
+            <span
+              class="absolute inset-0 rounded-mm-pill"
+              style="
+                animation: mm-ping-strong 2s var(--ease-out) infinite;
+                background: rgba(20, 86, 240, 0.35);
+              "
+            ></span>
+          }
+        </button>
+      </div>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Top banner con countdown live"
+    description="Banner sticky superior con countdown reactivo (days · hours · minutes · seconds). El timer se actualiza cada segundo via signal + setInterval, SSR-safe."
+    [snippets]="snippetsBanner"
+  >
+    <div class="flex flex-col gap-3">
+      @if (topBannerOpen()) {
+        <div
+          class="rounded-mm-xl bg-linear-to-r from-brand-6 via-primary-500 to-brand-pink text-white px-4 py-2.5 shadow-mm-brand"
+          style="animation: fadeInDown 240ms var(--ease-out) both"
+        >
+          <div class="flex flex-wrap items-center gap-3">
+            <span
+              class="rounded-mm-pill bg-white/20 backdrop-blur px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+            >
+              🎉 Oferta
+            </span>
+            <p class="flex-1 text-sm min-w-fit">
+              <strong>30% OFF</strong> en plan Growth · termina en
+            </p>
+            <div
+              class="inline-flex items-center gap-1 font-mono text-sm bg-white/15 backdrop-blur rounded-mm-md px-2 py-1"
+            >
+              <span class="tabular-nums">{{ countdown().days }}</span>
+              <span class="opacity-70 text-xs">d</span>
+              <span class="tabular-nums ml-1">{{ countdown().hours }}</span>
+              <span class="opacity-70 text-xs">h</span>
+              <span class="tabular-nums ml-1">{{ countdown().minutes }}</span>
+              <span class="opacity-70 text-xs">m</span>
+              <span class="tabular-nums ml-1 w-5 text-right">{{ countdown().seconds }}</span>
+              <span class="opacity-70 text-xs">s</span>
+            </div>
+            <button
+              type="button"
+              class="rounded-mm-pill bg-white text-cta px-4 py-1.5 text-xs font-semibold shadow-mm-sm hover:shadow-mm-elevated hover:-translate-y-px transition mm-press"
+            >
+              Aprovechar →
+            </button>
+            <button
+              type="button"
+              (click)="dismissTopBanner()"
+              aria-label="Cerrar banner"
+              class="size-7 rounded-mm-sm grid place-items-center hover:bg-white/15 transition mm-press"
+            >
+              <svg
+                class="size-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M18 6 6 18M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      } @else {
+        <button
+          type="button"
+          (click)="reopenTopBanner()"
+          class="self-start inline-flex items-center gap-2 rounded-mm-md border border-border bg-surface-base px-4 py-2 text-sm font-medium text-ink-dark hover:border-ink-dark transition mm-press"
+        >
+          Reabrir top banner
+        </button>
+      }
+
+      <p class="text-[11px] text-ink-muted italic">
+        El countdown está vivo — cada segundo actualiza via signal sin Zone.js.
+      </p>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Newsletter inline (signup + success)"
+    description="Card hero con gradient brand · email input con backdrop blur · estado success con animation scaleIn bounce. Patrón para landings y end-of-page CTAs."
+    [snippets]="snippetsNewsletter"
+  >
+    <section
+      class="relative rounded-mm-3xl bg-linear-to-br from-brand-6 via-primary-500 to-brand-pink text-white p-8 md:p-10 shadow-mm-brand overflow-hidden"
+    >
+      <span
+        class="absolute -top-12 -right-12 size-48 rounded-mm-pill bg-white/10 blur-2xl pointer-events-none"
+      ></span>
+      <span
+        class="absolute -bottom-16 -left-8 size-40 rounded-mm-pill bg-white/10 blur-2xl pointer-events-none"
+      ></span>
+
+      @if (!newsletterSubscribed()) {
+        <div class="relative max-w-md" style="animation: fadeInUp 320ms var(--ease-out) both">
+          <span
+            class="rounded-mm-pill bg-white/20 backdrop-blur px-3 py-1 text-[10px] font-semibold uppercase tracking-wider"
+          >
+            Newsletter
+          </span>
+          <h3 class="font-display text-2xl md:text-3xl font-medium leading-tight mt-4">
+            Recibe lo mejor cada lunes
+          </h3>
+          <p class="text-sm opacity-90 mt-2 leading-relaxed mb-6">
+            Patrones nuevos, cicatrices encontradas y recursos de diseño. Sin spam, sin tracking,
+            sin BS.
+          </p>
+
+          <form (submit)="subscribeNewsletter($event)" class="flex flex-col sm:flex-row gap-2">
+            <input
+              type="email"
+              [value]="newsletterEmail()"
+              (input)="onNewsletterEmail($event)"
+              placeholder="tu@email.com"
+              required
+              class="mm-input-bare flex-1 rounded-mm-md bg-white/15 backdrop-blur px-4 py-3 text-sm text-white placeholder:text-white/60 transition focus:bg-white/25"
+              aria-label="Email para newsletter"
+            />
+            <button
+              type="submit"
+              class="rounded-mm-md bg-white text-cta px-5 py-3 text-sm font-semibold shadow-mm-sm hover:shadow-mm-elevated hover:-translate-y-px transition mm-press"
+            >
+              Suscribirme
+            </button>
+          </form>
+
+          <p class="text-[11px] opacity-70 mt-3">
+            Únete a 2,400+ devs y diseñadores que ya leen el newsletter.
+          </p>
+        </div>
+      } @else {
+        <div class="relative max-w-md" style="animation: scaleIn 420ms var(--ease-bounce) both">
+          <span
+            class="size-14 rounded-mm-pill bg-white/20 backdrop-blur grid place-items-center mb-4 shadow-mm-elevated"
+            style="animation: mm-check-pop 480ms var(--ease-bounce) 120ms both"
+          >
+            <svg
+              class="size-7 text-white"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </span>
+          <h3 class="font-display text-2xl md:text-3xl font-medium leading-tight">
+            ¡Listo! Bienvenido al club.
+          </h3>
+          <p class="text-sm opacity-90 mt-2 leading-relaxed">
+            Te enviaremos el primer newsletter el próximo lunes a las 9am · CDT.
+          </p>
+          <button
+            type="button"
+            (click)="resetNewsletter()"
+            class="text-sm underline mt-4 opacity-80 hover:opacity-100 transition"
+          >
+            Cambiar email
+          </button>
+        </div>
+      }
+    </section>
+  </mm-canvas-frame>
+</div>

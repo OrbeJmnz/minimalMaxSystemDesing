@@ -1,0 +1,291 @@
+<div class="space-y-10">
+  <mm-section-header
+    eyebrow="Acciones"
+    title="Buttons"
+    description="Cinco variantes con la firma MinimalMax: dark CTA, pill nav, pill white, secondary y ghost. Click = ripple effect."
+  />
+
+  <mm-canvas-frame
+    heading="Variantes"
+    description="Primary Dark es el CTA principal. Pills son la firma para navegación y filtros. Todos con ripple en click."
+    [snippets]="snippetsVariants"
+  >
+    <div data-stagger class="flex flex-wrap gap-3 items-center">
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg transition-all duration-200 hover:-translate-y-px hover:bg-cta-hover active:translate-y-0 mm-press"
+      >
+        Primary Dark
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-brand-6 x-5 py-2.5 text-sm font-medium text-white shadow-mm-brand transition-all duration-200 hover:bg-primary-600 hover:-translate-y-px active:translate-y-0 mm-press"
+      >
+        Primary Brand
+      </button>
+      <button
+        type="button"
+        mmRipple
+        [color]="'rgba(20, 86, 240, 0.2)'"
+        class="rounded-mm-pill bg-black/5 px-5 py-2.5 text-sm font-medium text-ink-dark transition-colors hover:bg-surface-secondary hover:-translate-y-px active:translate-y-0mm-press"
+      >
+        Pill Nav
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-pill bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg transition hover:bg-cta-hover hover:-translate-y-px active:translate-y-0 mm-press"
+      >
+        Pill Active
+      </button>
+      <button
+        type="button"
+        mmRipple
+        [color]="'rgba(0, 0, 0, 0.08)'"
+        class="rounded-mm-md bg-surface-secondary px-5 py-2.5 text-sm font-medium text-ink-dark transition hover:bg-border-soft hover:-translate-y-px active:translate-y-0 mm-press"
+      >
+        Secondary
+      </button>
+      <button
+        type="button"
+        mmRipple
+        [color]="'rgba(20, 86, 240, 0.15)'"
+        class="rounded-mm-md border border-border bg-surface-base px-5 py-2.5 text-sm font-medium text-ink-dark transition hover:border-ink-dark hover:shadow-mm-sm mm-press"
+      >
+        Ghost
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Tamaños"
+    description="Small (badge/chip), Medium (default) y Large (hero CTA)."
+    [snippets]="snippetsSizes"
+  >
+    <div class="flex flex-wrap items-end gap-3">
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-cta px-3 py-1.5 text-xs font-semibold text-cta-fg hover:-translate-y-px active:translate-y-0 mm-press"
+      >
+        Small
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg hover:-translate-y-px active:translate-y-0 mm-press"
+      >
+        Medium
+      </button>
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-cta px-7 py-3.5 text-base font-medium text-cta-fg hover:-translate-y-px active:translate-y-0 mm-press shadow-mm-sm hover:shadow-mm-elevated transition-shadow"
+      >
+        Large CTA
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Con icono"
+    description="Iconos lucide-style inline. El icono escala suavemente en hover."
+    [snippets]="snippetsIcon"
+  >
+    <div class="flex flex-wrap gap-3 items-center">
+      <button
+        type="button"
+        mmRipple
+        class="group inline-flex items-center gap-2 rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg transition-all duration-200 hover:-translate-y-px hover:bg-cta-hover mm-press"
+      >
+        <svg
+          class="size-4 transition-transform duration-300 group-hover:rotate-90"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        Nuevo proyecto
+      </button>
+      <button
+        type="button"
+        mmRipple
+        [color]="'rgba(20, 86, 240, 0.2)'"
+        class="group inline-flex items-center gap-2 rounded-mm-pill bg-black/5 px-5 py-2.5 text-sm font-medium text-ink-dark transition-colors hover:bg-surface-secondary mm-press"
+      >
+        <svg
+          class="size-4 transition-transform duration-300 group-hover:scale-110"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        Comentar
+        <span
+          class="rounded-mm-pill bg-primary-200 text-primary-700 text-[10px] font-semibold px-2 py-0.5"
+        >
+          3
+        </span>
+      </button>
+      <button
+        type="button"
+        mmRipple
+        [color]="'rgba(0, 0, 0, 0.08)'"
+        class="inline-flex items-center justify-center size-10 rounded-mm-pill bg-surface-base border border-border text-ink-dark hover:border-ink-dark hover:shadow-mm-sm transition mm-press"
+        aria-label="Más opciones"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="19" cy="12" r="1"></circle>
+          <circle cx="5" cy="12" r="1"></circle>
+        </svg>
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Estados"
+    description="Hover, focus, disabled y loading con skeleton del texto."
+    [snippets]="snippetsStates"
+  >
+    <div class="flex flex-wrap gap-3 items-center">
+      <button
+        type="button"
+        mmRipple
+        class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg transition-all hover:-translate-y-px hover:shadow-mm-elevated mm-press"
+      >
+        Hover me
+      </button>
+      <button
+        type="button"
+        class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
+      >
+        Focus me (Tab)
+      </button>
+      <button
+        type="button"
+        disabled
+        class="rounded-mm-md bg-cta px-5 py-2.5 text-sm font-medium text-cta-fg opacity-50 cursor-not-allowed"
+      >
+        Disabled
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="triggerLoading()"
+        [disabled]="loading()"
+        class="relative inline-flex items-center gap-2 rounded-mm-md bg-brand-6 px-5 py-2.5 text-sm font-medium text-white shadow-mm-brand disabled:cursor-wait mm-press transition-all hover:shadow-mm-elevated overflow-hidden"
+      >
+        @if (loading()) {
+          <span class="absolute inset-0 mm-skeleton opacity-30"></span>
+          <svg class="relative size-4 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-opacity="0.25"
+            ></circle>
+            <path
+              d="M22 12a10 10 0 0 1-10 10"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            ></path>
+          </svg>
+          <span class="relative">Procesando…</span>
+        } @else {
+          <svg
+            class="size-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m5 12 5 5L20 7"></path>
+          </svg>
+          Probar loading
+        }
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Toast notifications"
+    description="Sistema de notificaciones con 4 variantes — slide-in derecha, auto-dismiss, action button opcional."
+    [snippets]="snippetsToast"
+  >
+    <div class="flex flex-wrap gap-3">
+      <button
+        type="button"
+        mmRipple
+        (click)="demoToast('success')"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-success px-4 py-2 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        <span class="size-2 rounded-full bg-white"></span>
+        Success
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="demoToast('error')"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-error px-4 py-2 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        <span class="size-2 rounded-full bg-white"></span>
+        Error
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="demoToast('warning')"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-warning px-4 py-2 text-sm font-medium text-white shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        <span class="size-2 rounded-full bg-white"></span>
+        Warning
+      </button>
+      <button
+        type="button"
+        mmRipple
+        (click)="demoToast('info')"
+        class="inline-flex items-center gap-2 rounded-mm-md bg-brand-6 px-4 py-2 text-sm font-medium text-white shadow-mm-brand hover:shadow-mm-elevated transition mm-press"
+      >
+        <span class="size-2 rounded-full bg-white"></span>
+        Info
+      </button>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Pill Filter Tabs"
+    description="Indicador deslizante animado entre opciones — patrón signature MinimalMax."
+    [snippets]="snippetsPillTabs"
+  >
+    <div class="flex flex-col gap-4">
+      <mm-pill-tabs [tabs]="filterTabs" [(active)]="activeFilterTab" />
+      <p class="text-xs text-ink-muted">
+        Activo: <span class="font-mono text-ink-dark">{{ activeFilterTab() }}</span>
+      </p>
+    </div>
+  </mm-canvas-frame>
+</div>
