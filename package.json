@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx serve mm-showcase",
+    "start": "node tools/serve.mjs",
+    "start:fixed": "nx serve mm-showcase",
     "build": "nx build mm-showcase",
     "watch": "nx build mm-showcase --watch --configuration development",
     "test": "nx test mm-showcase",
