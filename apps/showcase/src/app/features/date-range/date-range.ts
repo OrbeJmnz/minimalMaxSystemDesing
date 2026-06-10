@@ -1,9 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '@minimax/ui-angular';
+import {
+  BottomSheetComponent,
+  DateWheelComponent,
+  SectionHeaderComponent,
+  ViewportService,
+} from '@minimax/ui-angular';
 
 interface DayCell {
   readonly date: Date;
@@ -76,12 +81,20 @@ function formatDate(d: Date | null): string {
 
 @Component({
   selector: 'mm-date-range',
-  imports: [CanvasFrameComponent, SectionHeaderComponent],
+  imports: [
+    CanvasFrameComponent,
+    SectionHeaderComponent,
+    BottomSheetComponent,
+    DateWheelComponent,
+  ],
   templateUrl: './date-range.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
 })
 export class DateRangeComponent {
+  private readonly viewport = inject(ViewportService);
+  protected readonly isMobile = this.viewport.isMobile;
+
   protected readonly today = startOfDay(new Date(2026, 4, 20));
 
   protected readonly viewMonth = signal(new Date(2026, 4, 1));
@@ -90,6 +103,23 @@ export class DateRangeComponent {
   protected readonly hover = signal<Date | null>(null);
   protected readonly open = signal(false);
   protected readonly activePreset = signal<string | null>('7d');
+
+  // ---- Mobile sheet (wheel picker) ----------------------------------------
+  protected readonly sheetOpen = signal(false);
+  protected readonly activeEndpoint = signal<'start' | 'end'>('start');
+  protected readonly startDraft = signal<Date>(this.start() ?? this.today);
+  protected readonly endDraft = signal<Date>(this.end() ?? this.today);
+
+  protected readonly activeDraft = computed(() =>
+    this.activeEndpoint() === 'start' ? this.startDraft() : this.endDraft(),
+  );
+  protected readonly startDraftLabel = computed(() => formatDate(this.startDraft()));
+  protected readonly endDraftLabel = computed(() => formatDate(this.endDraft()));
+  protected readonly draftDays = computed(() => {
+    const a = startOfDay(this.startDraft()).getTime();
+    const b = startOfDay(this.endDraft()).getTime();
+    return Math.abs(Math.round((b - a) / 86_400_000)) + 1;
+  });
 
   protected readonly presets: readonly Preset[] = [
     {
@@ -222,6 +252,56 @@ export class DateRangeComponent {
     this.start.set(null);
     this.end.set(null);
     this.activePreset.set(null);
+  }
+
+  // ---- Mobile sheet handlers ----------------------------------------------
+
+  /** El trigger compacto: en móvil abre el sheet de ruedas; en desktop el popover. */
+  protected onTrigger(): void {
+    if (this.isMobile()) this.openSheet();
+    else this.toggleOpen();
+  }
+
+  protected openSheet(): void {
+    this.startDraft.set(this.start() ?? this.today);
+    this.endDraft.set(this.end() ?? this.today);
+    this.activeEndpoint.set('start');
+    this.open.set(false);
+    this.sheetOpen.set(true);
+  }
+
+  protected closeSheet(): void {
+    this.sheetOpen.set(false);
+  }
+
+  protected onWheelChange(date: Date): void {
+    if (this.activeEndpoint() === 'start') this.startDraft.set(date);
+    else this.endDraft.set(date);
+  }
+
+  protected applyPresetDraft(preset: Preset): void {
+    const range = preset.compute(this.today);
+    this.startDraft.set(range.start);
+    this.endDraft.set(range.end);
+    this.activePreset.set(preset.id);
+  }
+
+  /** Aplica el rango ordenando si quedó invertido (start > end). */
+  protected applySheet(): void {
+    let s = startOfDay(this.startDraft());
+    let e = startOfDay(this.endDraft());
+    if (s.getTime() > e.getTime()) [s, e] = [e, s];
+    this.start.set(s);
+    this.end.set(e);
+    this.activePreset.set(null);
+    this.viewMonth.set(new Date(s.getFullYear(), s.getMonth(), 1));
+    this.sheetOpen.set(false);
+  }
+
+  protected clearDraft(): void {
+    this.startDraft.set(this.today);
+    this.endDraft.set(this.today);
+    this.activeEndpoint.set('start');
   }
 
   private buildMonth(reference: Date): {
@@ -560,6 +640,88 @@ protected readonly presets: readonly Preset[] = [
     </span>
   }
 </button>`,
+    },
+  ];
+
+  protected readonly snippetsMobile: readonly CanvasFrameSnippet[] = [
+    {
+      label: 'HTML',
+      lang: 'html',
+      title: 'date-range.html (sheet móvil)',
+      code: `<!-- En móvil el trigger abre un bottom-sheet con ruedas en vez del popover -->
+<mm-bottom-sheet [open]="sheetOpen()" (close)="closeSheet()"
+                 title="Selecciona el rango" eyebrow="Periodo">
+
+  <!-- Segmento Desde | Hasta: tocas cuál editas -->
+  <div class="grid grid-cols-2 gap-1 rounded-mm-xl bg-surface-secondary p-1">
+    <button (click)="activeEndpoint.set('start')"
+            [class.bg-surface-base]="activeEndpoint() === 'start'">
+      <span class="block text-[10px] uppercase">Desde</span>
+      <span class="font-mono">{{ startDraftLabel() }}</span>
+    </button>
+    <button (click)="activeEndpoint.set('end')"
+            [class.bg-surface-base]="activeEndpoint() === 'end'">
+      <span class="block text-[10px] uppercase">Hasta</span>
+      <span class="font-mono">{{ endDraftLabel() }}</span>
+    </button>
+  </div>
+
+  <!-- Presets en chips con scroll horizontal -->
+  <div class="flex gap-2 overflow-x-auto mm-scroll-hidden">
+    @for (preset of presets; track preset.id) {
+      <button (click)="applyPresetDraft(preset)" class="shrink-0 rounded-mm-pill ...">
+        {{ preset.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Ruedas día/mes/año (la activa edita el endpoint seleccionado) -->
+  <mm-date-wheel [value]="activeDraft()" (valueChange)="onWheelChange($event)"
+                 [minYear]="2020" [maxYear]="2030" />
+
+  <!-- Aplicar ordena si quedó invertido (start > end) -->
+  <div slot="footer">
+    <button (click)="clearDraft()">Limpiar</button>
+    <button (click)="applySheet()">Aplicar</button>
+  </div>
+</mm-bottom-sheet>`,
+    },
+    {
+      label: 'TS',
+      lang: 'ts',
+      title: 'date-range.ts (sheet + orden)',
+      code: `private readonly viewport = inject(ViewportService);
+protected readonly isMobile = this.viewport.isMobile;   // signal SSR-safe
+
+protected readonly sheetOpen = signal(false);
+protected readonly activeEndpoint = signal<'start' | 'end'>('start');
+protected readonly startDraft = signal<Date>(this.today);
+protected readonly endDraft = signal<Date>(this.today);
+
+// La rueda escribe sobre el endpoint activo
+protected readonly activeDraft = computed(() =>
+  this.activeEndpoint() === 'start' ? this.startDraft() : this.endDraft());
+
+protected onWheelChange(date: Date): void {
+  if (this.activeEndpoint() === 'start') this.startDraft.set(date);
+  else this.endDraft.set(date);
+}
+
+// El trigger: móvil → sheet de ruedas, desktop → popover doble calendario
+protected onTrigger(): void {
+  if (this.isMobile()) this.openSheet();
+  else this.toggleOpen();
+}
+
+// Aplicar ordena si el usuario dejó el rango invertido
+protected applySheet(): void {
+  let s = startOfDay(this.startDraft());
+  let e = startOfDay(this.endDraft());
+  if (s.getTime() > e.getTime()) [s, e] = [e, s];
+  this.start.set(s);
+  this.end.set(e);
+  this.sheetOpen.set(false);
+}`,
     },
   ];
 }

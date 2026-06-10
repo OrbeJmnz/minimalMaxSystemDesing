@@ -7,12 +7,17 @@ import {
   signal,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '@minimax/ui-angular';
-import { EmptyStateComponent } from '@minimax/ui-angular';
+import {
+  BottomSheetComponent,
+  EmptyStateComponent,
+  SectionHeaderComponent,
+  ViewportService,
+} from '@minimax/ui-angular';
 
 interface SearchResult {
   readonly id: string;
@@ -36,7 +41,13 @@ interface FacetCount {
 
 @Component({
   selector: 'mm-search',
-  imports: [CanvasFrameComponent, SectionHeaderComponent, EmptyStateComponent],
+  imports: [
+    CanvasFrameComponent,
+    SectionHeaderComponent,
+    EmptyStateComponent,
+    BottomSheetComponent,
+    NgTemplateOutlet,
+  ],
   templateUrl: './search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
@@ -44,6 +55,10 @@ interface FacetCount {
 export class SearchComponent {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly viewport = inject(ViewportService);
+  protected readonly isMobile = this.viewport.isMobile;
+
+  protected readonly filtersOpen = signal(false);
 
   protected readonly query = signal('design system');
   protected readonly sortMode = signal<SortMode>('relevance');
@@ -240,6 +255,13 @@ export class SearchComponent {
       this.selectedTypes().size > 0 ||
       this.selectedAuthors().size > 0 ||
       this.selectedDateRange() !== 'all',
+  );
+
+  protected readonly activeFilterCount = computed(
+    () =>
+      this.selectedTypes().size +
+      this.selectedAuthors().size +
+      (this.selectedDateRange() !== 'all' ? 1 : 0),
   );
 
   protected onQuery(event: Event): void {

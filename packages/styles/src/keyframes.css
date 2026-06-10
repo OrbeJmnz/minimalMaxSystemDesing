@@ -265,3 +265,14 @@
     box-shadow: 0 0 0 12px rgba(20, 86, 240, 0);
   }
 }
+
+/* Bottom sheet — sube desde abajo (mobile). El drag-to-dismiss usa transición
+   inline sobre transform; este keyframe es el mount-in por defecto / fallback. */
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

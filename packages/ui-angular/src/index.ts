@@ -5,6 +5,7 @@
  */
 
 // ---- Components ----
+export * from './lib/components/bottom-sheet/bottom-sheet';
 export * from './lib/components/calendar/calendar';
 export * from './lib/components/charts/chart-bar';
 export * from './lib/components/charts/chart-donut';
@@ -13,6 +14,7 @@ export * from './lib/components/charts/chart-line';
 export * from './lib/components/charts/chart-ring';
 export * from './lib/components/charts/chart-sparkline';
 export * from './lib/components/color-picker/color-picker';
+export * from './lib/components/date-wheel/date-wheel';
 export * from './lib/components/diff-viewer/diff-viewer';
 export * from './lib/components/drawer-shell/drawer-shell';
 export * from './lib/components/empty-state/empty-state';
@@ -26,10 +28,12 @@ export * from './lib/components/section-header/section-header';
 export * from './lib/components/skeleton/skeleton';
 export * from './lib/components/toast-host/toast-host';
 export * from './lib/components/tour-host/tour-host';
+export * from './lib/components/wheel-picker/wheel-picker';
 
 // ---- Directives ----
 export * from './lib/directives/click-outside.directive';
 export * from './lib/directives/ripple.directive';
+export * from './lib/directives/swipe-action.directive';
 export * from './lib/directives/tooltip.directive';
 
 // ---- Services ----
@@ -38,3 +42,4 @@ export * from './lib/services/overlay.service';
 export * from './lib/services/theme.service';
 export * from './lib/services/toast.service';
 export * from './lib/services/tour.service';
+export * from './lib/services/viewport.service';

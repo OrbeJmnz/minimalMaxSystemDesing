@@ -14,10 +14,10 @@
       <div class="relative">
         <button
           type="button"
-          (click)="toggleOpen()"
-          class="group inline-flex items-center gap-3 rounded-mm-md border border-border bg-surface-base px-4 py-2.5 text-sm shadow-mm-sm transition-all duration-200 hover:border-ink-dark hover:shadow-mm-elevated mm-press"
-          [class.border-brand-6]="open()"
-          [class.shadow-mm-brand]="open()"
+          (click)="onTrigger()"
+          class="group inline-flex w-full sm:w-auto items-center gap-3 rounded-mm-md border border-border bg-surface-base px-4 py-2.5 text-sm shadow-mm-sm transition-all duration-200 hover:border-ink-dark hover:shadow-mm-elevated mm-press"
+          [class.border-brand-6]="open() || sheetOpen()"
+          [class.shadow-mm-brand]="open() || sheetOpen()"
         >
           <svg
             class="size-4 text-brand-6 transition-transform duration-300 group-hover:rotate-12"
@@ -289,4 +289,137 @@
       }
     </button>
   </mm-canvas-frame>
+
+  <mm-canvas-frame
+    heading="Mobile date picker (rueda)"
+    description="En viewport móvil (< 768px) el input principal abre este bottom-sheet en vez del popover: grabber + drag-to-dismiss, ruedas día/mes/año con inercia táctil, segmento Desde | Hasta para elegir qué editas, y Aplicar ordena el rango si quedó invertido. Ábrelo aquí en cualquier tamaño para probarlo."
+    [snippets]="snippetsMobile"
+  >
+    <div class="flex flex-col items-center gap-4 py-4">
+      <button
+        type="button"
+        (click)="openSheet()"
+        class="inline-flex items-center gap-2.5 rounded-mm-pill bg-cta text-cta-fg px-5 py-2.5 text-sm font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        <svg
+          class="size-4"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+          <path d="M16 2v4M8 2v4M3 10h18"></path>
+        </svg>
+        Abrir selector de rueda
+      </button>
+      <p class="text-xs text-ink-muted text-center max-w-sm">
+        Banda central marca la selección · el ítem centrado es el valor. Arrastra el grabber hacia
+        abajo para descartar.
+      </p>
+    </div>
+  </mm-canvas-frame>
+
+  <mm-bottom-sheet
+    [open]="sheetOpen()"
+    (close)="closeSheet()"
+    title="Selecciona el rango"
+    eyebrow="Periodo"
+  >
+    <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-2 gap-1 rounded-mm-xl bg-surface-secondary p-1" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeEndpoint() === 'start'"
+          (click)="activeEndpoint.set('start')"
+          class="rounded-mm-lg px-3 py-2 text-left transition-all duration-200 mm-press"
+          [class.bg-surface-base]="activeEndpoint() === 'start'"
+          [class.shadow-mm-sm]="activeEndpoint() === 'start'"
+        >
+          <span class="block text-[10px] uppercase tracking-wider text-ink-muted font-semibold">
+            Desde
+          </span>
+          <span
+            class="block font-mono text-sm"
+            [class.text-ink-dark]="activeEndpoint() === 'start'"
+            [class.text-ink-secondary]="activeEndpoint() !== 'start'"
+          >
+            {{ startDraftLabel() }}
+          </span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeEndpoint() === 'end'"
+          (click)="activeEndpoint.set('end')"
+          class="rounded-mm-lg px-3 py-2 text-left transition-all duration-200 mm-press"
+          [class.bg-surface-base]="activeEndpoint() === 'end'"
+          [class.shadow-mm-sm]="activeEndpoint() === 'end'"
+        >
+          <span class="block text-[10px] uppercase tracking-wider text-ink-muted font-semibold">
+            Hasta
+          </span>
+          <span
+            class="block font-mono text-sm"
+            [class.text-ink-dark]="activeEndpoint() === 'end'"
+            [class.text-ink-secondary]="activeEndpoint() !== 'end'"
+          >
+            {{ endDraftLabel() }}
+          </span>
+        </button>
+      </div>
+
+      <div class="flex gap-2 overflow-x-auto mm-scroll-hidden -mx-1 px-1 pb-0.5">
+        @for (preset of presets; track preset.id) {
+          <button
+            type="button"
+            (click)="applyPresetDraft(preset)"
+            class="shrink-0 rounded-mm-pill border px-3 py-1.5 text-xs font-medium transition-all duration-200 mm-press"
+            [class.bg-cta]="activePreset() === preset.id"
+            [class.text-cta-fg]="activePreset() === preset.id"
+            [class.border-cta]="activePreset() === preset.id"
+            [class.border-border]="activePreset() !== preset.id"
+            [class.text-ink-secondary]="activePreset() !== preset.id"
+          >
+            {{ preset.label }}
+          </button>
+        }
+      </div>
+
+      <mm-date-wheel
+        [value]="activeDraft()"
+        (valueChange)="onWheelChange($event)"
+        [minYear]="2020"
+        [maxYear]="2030"
+      />
+
+      <p class="text-center text-xs text-ink-muted">
+        <span class="font-mono text-ink-dark font-semibold tabular-nums">{{ draftDays() }}</span>
+        {{ draftDays() === 1 ? 'día seleccionado' : 'días seleccionados' }}
+      </p>
+    </div>
+
+    <div
+      slot="footer"
+      class="flex items-center gap-3 px-5 pt-3 pb-4 border-t border-border-soft bg-surface-base"
+    >
+      <button
+        type="button"
+        (click)="clearDraft()"
+        class="flex-1 rounded-mm-md border border-border bg-surface-base px-4 py-2.5 text-sm font-medium text-ink-secondary hover:text-ink-dark hover:border-ink-dark transition mm-press"
+      >
+        Limpiar
+      </button>
+      <button
+        type="button"
+        (click)="applySheet()"
+        class="flex-[1.5] rounded-mm-md bg-cta text-cta-fg px-4 py-2.5 text-sm font-medium shadow-mm-sm hover:shadow-mm-elevated transition mm-press"
+      >
+        Aplicar
+      </button>
+    </div>
+  </mm-bottom-sheet>
 </div>

@@ -3,9 +3,13 @@ import {
   CanvasFrameComponent,
   CanvasFrameSnippet,
 } from '../../shared/components/canvas-frame/canvas-frame';
-import { SectionHeaderComponent } from '@minimax/ui-angular';
-import { EmptyStateComponent } from '@minimax/ui-angular';
-import { ToastService } from '@minimax/ui-angular';
+import {
+  EmptyStateComponent,
+  SectionHeaderComponent,
+  SwipeActionsDirective,
+  ToastService,
+  ViewportService,
+} from '@minimax/ui-angular';
 import { inject } from '@angular/core';
 
 interface MailMessage {
@@ -32,13 +36,20 @@ type InboxFilter = 'all' | 'unread' | 'starred' | 'important' | 'archived';
 
 @Component({
   selector: 'mm-inbox',
-  imports: [CanvasFrameComponent, SectionHeaderComponent, EmptyStateComponent],
+  imports: [
+    CanvasFrameComponent,
+    SectionHeaderComponent,
+    EmptyStateComponent,
+    SwipeActionsDirective,
+  ],
   templateUrl: './inbox.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'block' },
 })
 export class InboxComponent {
   private readonly toast = inject(ToastService);
+  private readonly viewport = inject(ViewportService);
+  protected readonly isMobile = this.viewport.isMobile;
 
   protected readonly messages = signal<MailMessage[]>([
     {
