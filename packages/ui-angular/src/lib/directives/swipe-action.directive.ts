@@ -23,7 +23,11 @@ const AXIS_LOCK = 8;
  * bandeja de acciones. Al deslizar a la izquierda revela la bandeja (`actionWidth`);
  * un deslizamiento largo más allá del umbral dispara `(commit)` directo.
  * `touch-action: pan-y` deja el scroll vertical al navegador y captura solo el
- * gesto horizontal. SSR-safe.
+ * gesto horizontal. SSR-safe · single-pointer (ignora toques secundarios).
+ *
+ * Tras un gesto horizontal el navegador sintetiza un `click`; el consumidor debe
+ * guardarlo con `consumeSwipeClick()` para que un swipe no dispare también el tap
+ * de la fila — p.ej. `(click)="sw.consumeSwipeClick() ? null : open()"`.
  */
 @Directive({
   selector: '[mmSwipeActions]',
@@ -46,6 +50,8 @@ export class SwipeActionsDirective {
   readonly opened = model(false);
   /** Deslizamiento largo más allá del umbral → acción primaria directa. */
   readonly commit = output<void>();
+  /** Progreso de revelado 0..1 (para que el consumidor anime la bandeja). */
+  readonly progress = output<number>();
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
@@ -65,6 +71,9 @@ export class SwipeActionsDirective {
   private startY = 0;
   private startOffset = 0;
   private axis: 'none' | 'x' | 'y' = 'none';
+  private activePointerId: number | null = null;
+  /** El navegador sintetiza un click tras el gesto; lo marcamos para tragarlo. */
+  private pendingClick = false;
 
   constructor() {
     // El padre puede forzar cierre/apertura vía `opened`; refleja el snap.
@@ -78,9 +87,21 @@ export class SwipeActionsDirective {
     });
   }
 
+  /** El consumidor llama esto en su `(click)`: true ⇒ fue un gesto, no abrir. */
+  consumeSwipeClick(): boolean {
+    if (this.pendingClick) {
+      this.pendingClick = false;
+      return true;
+    }
+    return false;
+  }
+
   protected onDown(event: PointerEvent): void {
     if (this.disabled() || !isPlatformBrowser(this.platformId)) return;
     if (event.pointerType === 'mouse' && event.button !== 0) return;
+    if (this.dragging()) return; // ya hay un puntero activo → ignora el segundo
+    this.pendingClick = false;
+    this.activePointerId = event.pointerId;
     this.startX = event.clientX;
     this.startY = event.clientY;
     this.startOffset = this.offset();
@@ -89,7 +110,13 @@ export class SwipeActionsDirective {
   }
 
   protected onMove(event: PointerEvent): void {
-    if (!this.dragging()) return;
+    if (!this.dragging() || event.pointerId !== this.activePointerId) return;
+    // Si se deshabilita a mitad del gesto (cruce de breakpoint), aborta limpio.
+    if (this.disabled()) {
+      this.endDrag();
+      this.snapClosed();
+      return;
+    }
     const dx = event.clientX - this.startX;
     const dy = event.clientY - this.startY;
 
@@ -97,6 +124,7 @@ export class SwipeActionsDirective {
       if (Math.abs(dx) < AXIS_LOCK && Math.abs(dy) < AXIS_LOCK) return;
       this.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
       if (this.axis === 'x') {
+        this.pendingClick = true; // gesto horizontal real → traga el click siguiente
         try {
           this.host.nativeElement.setPointerCapture?.(event.pointerId);
         } catch {
@@ -111,21 +139,14 @@ export class SwipeActionsDirective {
     if (next > 0) next *= 0.3; // resistencia al cerrar de más (derecha)
     if (next < -max) next = -max + (next + max) * 0.4; // rubber-band al abrir de más
     this.offset.set(next);
+    this.progress.emit(Math.min(1, Math.max(0, -next / max)));
   }
 
   protected onUp(event: PointerEvent): void {
-    if (!this.dragging()) return;
-    try {
-      this.host.nativeElement.releasePointerCapture?.(event.pointerId);
-    } catch {
-      /* noop */
-    }
-    this.dragging.set(false);
-    if (this.axis !== 'x') {
-      this.axis = 'none';
-      return;
-    }
-    this.axis = 'none';
+    if (!this.dragging() || event.pointerId !== this.activePointerId) return;
+    const wasX = this.axis === 'x';
+    this.endDrag();
+    if (!wasX) return;
 
     const max = this.actionWidth();
     const o = this.offset();
@@ -141,14 +162,8 @@ export class SwipeActionsDirective {
   }
 
   protected onCancel(event: PointerEvent): void {
-    if (!this.dragging()) return;
-    try {
-      this.host.nativeElement.releasePointerCapture?.(event.pointerId);
-    } catch {
-      /* noop */
-    }
-    this.dragging.set(false);
-    this.axis = 'none';
+    if (!this.dragging() || event.pointerId !== this.activePointerId) return;
+    this.endDrag();
     if (this.offset() > -this.actionWidth() * 0.5) this.snapClosed();
     else this.offset.set(-this.actionWidth());
   }
@@ -156,6 +171,19 @@ export class SwipeActionsDirective {
   /** Cierra la fila (API pública para el padre / botón de la bandeja). */
   close(): void {
     this.snapClosed();
+  }
+
+  private endDrag(): void {
+    try {
+      if (this.activePointerId !== null) {
+        this.host.nativeElement.releasePointerCapture?.(this.activePointerId);
+      }
+    } catch {
+      /* noop */
+    }
+    this.dragging.set(false);
+    this.axis = 'none';
+    this.activePointerId = null;
   }
 
   private snapClosed(): void {
